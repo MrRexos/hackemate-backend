@@ -1,1 +1,2 @@
 # hackemate-backend
+rates tots
