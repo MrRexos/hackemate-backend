@@ -8,7 +8,10 @@
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
     "prova:sweep": "node src/scripts/prova-sweep.js",
-    "prova:bars40": "node src/scripts/prova-bars-bcn-40.js"
+    "prova:bars40": "node src/scripts/prova-bars-bcn-40.js",
+    "fixtures:excel": "node src/scripts/genera-fixture-excel-prova.js",
+    "prova:excel": "node src/main-rutes-excel.js fixtures/excel/comandes-prova.xlsx --mock-geocode",
+    "rutes:excel": "node src/main-rutes-excel.js"
   },
   "keywords": [
     "hackemate",

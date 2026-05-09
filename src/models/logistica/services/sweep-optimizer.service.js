@@ -1,6 +1,11 @@
 import { asseguraArray } from '../validators/logistica.validators.js';
 import { construeixEntrega } from '../utils/entrega.utils.js';
 import { coordenadesPolarsRespecteCentre, normalitzaCoordenades, normalitzaPuntRuta } from '../utils/coordenades.utils.js';
+import {
+  FRACCIO_MAX_UTILITZACIO_CAPACITAT_CAMIO,
+  volumCarregaMaximaOperativa,
+  volumPermetAfegirACamio,
+} from '../constants/capacitat-camio.constants.js';
 
 const MIGDIA_MINUTS = 14 * 60;
 const TEMPS_SERVEI_MINUTS = 5;
@@ -165,6 +170,8 @@ export async function geocodificarAdreces(entregues, options = {}) {
 /**
  * Planifica rutes amb cluster radi + angle, inserció amb llindar de km i fase de tornada.
  *
+ * **Capacitat:** mai es supera el **97%** de la `capacitatMaxima` nominal del camió (reserva operativa).
+ *
  * Opcions rellevants:
  * - `radiUrbàKm` (per defecte 9): límit urbà / perifèria (Haversine des del magatzem).
  * - `llindarKmInsercio` (per defecte 5): increment marginal màx. (km) per afegir a una ruta mateixa zona o mixta.
@@ -185,6 +192,8 @@ export async function geocodificarAdreces(entregues, options = {}) {
  *
  * **Doble torn (matí / tarda):** el mateix camió pot tenir **dues rutes** (un viatge matí i un altre tarda): entre fases es
  * tornen a posar tots els vehicles a `camionsDisponibles`, i no s’afegeixen parades de tarda a una ruta només de matí (i viceversa).
+ * Després de calcular les ETA, es comprova que **cap camió físic** tingui dues rutes amb intervals [sortida magatzem, tornada magatzem] que es solapin;
+ * si passa (p. ex. després de compactar o OSRM), es **reassigna** una de les rutes a un altre camió amb capacitat i finestra lliure o a un **camió virtual** addicional.
  */
 export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, options = {}) {
   const entreguesInput = asseguraArray(llistaEntregues, 'llistaEntregues');
@@ -384,7 +393,11 @@ export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, 
 
   compactarRutesPerQuotaMin(rutes, context);
 
+  corregirSobrecàrregaRutes(rutes, context, entreguesNoAssignades);
+
   actualitzaEtasRutes(rutes, context);
+
+  resoleSolapamentsTemporalCamions(rutes, context);
 
   return {
     rutes: rutes.filter((r) => r.entregues.length > 0),
@@ -681,8 +694,7 @@ function fusionDestPotAbsorbirFont(dest, font) {
   for (const e of font.entregues) {
     if (!rutaCompatibleReintegracio(dest, e.__fase)) return false;
   }
-  const cap = Number(dest.camio.capacitatMaxima || 0);
-  return dest.volumOcupat + font.volumOcupat <= cap;
+  return volumPermetAfegirACamio(dest.volumOcupat, font.volumOcupat, dest.camio);
 }
 
 /**
@@ -1220,18 +1232,18 @@ function intentaOptimitzacioIncremental(ruta, context) {
   }
 }
 
-function creaRutaNova(entrega, context, index) {
+function creaRutaNova(entrega, context, index, permetVirtualFallback = false) {
   const volum = Number(entrega.volumTotal || 0);
   const camio = context.camionsDisponibles
-    .filter((c) => Number(c.capacitatMaxima || 0) >= volum)
+    .filter((c) => volumPermetAfegirACamio(0, volum, c))
     .sort((a, b) => Number(a.capacitatMaxima || 0) - Number(b.capacitatMaxima || 0))[0];
 
   if (!camio) {
-    if (context.assignacioCompletaActiva) {
+    if (context.assignacioCompletaActiva || permetVirtualFallback) {
       const vol = Number(entrega.volumTotal || 0);
       const capMin = Number(context.capacitatCamioVirtualMinima) || 130;
       context.__seqCamioVirtual = (context.__seqCamioVirtual || 0) + 1;
-      const cap = Math.max(vol, capMin);
+      const cap = Math.max(vol / FRACCIO_MAX_UTILITZACIO_CAPACITAT_CAMIO, capMin);
       return {
         camio: { id: `VIRTUAL-${context.__seqCamioVirtual}`, capacitatMaxima: cap },
         entregues: [],
@@ -1283,7 +1295,100 @@ function eliminaEntrega(ruta, entrega) {
 }
 
 function teCapacitatPer(ruta, entrega) {
-  return ruta.volumOcupat + Number(entrega.volumTotal || 0) <= Number(ruta.camio.capacitatMaxima || 0);
+  return volumPermetAfegirACamio(ruta.volumOcupat, entrega?.volumTotal ?? 0, ruta.camio);
+}
+
+function sobrepassaCapacitatOperativa(ruta) {
+  recalculaVolum(ruta);
+  const vol = Number(ruta.volumOcupat || 0);
+  const maxU = volumCarregaMaximaOperativa(ruta.camio);
+  return Math.round(vol * 1e9) > Math.round(maxU * 1e9);
+}
+
+/**
+ * Garanteix que cap ruta superi el volum operatiu: treu parades en excés i les reubica o crea ruta nova / camió virtual.
+ */
+function corregirSobrecàrregaRutes(rutes, context, entreguesNoAssignades) {
+  let guard = 0;
+  while (guard++ < 5000) {
+    let problem = null;
+    for (const ruta of rutes) {
+      if (sobrepassaCapacitatOperativa(ruta)) {
+        problem = ruta;
+        break;
+      }
+    }
+    if (!problem) return;
+
+    if (!problem.entregues.length) {
+      continue;
+    }
+
+    const e = problem.entregues[problem.entregues.length - 1];
+    eliminaEntrega(problem, e);
+    e.__assignada = false;
+
+    const admetTorneig = (ruta) => {
+      if (!ruta.entregues.length) return true;
+      const f = e.__fase;
+      if (f == null || f === 'reintegre') return true;
+      return rutaAdmetNouStopMateixTorneig(ruta, f);
+    };
+
+    const candidates = [...rutes]
+      .filter(
+        (ruta) =>
+          ruta !== problem
+          && teCapacitatPer(ruta, e)
+          && admetTorneig(ruta)
+          && potAfegirEntregaQuotaParades(ruta, context),
+      )
+      .sort((a, b) => {
+        const pb = puntuacioRutaPerEntrega(b, e, context);
+        const pa = puntuacioRutaPerEntrega(a, e, context);
+        if (pb !== pa) return pb - pa;
+        return b.entregues.length - a.entregues.length;
+      });
+
+    let reinserida = false;
+    for (const ruta of candidates) {
+      const millor = millorInsercioAmbLlindar(ruta, e, context);
+      if (!millor) continue;
+
+      ruta.entregues.splice(millor.pos, 0, e);
+      ruta.volumOcupat += Number(e.volumTotal || 0);
+      recalculaVolum(ruta);
+      if (teFinestresValides(ruta, context)) {
+        intentaOptimitzacioIncremental(ruta, context);
+        e.__assignada = true;
+        reinserida = true;
+        break;
+      }
+      eliminaEntrega(ruta, e);
+    }
+
+    if (reinserida) continue;
+
+    const novaRuta = creaRutaNova(e, context, rutes.length + 1, true);
+    if (!novaRuta) {
+      marcaNoAssignada(e, 'CAPACITAT_FLOTA');
+      entreguesNoAssignades.push(e);
+      continue;
+    }
+
+    afegeixEntrega(novaRuta, e);
+    recalculaVolum(novaRuta);
+    if (teFinestresValides(novaRuta, context)) {
+      intentaOptimitzacioIncremental(novaRuta, context);
+      e.__assignada = true;
+      rutes.push(novaRuta);
+    } else {
+      desfesUltimaEntrega(novaRuta);
+      desferRutaNovaBuida(novaRuta, context);
+      marcaNoAssignada(e, 'FINESTRES_NOVA_RUTA');
+      entreguesNoAssignades.push(e);
+    }
+  }
 }
 
 function insereixEntregaMinimCost(ruta, entrega, context) {
@@ -1410,6 +1515,12 @@ function planificacioValidaPerSeq(entregues, context) {
 
 function actualitzaEtasRutes(rutes, context) {
   for (const ruta of rutes) {
+    for (const entrega of ruta.entregues || []) {
+      entrega.horaDEntrega = null;
+    }
+  }
+
+  for (const ruta of rutes) {
     const sortidaMinuts = calculaSortidaAproximada(ruta, context);
     const ctxTimeline =
       context.assignacioCompletaOpcio === true ? { ...context, ignoreFinestresClient: true } : context;
@@ -1419,6 +1530,7 @@ function actualitzaEtasRutes(rutes, context) {
       : planificacio.valida;
     ruta.sortidaMagatzemMinuts = sortidaMinuts;
     ruta.horaSortidaMagatzem = minutsAHhMm(sortidaMinuts);
+    ruta.horaSortidaMagatzemAproximada = ruta.horaSortidaMagatzem;
 
     for (const parada of planificacio.parades) {
       const { entrega, arribadaMin, sortidaMin, tempsDescarregaEntrega } = parada;
@@ -1427,6 +1539,7 @@ function actualitzaEtasRutes(rutes, context) {
       entrega.arribadaHora = minutsAHhMm(arribadaMin);
       entrega.sortidaHora = minutsAHhMm(sortidaMin);
       entrega.tempsDescarregaMinuts = tempsDescarregaEntrega;
+      entrega.horaDEntrega = entrega.arribadaHora;
     }
 
     if (ruta.entregues.length > 0 && planificacio.parades.length > 0) {
@@ -1447,6 +1560,113 @@ function actualitzaEtasRutes(rutes, context) {
       ruta.tornadaMagatzemMinuts = sortidaMinuts;
       ruta.horaTornadaMagatzem = minutsAHhMm(sortidaMinuts);
     }
+
+    ruta.horaArribadaMagatzemAproximada = ruta.horaTornadaMagatzem ?? null;
+  }
+}
+
+/** Comparació estable en minuts arrodonits (mateixa escala que les ETA mostrades). */
+function minutsIntervalRuta(inici, fi) {
+  return {
+    inici: Math.round(Number(inici)),
+    fi: Math.round(Number(fi)),
+  };
+}
+
+/** True si els intervals [ia, fa] i [ib, fb] es solapen en temps estrictament (no es permet simultaneïtat). Tou al límit: tornada === sortida següent és vàlid. */
+function intervalsTempsSolapen(ia, fa, ib, fb) {
+  if (![ia, fa, ib, fb].every((n) => Number.isFinite(n))) return false;
+  return ia < fb && ib < fa;
+}
+
+function camioTeIntervalLliure(reservesPerCamioId, camioIdStr, inici, fi) {
+  const bookings = reservesPerCamioId.get(camioIdStr) || [];
+  for (const b of bookings) {
+    if (intervalsTempsSolapen(inici, fi, b.inici, b.fi)) return false;
+  }
+  return true;
+}
+
+function registraIntervalCamio(reservesPerCamioId, camioIdStr, inici, fi) {
+  if (!reservesPerCamioId.has(camioIdStr)) reservesPerCamioId.set(camioIdStr, []);
+  reservesPerCamioId.get(camioIdStr).push({ inici, fi });
+}
+
+/**
+ * El mateix id de camió no pot cobrir dues rutes amb intervals temporals que es creuin.
+ * Es processen les rutes per ordre de sortida; si hi ha solapament amb una reserva ja feta per aquell camió,
+ * es busca un altre camió físic amb capacitat i sense conflicte; si no n’hi ha, camió virtual nou.
+ */
+function resoleSolapamentsTemporalCamions(rutes, context) {
+  const camionsFisics = Array.isArray(context.camions) ? context.camions : [];
+  const reservesPerCamioId = new Map();
+
+  const ambParades = rutes.filter((r) => r.entregues?.length > 0);
+  ambParades.sort((a, b) => {
+    const sa = Number(a.sortidaMagatzemMinuts);
+    const sb = Number(b.sortidaMagatzemMinuts);
+    if (Number.isFinite(sa) && Number.isFinite(sb) && sa !== sb) return sa - sb;
+    const ta = Number(a.tornadaMagatzemMinuts);
+    const tb = Number(b.tornadaMagatzemMinuts);
+    if (Number.isFinite(ta) && Number.isFinite(tb) && ta !== tb) return ta - tb;
+    return 0;
+  });
+
+  for (const ruta of ambParades) {
+    recalculaVolum(ruta);
+    const volum = Number(ruta.volumOcupat || 0);
+    const rawInici = ruta.sortidaMagatzemMinuts;
+    const rawFi = ruta.tornadaMagatzemMinuts;
+    if (!Number.isFinite(rawInici) || !Number.isFinite(rawFi)) continue;
+
+    const { inici, fi } = minutsIntervalRuta(rawInici, rawFi);
+    if (!Number.isFinite(inici) || !Number.isFinite(fi)) continue;
+
+    let camioIdStr = String(ruta.camio?.id ?? '').trim();
+    if (!camioIdStr) {
+      context.__anonCamioSeq = (context.__anonCamioSeq || 0) + 1;
+      camioIdStr = `__sense-id-${context.__anonCamioSeq}`;
+    }
+
+    const ocupatPelMateixId = !camioTeIntervalLliure(reservesPerCamioId, camioIdStr, inici, fi);
+
+    if (!ocupatPelMateixId) {
+      registraIntervalCamio(reservesPerCamioId, camioIdStr, inici, fi);
+      continue;
+    }
+
+    const candidats = [...camionsFisics]
+      .filter((c) => volumPermetAfegirACamio(0, volum, c))
+      .sort((a, b) => Number(a.capacitatMaxima || 0) - Number(b.capacitatMaxima || 0));
+
+    let substitut = null;
+    for (const c of candidats) {
+      const idS = String(c.id ?? '');
+      if (camioTeIntervalLliure(reservesPerCamioId, idS, inici, fi)) {
+        substitut = c;
+        break;
+      }
+    }
+
+    if (substitut) {
+      ruta.camio = {
+        id: substitut.id ?? ruta.camio?.id,
+        capacitatMaxima: Number(substitut.capacitatMaxima || 0),
+      };
+      ruta.__camioFont = substitut;
+      ruta.__camioVirtual = false;
+      registraIntervalCamio(reservesPerCamioId, String(substitut.id ?? ''), inici, fi);
+      continue;
+    }
+
+    context.__seqCamioVirtual = (context.__seqCamioVirtual || 0) + 1;
+    const capMin = Number(context.capacitatCamioVirtualMinima) || 130;
+    const capVirt = Math.max(volum / FRACCIO_MAX_UTILITZACIO_CAPACITAT_CAMIO, capMin);
+    const vid = `VIRTUAL-${context.__seqCamioVirtual}`;
+    ruta.camio = { id: vid, capacitatMaxima: capVirt };
+    ruta.__camioFont = null;
+    ruta.__camioVirtual = true;
+    registraIntervalCamio(reservesPerCamioId, vid, inici, fi);
   }
 }
 
