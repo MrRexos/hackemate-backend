@@ -48,12 +48,13 @@ export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, 
   const entregues = await geocodificarAdreces(entreguesNormalitzades, options);
   const ordenadesPerAngle = preprocessaAngles(entregues, magatzem);
 
-  const faseMati = ordenadesPerAngle.filter((e) => teFranjaMati(e));
-  const faseTarda = ordenadesPerAngle.filter((e) => teFranjaTarda(e));
-  const faseResta = ordenadesPerAngle.filter((e) => !teFranjaMati(e) && !teFranjaTarda(e));
+  const faseSenseFranja = ordenadesPerAngle.filter((e) => !teFranjaMati(e) && !teFranjaTarda(e));
+  const faseMati = ordenadesPerAngle.filter((e) => teFranjaMati(e) || faseSenseFranja.includes(e));
+  const faseTarda = ordenadesPerAngle.filter((e) => teFranjaTarda(e) || faseSenseFranja.includes(e));
 
   const context = {
     camions,
+    camionsDisponibles: [...camions],
     magatzem,
     velocitatKmH,
     tempsDescarregaMinuts,
@@ -63,9 +64,11 @@ export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, 
   const rutes = [];
   const entreguesNoAssignades = [];
 
-  sweepAssignacio(faseMati, rutes, context, entreguesNoAssignades, 'mati');
-  sweepAssignacio(faseTarda, rutes, context, entreguesNoAssignades, 'tarda');
-  insertaSobrantsPerProximitat(faseResta, rutes, context, entreguesNoAssignades);
+  sweepAssignacio(faseMati, rutes, context, entreguesNoAssignades, 'mati', { registrarNoAssignades: false });
+  sweepAssignacio(faseTarda, rutes, context, entreguesNoAssignades, 'tarda', { registrarNoAssignades: false });
+
+  const fasePendent = ordenadesPerAngle.filter((e) => !e.__assignada);
+  insertaSobrantsPerProximitat(fasePendent, rutes, context, entreguesNoAssignades);
 
   for (const ruta of rutes) {
     optimitzaRuta2Opt(ruta, context);
@@ -90,8 +93,10 @@ function preprocessaAngles(entregues, magatzem) {
     .sort((a, b) => a.angle - b.angle);
 }
 
-function sweepAssignacio(entregues, rutes, context, noAssignades, fase) {
+function sweepAssignacio(entregues, rutes, context, noAssignades, fase, options = {}) {
+  const { registrarNoAssignades = true } = options;
   for (const entrega of entregues) {
+    if (entrega.__assignada) continue;
     entrega.__fase = fase;
 
     const candidates = [...rutes]
@@ -102,6 +107,8 @@ function sweepAssignacio(entregues, rutes, context, noAssignades, fase) {
     for (const ruta of candidates) {
       afegeixEntrega(ruta, entrega);
       if (teFinestresValides(ruta, context)) {
+        intentaOptimitzacioIncremental(ruta, context);
+        entrega.__assignada = true;
         assignada = true;
         break;
       }
@@ -110,17 +117,19 @@ function sweepAssignacio(entregues, rutes, context, noAssignades, fase) {
 
     if (assignada) continue;
 
-    const novaRuta = creaRutaNova(entrega, context.camions, rutes.length + 1);
+    const novaRuta = creaRutaNova(entrega, context, rutes.length + 1);
     if (!novaRuta) {
-      noAssignades.push(entrega);
+      if (registrarNoAssignades) noAssignades.push(entrega);
       continue;
     }
 
     afegeixEntrega(novaRuta, entrega);
     if (teFinestresValides(novaRuta, context)) {
+      intentaOptimitzacioIncremental(novaRuta, context);
+      entrega.__assignada = true;
       rutes.push(novaRuta);
     } else {
-      noAssignades.push(entrega);
+      if (registrarNoAssignades) noAssignades.push(entrega);
     }
   }
 }
@@ -133,13 +142,15 @@ function insertaSobrantsPerProximitat(entregues, rutes, context, noAssignades) {
     let assignada = false;
     for (const ruta of candidates) {
       if (insereixEntregaMinimCost(ruta, entrega, context)) {
+        intentaOptimitzacioIncremental(ruta, context);
+        entrega.__assignada = true;
         assignada = true;
         break;
       }
     }
 
     if (!assignada) {
-      const novaRuta = creaRutaNova(entrega, context.camions, rutes.length + 1);
+      const novaRuta = creaRutaNova(entrega, context, rutes.length + 1);
       if (!novaRuta) {
         noAssignades.push(entrega);
         continue;
@@ -147,6 +158,8 @@ function insertaSobrantsPerProximitat(entregues, rutes, context, noAssignades) {
 
       afegeixEntrega(novaRuta, entrega);
       if (teFinestresValides(novaRuta, context)) {
+        intentaOptimitzacioIncremental(novaRuta, context);
+        entrega.__assignada = true;
         rutes.push(novaRuta);
       } else {
         noAssignades.push(entrega);
@@ -162,12 +175,16 @@ function revalidaFinestresDespuesOptimitzar(rutes, context, noAssignades) {
     const sobrants = ruta.entregues.filter((e) => e.__fase === 'resta');
     for (const entrega of sobrants) {
       eliminaEntrega(ruta, entrega);
+      entrega.__assignada = false;
+      noAssignades.push(entrega);
       if (teFinestresValides(ruta, context)) break;
     }
 
     if (!teFinestresValides(ruta, context)) {
       while (!teFinestresValides(ruta, context) && ruta.entregues.length > 0) {
-        noAssignades.push(ruta.entregues.pop());
+        const entregaExpulsada = ruta.entregues.pop();
+        entregaExpulsada.__assignada = false;
+        noAssignades.push(entregaExpulsada);
         recalculaVolum(ruta);
       }
     }
@@ -243,13 +260,30 @@ function optimitzaRuta2Opt(ruta, context) {
   }
 }
 
-function creaRutaNova(entrega, flotaCamions, index) {
+function intentaOptimitzacioIncremental(ruta, context) {
+  if (!ruta || !Array.isArray(ruta.entregues) || ruta.entregues.length < 4) return;
+
+  const seqOriginal = [...ruta.entregues];
+  optimitzaRuta2Opt(ruta, context);
+
+  // Capa de seguretat: qualsevol optimitzacio incremental ha de mantenir franges.
+  if (!teFinestresValides(ruta, context)) {
+    ruta.entregues = seqOriginal;
+  }
+}
+
+function creaRutaNova(entrega, context, index) {
   const volum = Number(entrega.volumTotal || 0);
-  const camio = flotaCamions
+  const camio = context.camionsDisponibles
     .filter((c) => Number(c.capacitatMaxima || 0) >= volum)
     .sort((a, b) => Number(a.capacitatMaxima || 0) - Number(b.capacitatMaxima || 0))[0];
 
   if (!camio) return null;
+
+  const idxDisponible = context.camionsDisponibles.indexOf(camio);
+  if (idxDisponible >= 0) {
+    context.camionsDisponibles.splice(idxDisponible, 1);
+  }
 
   return {
     camio: { id: camio.id ?? `camio-${index}`, capacitatMaxima: Number(camio.capacitatMaxima || 0) },
