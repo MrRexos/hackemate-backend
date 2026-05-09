@@ -7,11 +7,12 @@ export class Pedido {
 }
 
 export class Entrega {
-  constructor({ ubicacio, pedidos = [], franjaHoraria, identificador, coordenades }) {
+  constructor({ ubicacio, pedidos = [], horaInici, horaFinal, identificador, coordenades }) {
     this.ubicacio = ubicacio;
     this.pedidos = Entrega.normalitzaPedidos(pedidos);
     this.volumTotal = Entrega.calculaVolumTotal(this.pedidos);
-    this.franjaHoraria = franjaHoraria;
+    this.horaInici = horaInici;
+    this.horaFinal = horaFinal;
     this.identificador = identificador;
     this.coordenades = Entrega.normalitzaCoordenades(coordenades);
   }
