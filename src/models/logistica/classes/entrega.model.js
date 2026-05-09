@@ -2,14 +2,16 @@ import { Pedido } from './pedido.model.js';
 import { coordenadesPolarsRespecteCentre, normalitzaCoordenades } from '../utils/coordenades.utils.js';
 
 export class Entrega {
-  constructor({ ubicacio, pedidos = [], horaInici, horaFinal, identificador, coordenades }) {
-    this.ubicacio = ubicacio;
+  constructor({ ubicacio, adreca, pedidos = [], horaInici, horaFinal, identificador, coordenades, angle = null }) {
+    this.ubicacio = ubicacio ?? adreca ?? null;
+    this.adreca = this.ubicacio;
     this.pedidos = Entrega.normalitzaPedidos(pedidos);
     this.volumTotal = Entrega.calculaVolumTotal(this.pedidos);
     this.horaInici = horaInici;
     this.horaFinal = horaFinal;
     this.identificador = identificador;
     this.coordenades = Entrega.normalitzaCoordenades(coordenades);
+    this.angle = Number.isFinite(Number(angle)) ? Number(angle) : null;
   }
 
   static normalitzaPedidos(pedidos) {
@@ -18,7 +20,7 @@ export class Entrega {
   }
 
   static calculaVolumTotal(pedidos) {
-    return pedidos.reduce((total, pedido) => total + Number(pedido.volum || 0), 0);
+    return pedidos.reduce((total, pedido) => total + Number(pedido.volumTotal || 0), 0);
   }
 
   static normalitzaCoordenades(coordenades) {

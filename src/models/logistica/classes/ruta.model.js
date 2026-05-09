@@ -1,11 +1,13 @@
 import { Entrega } from './entrega.model.js';
 import { calculaTempsRutaAproximat, normalitzaEntregues, obtenirEntreguesAmbAngleDesDeCentre } from '../services/ruta.service.js';
+import { geocodificarAdreces, generarRutes } from '../services/sweep-optimizer.service.js';
 import { normalitzaPuntRuta } from '../utils/coordenades.utils.js';
 
 export class Ruta {
-  constructor({ camio, entregues = [] }) {
+  constructor({ camio, entregues = [], volumOcupat = 0 }) {
     this.camio = camio;
     this.entregues = normalitzaEntregues(entregues, Entrega);
+    this.volumOcupat = Number(volumOcupat) || this.entregues.reduce((acc, e) => acc + Number(e.volumTotal || 0), 0);
   }
 
   obtenirEntreguesAmbAngleDesDeCentre() {
@@ -18,5 +20,25 @@ export class Ruta {
 
   static normalitzaPuntRuta(punt, nomCamp) {
     return normalitzaPuntRuta(punt, nomCamp);
+  }
+
+  static async geocodificarAdreces(entregues, options = {}) {
+    return geocodificarAdreces(entregues, options);
+  }
+
+  static async generarRutes(llistaEntregues, flotaCamions, puntMagatzem, options = {}) {
+    return generarRutes(llistaEntregues, flotaCamions, puntMagatzem, {
+      ...options,
+      EntregaClass: Entrega,
+    });
+  }
+
+  teCapacitatPer(entrega) {
+    return this.volumOcupat + Number(entrega.volumTotal || 0) <= Number(this.camio?.capacitatMaxima || 0);
+  }
+
+  afegirEntrega(entrega) {
+    this.entregues.push(entrega);
+    this.volumOcupat += Number(entrega.volumTotal || 0);
   }
 }
