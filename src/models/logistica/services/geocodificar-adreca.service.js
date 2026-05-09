@@ -1,6 +1,6 @@
 /**
  * Geocodifica una adreça amb Nominatim (OSM).
- * Respecta la política d’ús: ~1 petició/s; `excelToEntregas` pot espaear-ho amb `pausaEntreGeocodificacionsMs`.
+ * Respecta la política d’ús Nominatim (~1 petició/s espaiades si crides en bucle).
  *
  * @param {string} adreca
  * @param {typeof fetch} [fetchImpl=fetch]
