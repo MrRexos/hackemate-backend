@@ -1,0 +1,1877 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resultat visual Sweep</title>
+  <style>
+    body { font-family: Inter, Segoe UI, Arial, sans-serif; margin: 20px; color: #0f172a; background: #f8fafc; }
+    h1, h2 { margin: 0 0 10px; }
+    .card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    .meta { display: grid; grid-template-columns: repeat(4, minmax(120px, 1fr)); gap: 10px; margin-top: 10px; }
+    .kpi { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; }
+    svg { width: 100%; border: 1px solid #e2e8f0; border-radius: 12px; background: linear-gradient(#ffffff, #f8fafc); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 8px; border-bottom: 1px solid #e2e8f0; }
+    th { background: #f1f5f9; }
+    .small { color: #475569; font-size: 13px; }
+    .toolbar { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:10px; }
+    .toolbar select { padding:6px 10px; border:1px solid #cbd5e1; border-radius:8px; background:#fff; }
+    .legend { display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
+    .legend-item { font-size:12px; color:#334155; display:inline-flex; align-items:center; gap:6px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:999px; padding:4px 8px; }
+    .legend-dot { width:10px; height:10px; border-radius:999px; display:inline-block; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Resultat visual Sweep</h1>
+    <div class="small">Escenari: Escala 200 entregues / objectiu 10 per camio</div>
+    <div class="meta">
+      <div class="kpi"><strong>Entregues</strong><br>200</div>
+      <div class="kpi"><strong>Rutes</strong><br>19</div>
+      <div class="kpi"><strong>No assignades</strong><br>0</div>
+      <div class="kpi"><strong>Velocitat</strong><br>38 km/h</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Mapa esquematic de rutes</h2>
+    <p class="small">Punt negre = magatzem. Cada color representa una ruta. Numeracio = ordre de parada.</p>
+    <div class="toolbar">
+      <label for="routeFilter"><strong>Mostra ruta:</strong></label>
+      <select id="routeFilter">
+        <option value="all">Totes les rutes</option>
+        <option value="0">Camio 01 (ruta 1)</option><option value="1">Camio 01 (ruta 2)</option><option value="2">Camio 01 (ruta 3)</option><option value="3">Camio 01 (ruta 4)</option><option value="4">Camio 01 (ruta 5)</option><option value="5">Camio 01 (ruta 6)</option><option value="6">Camio 01 (ruta 7)</option><option value="7">Camio 01 (ruta 8)</option><option value="8">Camio 01 (ruta 9)</option><option value="9">Camio 01 (ruta 10)</option><option value="10">Camio 01 (ruta 11)</option><option value="11">Camio 01 (ruta 12)</option><option value="12">Camio 01 (ruta 13)</option><option value="13">Camio 01 (ruta 14)</option><option value="14">Camio 01 (ruta 15)</option><option value="15">Camio 01 (ruta 16)</option><option value="16">Camio 01 (ruta 17)</option><option value="17">Camio 01 (ruta 18)</option><option value="18">Camio 01 (ruta 19)</option>
+      </select>
+    </div>
+    <div class="legend"><span class="legend-item" data-route-index="0"><span class="legend-dot" style="background:#ef4444"></span>Camio 01 · Ruta 1</span><span class="legend-item" data-route-index="1"><span class="legend-dot" style="background:#2563eb"></span>Camio 01 · Ruta 2</span><span class="legend-item" data-route-index="2"><span class="legend-dot" style="background:#16a34a"></span>Camio 01 · Ruta 3</span><span class="legend-item" data-route-index="3"><span class="legend-dot" style="background:#9333ea"></span>Camio 01 · Ruta 4</span><span class="legend-item" data-route-index="4"><span class="legend-dot" style="background:#ea580c"></span>Camio 01 · Ruta 5</span><span class="legend-item" data-route-index="5"><span class="legend-dot" style="background:#0891b2"></span>Camio 01 · Ruta 6</span><span class="legend-item" data-route-index="6"><span class="legend-dot" style="background:#4f46e5"></span>Camio 01 · Ruta 7</span><span class="legend-item" data-route-index="7"><span class="legend-dot" style="background:#65a30d"></span>Camio 01 · Ruta 8</span><span class="legend-item" data-route-index="8"><span class="legend-dot" style="background:#be123c"></span>Camio 01 · Ruta 9</span><span class="legend-item" data-route-index="9"><span class="legend-dot" style="background:#0f766e"></span>Camio 01 · Ruta 10</span><span class="legend-item" data-route-index="10"><span class="legend-dot" style="background:#a855f7"></span>Camio 01 · Ruta 11</span><span class="legend-item" data-route-index="11"><span class="legend-dot" style="background:#ca8a04"></span>Camio 01 · Ruta 12</span><span class="legend-item" data-route-index="12"><span class="legend-dot" style="background:#db2777"></span>Camio 01 · Ruta 13</span><span class="legend-item" data-route-index="13"><span class="legend-dot" style="background:#7c3aed"></span>Camio 01 · Ruta 14</span><span class="legend-item" data-route-index="14"><span class="legend-dot" style="background:#059669"></span>Camio 01 · Ruta 15</span><span class="legend-item" data-route-index="15"><span class="legend-dot" style="background:#ef4444"></span>Camio 01 · Ruta 16</span><span class="legend-item" data-route-index="16"><span class="legend-dot" style="background:#2563eb"></span>Camio 01 · Ruta 17</span><span class="legend-item" data-route-index="17"><span class="legend-dot" style="background:#16a34a"></span>Camio 01 · Ruta 18</span><span class="legend-item" data-route-index="18"><span class="legend-dot" style="background:#9333ea"></span>Camio 01 · Ruta 19</span></div>
+    <svg viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid meet">
+      <rect x="0" y="0" width="1000" height="640" fill="transparent"></rect>
+      <g class="route-layer" data-route-index="0" data-route-id="C-01"><polyline points="490,310 616.9591984245758,310 690.6220662919625,302.3170005381112 726.9920293900051,296.36379149432116 798.2654617041756,280.28076796837325 832.9536054317829,270.1779744464113 899.9018058147764,245.93788953182093 931.9531726232569,231.8439250039786 768.0902905008036,223.7514294024407 738.8982541369065,238.70796553301193 676.9024891571208,264.9565641217927 644.2940631427225,276.1873942819574 564.6247444768417,247.47956140663103 490,310" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="616.9591984245758" cy="310" r="4.5" fill="#ef4444" /><text x="623.9591984245758" y="303" font-size="11" fill="#0f172a">1</text></g><g><circle cx="690.6220662919625" cy="302.3170005381112" r="4.5" fill="#ef4444" /><text x="697.6220662919625" y="295.3170005381112" font-size="11" fill="#0f172a">2</text></g><g><circle cx="726.9920293900051" cy="296.36379149432116" r="4.5" fill="#ef4444" /><text x="733.9920293900051" y="289.36379149432116" font-size="11" fill="#0f172a">3</text></g><g><circle cx="798.2654617041756" cy="280.28076796837325" r="4.5" fill="#ef4444" /><text x="805.2654617041756" y="273.28076796837325" font-size="11" fill="#0f172a">4</text></g><g><circle cx="832.9536054317829" cy="270.1779744464113" r="4.5" fill="#ef4444" /><text x="839.9536054317829" y="263.1779744464113" font-size="11" fill="#0f172a">5</text></g><g><circle cx="899.9018058147764" cy="245.93788953182093" r="4.5" fill="#ef4444" /><text x="906.9018058147764" y="238.93788953182093" font-size="11" fill="#0f172a">6</text></g><g><circle cx="931.9531726232569" cy="231.8439250039786" r="4.5" fill="#ef4444" /><text x="938.9531726232569" y="224.8439250039786" font-size="11" fill="#0f172a">7</text></g><g><circle cx="768.0902905008036" cy="223.7514294024407" r="4.5" fill="#ef4444" /><text x="775.0902905008036" y="216.7514294024407" font-size="11" fill="#0f172a">8</text></g><g><circle cx="738.8982541369065" cy="238.70796553301193" r="4.5" fill="#ef4444" /><text x="745.8982541369065" y="231.70796553301193" font-size="11" fill="#0f172a">9</text></g><g><circle cx="676.9024891571208" cy="264.9565641217927" r="4.5" fill="#ef4444" /><text x="683.9024891571208" y="257.9565641217927" font-size="11" fill="#0f172a">10</text></g><g><circle cx="644.2940631427225" cy="276.1873942819574" r="4.5" fill="#ef4444" /><text x="651.2940631427225" y="269.1873942819574" font-size="11" fill="#0f172a">11</text></g><g><circle cx="564.6247444768417" cy="247.47956140663103" r="4.5" fill="#ef4444" /><text x="571.6247444768417" y="240.47956140663103" font-size="11" fill="#0f172a">12</text></g></g>
+<g class="route-layer" data-route-index="1" data-route-id="C-01"><polyline points="490,310 592.7121491177006,264.5762424923763 597.7112222761591,206.68868730662228 668.5628127431579,214.17651571013954 619.5767023780734,248.82000417319097 690.5234239971851,195.38015625241866 822.3906499712449,190.34548027001438 847.3173220974043,171.97188907404245 729.0012675945663,155.0805654068618 745.3771906708785,133.68000519469336 772.076432371993,88.6473723751987 638.6556432979355,117.70736887750184 490,310" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="592.7121491177006" cy="264.5762424923763" r="4.5" fill="#2563eb" /><text x="599.7121491177006" y="257.5762424923763" font-size="11" fill="#0f172a">1</text></g><g><circle cx="597.7112222761591" cy="206.68868730662228" r="4.5" fill="#2563eb" /><text x="604.7112222761591" y="199.68868730662228" font-size="11" fill="#0f172a">2</text></g><g><circle cx="668.5628127431579" cy="214.17651571013954" r="4.5" fill="#2563eb" /><text x="675.5628127431579" y="207.17651571013954" font-size="11" fill="#0f172a">3</text></g><g><circle cx="619.5767023780734" cy="248.82000417319097" r="4.5" fill="#2563eb" /><text x="626.5767023780734" y="241.82000417319097" font-size="11" fill="#0f172a">4</text></g><g><circle cx="690.5234239971851" cy="195.38015625241866" r="4.5" fill="#2563eb" /><text x="697.5234239971851" y="188.38015625241866" font-size="11" fill="#0f172a">5</text></g><g><circle cx="822.3906499712449" cy="190.34548027001438" r="4.5" fill="#2563eb" /><text x="829.3906499712449" y="183.34548027001438" font-size="11" fill="#0f172a">6</text></g><g><circle cx="847.3173220974043" cy="171.97188907404245" r="4.5" fill="#2563eb" /><text x="854.3173220974043" y="164.97188907404245" font-size="11" fill="#0f172a">7</text></g><g><circle cx="729.0012675945663" cy="155.0805654068618" r="4.5" fill="#2563eb" /><text x="736.0012675945663" y="148.0805654068618" font-size="11" fill="#0f172a">8</text></g><g><circle cx="745.3771906708785" cy="133.68000519469336" r="4.5" fill="#2563eb" /><text x="752.3771906708785" y="126.68000519469336" font-size="11" fill="#0f172a">9</text></g><g><circle cx="772.076432371993" cy="88.6473723751987" r="4.5" fill="#2563eb" /><text x="779.076432371993" y="81.6473723751987" font-size="11" fill="#0f172a">10</text></g><g><circle cx="638.6556432979355" cy="117.70736887750184" r="4.5" fill="#2563eb" /><text x="645.6556432979355" y="110.70736887750184" font-size="11" fill="#0f172a">11</text></g></g>
+<g class="route-layer" data-route-index="2" data-route-id="C-01"><polyline points="490,310 611.1765439535837,185.27926772968448 631.6940802674575,140.72764926039594 645.7893270975077,70.49108940966107 645.8963687600203,46.42332551498896 539.9913254903499,191.48491266658607 535.7514626208374,214.14408949599238 490,232.72048791547593 541.5445265823514,145.526861163175 538.824452623403,122.36015374531218 526.3415779063581,75.98468209027305 455.52355178321955,143.88136322617646 490,310" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="611.1765439535837" cy="185.27926772968448" r="4.5" fill="#16a34a" /><text x="618.1765439535837" y="178.27926772968448" font-size="11" fill="#0f172a">1</text></g><g><circle cx="631.6940802674575" cy="140.72764926039594" r="4.5" fill="#16a34a" /><text x="638.6940802674575" y="133.72764926039594" font-size="11" fill="#0f172a">2</text></g><g><circle cx="645.7893270975077" cy="70.49108940966107" r="4.5" fill="#16a34a" /><text x="652.7893270975077" y="63.49108940966107" font-size="11" fill="#0f172a">3</text></g><g><circle cx="645.8963687600203" cy="46.42332551498896" r="4.5" fill="#16a34a" /><text x="652.8963687600203" y="39.42332551498896" font-size="11" fill="#0f172a">4</text></g><g><circle cx="539.9913254903499" cy="191.48491266658607" r="4.5" fill="#16a34a" /><text x="546.9913254903499" y="184.48491266658607" font-size="11" fill="#0f172a">5</text></g><g><circle cx="535.7514626208374" cy="214.14408949599238" r="4.5" fill="#16a34a" /><text x="542.7514626208374" y="207.14408949599238" font-size="11" fill="#0f172a">6</text></g><g><circle cx="490" cy="232.72048791547593" r="4.5" fill="#16a34a" /><text x="497" y="225.72048791547593" font-size="11" fill="#0f172a">7</text></g><g><circle cx="541.5445265823514" cy="145.526861163175" r="4.5" fill="#16a34a" /><text x="548.5445265823514" y="138.526861163175" font-size="11" fill="#0f172a">8</text></g><g><circle cx="538.824452623403" cy="122.36015374531218" r="4.5" fill="#16a34a" /><text x="545.824452623403" y="115.36015374531218" font-size="11" fill="#0f172a">9</text></g><g><circle cx="526.3415779063581" cy="75.98468209027305" r="4.5" fill="#16a34a" /><text x="533.3415779063581" y="68.98468209027305" font-size="11" fill="#0f172a">10</text></g><g><circle cx="455.52355178321955" cy="143.88136322617646" r="4.5" fill="#16a34a" /><text x="462.52355178321955" y="136.88136322617646" font-size="11" fill="#0f172a">11</text></g></g>
+<g class="route-layer" data-route-index="3" data-route-id="C-01"><polyline points="490,310 484.8489821404784,210.22988505749652 467.5976574549881,165.74398211041472 516.5727800936795,52.90993793251664 361.6007339350648,40.98502535976479 405.76015633044295,80.60245427356557 424.5781008762445,101.24563147629175 450.767450094585,236.50281645591411 416.0000696286847,196.23326746960043 395.45954152936974,177.01819433843383 348.30591973254246,140.72764926039594 263.23953205018915,92.50249959288186 490,310" fill="none" stroke="#9333ea" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="484.8489821404784" cy="210.22988505749652" r="4.5" fill="#9333ea" /><text x="491.8489821404784" y="203.22988505749652" font-size="11" fill="#0f172a">1</text></g><g><circle cx="467.5976574549881" cy="165.74398211041472" r="4.5" fill="#9333ea" /><text x="474.5976574549881" y="158.74398211041472" font-size="11" fill="#0f172a">2</text></g><g><circle cx="516.5727800936795" cy="52.90993793251664" r="4.5" fill="#9333ea" /><text x="523.5727800936795" y="45.90993793251664" font-size="11" fill="#0f172a">3</text></g><g><circle cx="361.6007339350648" cy="40.98502535976479" r="4.5" fill="#9333ea" /><text x="368.6007339350648" y="33.98502535976479" font-size="11" fill="#0f172a">4</text></g><g><circle cx="405.76015633044295" cy="80.60245427356557" r="4.5" fill="#9333ea" /><text x="412.76015633044295" y="73.60245427356557" font-size="11" fill="#0f172a">5</text></g><g><circle cx="424.5781008762445" cy="101.24563147629175" r="4.5" fill="#9333ea" /><text x="431.5781008762445" y="94.24563147629175" font-size="11" fill="#0f172a">6</text></g><g><circle cx="450.767450094585" cy="236.50281645591411" r="4.5" fill="#9333ea" /><text x="457.767450094585" y="229.50281645591411" font-size="11" fill="#0f172a">7</text></g><g><circle cx="416.0000696286847" cy="196.23326746960043" r="4.5" fill="#9333ea" /><text x="423.0000696286847" y="189.23326746960043" font-size="11" fill="#0f172a">8</text></g><g><circle cx="395.45954152936974" cy="177.01819433843383" r="4.5" fill="#9333ea" /><text x="402.45954152936974" y="170.01819433843383" font-size="11" fill="#0f172a">9</text></g><g><circle cx="348.30591973254246" cy="140.72764926039594" r="4.5" fill="#9333ea" /><text x="355.30591973254246" y="133.72764926039594" font-size="11" fill="#0f172a">10</text></g><g><circle cx="263.23953205018915" cy="92.50249959288186" r="4.5" fill="#9333ea" /><text x="270.23953205018915" y="85.50249959288186" font-size="11" fill="#0f172a">11</text></g></g>
+<g class="route-layer" data-route-index="4" data-route-id="C-01"><polyline points="490,310 387.28785088229944,264.5762424923763 389.4900068559572,231.1272246394596 361.86583857444083,215.72059486073425 285.10165412731635,236.2403645499869 301.6959709860992,187.94226365389807 321.8015841693682,123.76848015696868 231.31400026291726,78.30311077487266 163.9208544055489,145.80061693748604 200.33143710554174,154.55301437424566 269.3062959057677,175.66470185568443 174.09067744161604,219.51395625344003 490,310" fill="none" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="387.28785088229944" cy="264.5762424923763" r="4.5" fill="#ea580c" /><text x="394.28785088229944" y="257.5762424923763" font-size="11" fill="#0f172a">1</text></g><g><circle cx="389.4900068559572" cy="231.1272246394596" r="4.5" fill="#ea580c" /><text x="396.4900068559572" y="224.1272246394596" font-size="11" fill="#0f172a">2</text></g><g><circle cx="361.86583857444083" cy="215.72059486073425" r="4.5" fill="#ea580c" /><text x="368.86583857444083" y="208.72059486073425" font-size="11" fill="#0f172a">3</text></g><g><circle cx="285.10165412731635" cy="236.2403645499869" r="4.5" fill="#ea580c" /><text x="292.10165412731635" y="229.2403645499869" font-size="11" fill="#0f172a">4</text></g><g><circle cx="301.6959709860992" cy="187.94226365389807" r="4.5" fill="#ea580c" /><text x="308.6959709860992" y="180.94226365389807" font-size="11" fill="#0f172a">5</text></g><g><circle cx="321.8015841693682" cy="123.76848015696868" r="4.5" fill="#ea580c" /><text x="328.8015841693682" y="116.76848015696868" font-size="11" fill="#0f172a">6</text></g><g><circle cx="231.31400026291726" cy="78.30311077487266" r="4.5" fill="#ea580c" /><text x="238.31400026291726" y="71.30311077487266" font-size="11" fill="#0f172a">7</text></g><g><circle cx="163.9208544055489" cy="145.80061693748604" r="4.5" fill="#ea580c" /><text x="170.9208544055489" y="138.80061693748604" font-size="11" fill="#0f172a">8</text></g><g><circle cx="200.33143710554174" cy="154.55301437424566" r="4.5" fill="#ea580c" /><text x="207.33143710554174" y="147.55301437424566" font-size="11" fill="#0f172a">9</text></g><g><circle cx="269.3062959057677" cy="175.66470185568443" r="4.5" fill="#ea580c" /><text x="276.3062959057677" y="168.66470185568443" font-size="11" fill="#0f172a">10</text></g><g><circle cx="174.09067744161604" cy="219.51395625344003" r="4.5" fill="#ea580c" /><text x="181.09067744161604" y="212.51395625344003" font-size="11" fill="#0f172a">11</text></g></g>
+<g class="route-layer" data-route-index="5" data-route-id="C-01"><polyline points="490,310 354.36791295768796,253.8931914613438 369.2546270346971,286.1193174488931 326.09195402299036,313.13540217536655 295.296642237983,279.57049752761725 248.94708037631338,229.33567409438967 135.5929338003407,216.6470062251297 56.98117763171689,215.1065581460927 67.63775517481744,293.8252642908159 181.73453829582454,280.28076796837325 257.6844815784028,278.3912438881538 217.0908110143981,330.98566413197244 490,310" fill="none" stroke="#0891b2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="354.36791295768796" cy="253.8931914613438" r="4.5" fill="#0891b2" /><text x="361.36791295768796" y="246.8931914613438" font-size="11" fill="#0f172a">1</text></g><g><circle cx="369.2546270346971" cy="286.1193174488931" r="4.5" fill="#0891b2" /><text x="376.2546270346971" y="279.1193174488931" font-size="11" fill="#0f172a">2</text></g><g><circle cx="326.09195402299036" cy="313.13540217536655" r="4.5" fill="#0891b2" /><text x="333.09195402299036" y="306.13540217536655" font-size="11" fill="#0f172a">3</text></g><g><circle cx="295.296642237983" cy="279.57049752761725" r="4.5" fill="#0891b2" /><text x="302.296642237983" y="272.57049752761725" font-size="11" fill="#0f172a">4</text></g><g><circle cx="248.94708037631338" cy="229.33567409438967" r="4.5" fill="#0891b2" /><text x="255.94708037631338" y="222.33567409438967" font-size="11" fill="#0f172a">5</text></g><g><circle cx="135.5929338003407" cy="216.6470062251297" r="4.5" fill="#0891b2" /><text x="142.5929338003407" y="209.6470062251297" font-size="11" fill="#0f172a">6</text></g><g><circle cx="56.98117763171689" cy="215.1065581460927" r="4.5" fill="#0891b2" /><text x="63.98117763171689" y="208.1065581460927" font-size="11" fill="#0f172a">7</text></g><g><circle cx="67.63775517481744" cy="293.8252642908159" r="4.5" fill="#0891b2" /><text x="74.63775517481744" y="286.8252642908159" font-size="11" fill="#0f172a">8</text></g><g><circle cx="181.73453829582454" cy="280.28076796837325" r="4.5" fill="#0891b2" /><text x="188.73453829582454" y="273.28076796837325" font-size="11" fill="#0f172a">9</text></g><g><circle cx="257.6844815784028" cy="278.3912438881538" r="4.5" fill="#0891b2" /><text x="264.6844815784028" y="271.3912438881538" font-size="11" fill="#0f172a">10</text></g><g><circle cx="217.0908110143981" cy="330.98566413197244" r="4.5" fill="#0891b2" /><text x="224.0908110143981" y="323.98566413197244" font-size="11" fill="#0f172a">11</text></g></g>
+<g class="route-layer" data-route-index="6" data-route-id="C-01"><polyline points="490,310 143.61526013366114,283.36434937096504 30,301.2006455078423 80.09819418522366,374.06211046817907 113.13260344941374,361.2764265814617 181.73453829582454,339.71923203162675 289.37793370803746,317.68299946188876 369.2546270346971,333.8806825511069 335.7059368572776,343.8126057180426 271.52989069884194,367.5463660255987 184.04821740070764,412.38164441864694 109.35511055867087,467.46104331823216 490,310" fill="none" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="143.61526013366114" cy="283.36434937096504" r="4.5" fill="#4f46e5" /><text x="150.61526013366114" y="276.36434937096504" font-size="11" fill="#0f172a">1</text></g><g><circle cx="30" cy="301.2006455078423" r="4.5" fill="#4f46e5" /><text x="37" y="294.2006455078423" font-size="11" fill="#0f172a">2</text></g><g><circle cx="80.09819418522366" cy="374.06211046817907" r="4.5" fill="#4f46e5" /><text x="87.09819418522366" y="367.06211046817907" font-size="11" fill="#0f172a">3</text></g><g><circle cx="113.13260344941374" cy="361.2764265814617" r="4.5" fill="#4f46e5" /><text x="120.13260344941374" y="354.2764265814617" font-size="11" fill="#0f172a">4</text></g><g><circle cx="181.73453829582454" cy="339.71923203162675" r="4.5" fill="#4f46e5" /><text x="188.73453829582454" y="332.71923203162675" font-size="11" fill="#0f172a">5</text></g><g><circle cx="289.37793370803746" cy="317.68299946188876" r="4.5" fill="#4f46e5" /><text x="296.37793370803746" y="310.68299946188876" font-size="11" fill="#0f172a">6</text></g><g><circle cx="369.2546270346971" cy="333.8806825511069" r="4.5" fill="#4f46e5" /><text x="376.2546270346971" y="326.8806825511069" font-size="11" fill="#0f172a">7</text></g><g><circle cx="335.7059368572776" cy="343.8126057180426" r="4.5" fill="#4f46e5" /><text x="342.7059368572776" y="336.8126057180426" font-size="11" fill="#0f172a">8</text></g><g><circle cx="271.52989069884194" cy="367.5463660255987" r="4.5" fill="#4f46e5" /><text x="278.52989069884194" y="360.5463660255987" font-size="11" fill="#0f172a">9</text></g><g><circle cx="184.04821740070764" cy="412.38164441864694" r="4.5" fill="#4f46e5" /><text x="191.04821740070764" y="405.38164441864694" font-size="11" fill="#0f172a">10</text></g><g><circle cx="109.35511055867087" cy="467.46104331823216" r="4.5" fill="#4f46e5" /><text x="116.35511055867087" y="460.46104331823216" font-size="11" fill="#0f172a">11</text></g></g>
+<g class="route-layer" data-route-index="7" data-route-id="C-01"><polyline points="490,310 387.28785088229944,355.4237575076237 397.82452882931386,392.55866167794 335.1124058426379,387.9947069547021 241.10174586309356,381.29203446698807 157.60935002875516,429.6545197299856 220.24387068303938,508.4829581879015 250.99873240543366,464.9194345931382 269.3062959057677,444.3352981443155 348.30591973254246,479.27235073960406 357.4800360122297,456.7278641187769 311.43718725684204,405.8234842898605 450.767450094585,383.4971835440859 490,310" fill="none" stroke="#65a30d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="387.28785088229944" cy="355.4237575076237" r="4.5" fill="#65a30d" /><text x="394.28785088229944" y="348.4237575076237" font-size="11" fill="#0f172a">1</text></g><g><circle cx="397.82452882931386" cy="392.55866167794" r="4.5" fill="#65a30d" /><text x="404.82452882931386" y="385.55866167794" font-size="11" fill="#0f172a">2</text></g><g><circle cx="335.1124058426379" cy="387.9947069547021" r="4.5" fill="#65a30d" /><text x="342.1124058426379" y="380.9947069547021" font-size="11" fill="#0f172a">3</text></g><g><circle cx="241.10174586309356" cy="381.29203446698807" r="4.5" fill="#65a30d" /><text x="248.10174586309356" y="374.29203446698807" font-size="11" fill="#0f172a">4</text></g><g><circle cx="157.60935002875516" cy="429.6545197299856" r="4.5" fill="#65a30d" /><text x="164.60935002875516" y="422.6545197299856" font-size="11" fill="#0f172a">5</text></g><g><circle cx="220.24387068303938" cy="508.4829581879015" r="4.5" fill="#65a30d" /><text x="227.24387068303938" y="501.4829581879015" font-size="11" fill="#0f172a">6</text></g><g><circle cx="250.99873240543366" cy="464.9194345931382" r="4.5" fill="#65a30d" /><text x="257.99873240543366" y="457.9194345931382" font-size="11" fill="#0f172a">7</text></g><g><circle cx="269.3062959057677" cy="444.3352981443155" r="4.5" fill="#65a30d" /><text x="276.3062959057677" y="437.3352981443155" font-size="11" fill="#0f172a">8</text></g><g><circle cx="348.30591973254246" cy="479.27235073960406" r="4.5" fill="#65a30d" /><text x="355.30591973254246" y="472.27235073960406" font-size="11" fill="#0f172a">9</text></g><g><circle cx="357.4800360122297" cy="456.7278641187769" r="4.5" fill="#65a30d" /><text x="364.4800360122297" y="449.7278641187769" font-size="11" fill="#0f172a">10</text></g><g><circle cx="311.43718725684204" cy="405.8234842898605" r="4.5" fill="#65a30d" /><text x="318.43718725684204" y="398.8234842898605" font-size="11" fill="#0f172a">11</text></g><g><circle cx="450.767450094585" cy="383.4971835440859" r="4.5" fill="#65a30d" /><text x="457.767450094585" y="376.4971835440859" font-size="11" fill="#0f172a">12</text></g></g>
+<g class="route-layer" data-route-index="8" data-route-id="C-01"><polyline points="490,310 444.24853737916254,405.8559105040076 382.2887777238409,413.31131269337766 207.92356762800702,531.3526276248014 336.63436736986847,525.726040295456 334.2106729024924,549.5089105903389 475.54391762005895,590 453.6584220936419,544.015317909727 446.24143110946903,520.8428851360209 438.07132924479384,451.4094459957347 490,387.2795120845241 502.6220705444992,432.11777948205344 490,310" fill="none" stroke="#be123c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="444.24853737916254" cy="405.8559105040076" r="4.5" fill="#be123c" /><text x="451.24853737916254" y="398.8559105040076" font-size="11" fill="#0f172a">1</text></g><g><circle cx="382.2887777238409" cy="413.31131269337766" r="4.5" fill="#be123c" /><text x="389.2887777238409" y="406.31131269337766" font-size="11" fill="#0f172a">2</text></g><g><circle cx="207.92356762800702" cy="531.3526276248014" r="4.5" fill="#be123c" /><text x="214.92356762800702" y="524.3526276248014" font-size="11" fill="#0f172a">3</text></g><g><circle cx="336.63436736986847" cy="525.726040295456" r="4.5" fill="#be123c" /><text x="343.63436736986847" y="518.726040295456" font-size="11" fill="#0f172a">4</text></g><g><circle cx="334.2106729024924" cy="549.5089105903389" r="4.5" fill="#be123c" /><text x="341.2106729024924" y="542.5089105903389" font-size="11" fill="#0f172a">5</text></g><g><circle cx="475.54391762005895" cy="590" r="4.5" fill="#be123c" /><text x="482.54391762005895" y="583" font-size="11" fill="#0f172a">6</text></g><g><circle cx="453.6584220936419" cy="544.015317909727" r="4.5" fill="#be123c" /><text x="460.6584220936419" y="537.015317909727" font-size="11" fill="#0f172a">7</text></g><g><circle cx="446.24143110946903" cy="520.8428851360209" r="4.5" fill="#be123c" /><text x="453.24143110946903" y="513.8428851360209" font-size="11" fill="#0f172a">8</text></g><g><circle cx="438.07132924479384" cy="451.4094459957347" r="4.5" fill="#be123c" /><text x="445.07132924479384" y="444.4094459957347" font-size="11" fill="#0f172a">9</text></g><g><circle cx="490" cy="387.2795120845241" r="4.5" fill="#be123c" /><text x="497" y="380.2795120845241" font-size="11" fill="#0f172a">10</text></g><g><circle cx="502.6220705444992" cy="432.11777948205344" r="4.5" fill="#be123c" /><text x="509.6220705444992" y="425.11777948205344" font-size="11" fill="#0f172a">11</text></g></g>
+<g class="route-layer" data-route-index="9" data-route-id="C-01"><polyline points="490,310 512.4023425450118,454.25601788958534 438.4554734176486,474.473138836825 538.824452623403,497.6398462546878 555.4218991237556,518.7543685237082 595.2448957691604,559.5054470176655 618.3992660649352,579.0149746402352 545.5492808225338,403.91812539122134 563.9999303713153,423.76673253039957 607.1226280529183,461.5032851268264 631.6940802674575,479.27235073960406 686.5752824135934,512.3247434607523 490,310" fill="none" stroke="#0f766e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="512.4023425450118" cy="454.25601788958534" r="4.5" fill="#0f766e" /><text x="519.4023425450118" y="447.25601788958534" font-size="11" fill="#0f172a">1</text></g><g><circle cx="438.4554734176486" cy="474.473138836825" r="4.5" fill="#0f766e" /><text x="445.4554734176486" y="467.473138836825" font-size="11" fill="#0f172a">2</text></g><g><circle cx="538.824452623403" cy="497.6398462546878" r="4.5" fill="#0f766e" /><text x="545.824452623403" y="490.6398462546878" font-size="11" fill="#0f172a">3</text></g><g><circle cx="555.4218991237556" cy="518.7543685237082" r="4.5" fill="#0f766e" /><text x="562.4218991237556" y="511.7543685237082" font-size="11" fill="#0f172a">4</text></g><g><circle cx="595.2448957691604" cy="559.5054470176655" r="4.5" fill="#0f766e" /><text x="602.2448957691604" y="552.5054470176655" font-size="11" fill="#0f172a">5</text></g><g><circle cx="618.3992660649352" cy="579.0149746402352" r="4.5" fill="#0f766e" /><text x="625.3992660649352" y="572.0149746402352" font-size="11" fill="#0f172a">6</text></g><g><circle cx="545.5492808225338" cy="403.91812539122134" r="4.5" fill="#0f766e" /><text x="552.5492808225338" y="396.91812539122134" font-size="11" fill="#0f172a">7</text></g><g><circle cx="563.9999303713153" cy="423.76673253039957" r="4.5" fill="#0f766e" /><text x="570.9999303713153" y="416.76673253039957" font-size="11" fill="#0f172a">8</text></g><g><circle cx="607.1226280529183" cy="461.5032851268264" r="4.5" fill="#0f766e" /><text x="614.1226280529183" y="454.5032851268264" font-size="11" fill="#0f172a">9</text></g><g><circle cx="631.6940802674575" cy="479.27235073960406" r="4.5" fill="#0f766e" /><text x="638.6940802674575" y="472.27235073960406" font-size="11" fill="#0f172a">10</text></g><g><circle cx="686.5752824135934" cy="512.3247434607523" r="4.5" fill="#0f766e" /><text x="693.5752824135934" y="505.3247434607523" font-size="11" fill="#0f172a">11</text></g></g>
+<g class="route-layer" data-route-index="10" data-route-id="C-01"><polyline points="490,310 564.6247444768417,372.52043859336897 590.5099931440428,388.87277536054034 647.4242956190348,418.69040775671465 716.7604679498108,527.4975004071182 853.6507453836217,481.6986979655683 779.6685628944583,465.44698562575434 744.5104996887375,455.4790324488462 678.3040290139007,432.05773634610193 592.7121491177006,355.4237575076237 659.7257279962655,375.56335268984475 694.8983458726836,383.7596354500131 883.478924541306,404.8282860593572 490,310" fill="none" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="564.6247444768417" cy="372.52043859336897" r="4.5" fill="#a855f7" /><text x="571.6247444768417" y="365.52043859336897" font-size="11" fill="#0f172a">1</text></g><g><circle cx="590.5099931440428" cy="388.87277536054034" r="4.5" fill="#a855f7" /><text x="597.5099931440428" y="381.87277536054034" font-size="11" fill="#0f172a">2</text></g><g><circle cx="647.4242956190348" cy="418.69040775671465" r="4.5" fill="#a855f7" /><text x="654.4242956190348" y="411.69040775671465" font-size="11" fill="#0f172a">3</text></g><g><circle cx="716.7604679498108" cy="527.4975004071182" r="4.5" fill="#a855f7" /><text x="723.7604679498108" y="520.4975004071182" font-size="11" fill="#0f172a">4</text></g><g><circle cx="853.6507453836217" cy="481.6986979655683" r="4.5" fill="#a855f7" /><text x="860.6507453836217" y="474.6986979655683" font-size="11" fill="#0f172a">5</text></g><g><circle cx="779.6685628944583" cy="465.44698562575434" r="4.5" fill="#a855f7" /><text x="786.6685628944583" y="458.44698562575434" font-size="11" fill="#0f172a">6</text></g><g><circle cx="744.5104996887375" cy="455.4790324488462" r="4.5" fill="#a855f7" /><text x="751.5104996887375" y="448.4790324488462" font-size="11" fill="#0f172a">7</text></g><g><circle cx="678.3040290139007" cy="432.05773634610193" r="4.5" fill="#a855f7" /><text x="685.3040290139007" y="425.05773634610193" font-size="11" fill="#0f172a">8</text></g><g><circle cx="592.7121491177006" cy="355.4237575076237" r="4.5" fill="#a855f7" /><text x="599.7121491177006" y="348.4237575076237" font-size="11" fill="#0f172a">9</text></g><g><circle cx="659.7257279962655" cy="375.56335268984475" r="4.5" fill="#a855f7" /><text x="666.7257279962655" y="368.56335268984475" font-size="11" fill="#0f172a">10</text></g><g><circle cx="694.8983458726836" cy="383.7596354500131" r="4.5" fill="#a855f7" /><text x="701.8983458726836" y="376.7596354500131" font-size="11" fill="#0f172a">11</text></g><g><circle cx="883.478924541306" cy="404.8282860593572" r="4.5" fill="#a855f7" /><text x="890.478924541306" y="397.8282860593572" font-size="11" fill="#0f172a">12</text></g></g>
+<g class="route-layer" data-route-index="11" data-route-id="C-01"><polyline points="490,310 647.4775672565622,337.8487163778885 684.7033577620169,340.42950247238275 768.0902905008036,396.2485705975593 805.909322558384,400.48604374656 923.0188223682832,404.89344185390723 912.3622448251826,326.1747357091841 874.4537365660099,332.12096046474454 798.2654617041756,339.71923203162675 760.2058709462564,341.37492922402157 653.9080459770096,306.8645978246335 762.9091889856019,289.0143358680275 490,310" fill="none" stroke="#ca8a04" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="647.4775672565622" cy="337.8487163778885" r="4.5" fill="#ca8a04" /><text x="654.4775672565622" y="330.8487163778885" font-size="11" fill="#0f172a">1</text></g><g><circle cx="684.7033577620169" cy="340.42950247238275" r="4.5" fill="#ca8a04" /><text x="691.7033577620169" y="333.42950247238275" font-size="11" fill="#0f172a">2</text></g><g><circle cx="768.0902905008036" cy="396.2485705975593" r="4.5" fill="#ca8a04" /><text x="775.0902905008036" y="389.2485705975593" font-size="11" fill="#0f172a">3</text></g><g><circle cx="805.909322558384" cy="400.48604374656" r="4.5" fill="#ca8a04" /><text x="812.909322558384" y="393.48604374656" font-size="11" fill="#0f172a">4</text></g><g><circle cx="923.0188223682832" cy="404.89344185390723" r="4.5" fill="#ca8a04" /><text x="930.0188223682832" y="397.89344185390723" font-size="11" fill="#0f172a">5</text></g><g><circle cx="912.3622448251826" cy="326.1747357091841" r="4.5" fill="#ca8a04" /><text x="919.3622448251826" y="319.1747357091841" font-size="11" fill="#0f172a">6</text></g><g><circle cx="874.4537365660099" cy="332.12096046474454" r="4.5" fill="#ca8a04" /><text x="881.4537365660099" y="325.12096046474454" font-size="11" fill="#0f172a">7</text></g><g><circle cx="798.2654617041756" cy="339.71923203162675" r="4.5" fill="#ca8a04" /><text x="805.2654617041756" y="332.71923203162675" font-size="11" fill="#0f172a">8</text></g><g><circle cx="760.2058709462564" cy="341.37492922402157" r="4.5" fill="#ca8a04" /><text x="767.2058709462564" y="334.37492922402157" font-size="11" fill="#0f172a">9</text></g><g><circle cx="653.9080459770096" cy="306.8645978246335" r="4.5" fill="#ca8a04" /><text x="660.9080459770096" y="299.8645978246335" font-size="11" fill="#0f172a">10</text></g><g><circle cx="762.9091889856019" cy="289.0143358680275" r="4.5" fill="#ca8a04" /><text x="769.9091889856019" y="282.0143358680275" font-size="11" fill="#0f172a">11</text></g></g>
+<g class="route-layer" data-route-index="12" data-route-id="C-01"><polyline points="490,310 610.745372965303,286.1193174488931 644.8875941573622,232.0052930452979 708.470109301158,252.45363397440127 866.8673965505862,258.7235734185383 870.644889441329,152.53895668176784 759.7561293169606,111.51704181209851 582.1754711706861,227.44133832206 533.758568890531,99.15711486397913 441.1755473765971,122.36015374531218 126.34925461637829,138.30130203443179 490,310" fill="none" stroke="#db2777" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="610.745372965303" cy="286.1193174488931" r="4.5" fill="#db2777" /><text x="617.745372965303" y="279.1193174488931" font-size="11" fill="#0f172a">1</text></g><g><circle cx="644.8875941573622" cy="232.0052930452979" r="4.5" fill="#db2777" /><text x="651.8875941573622" y="225.0052930452979" font-size="11" fill="#0f172a">2</text></g><g><circle cx="708.470109301158" cy="252.45363397440127" r="4.5" fill="#db2777" /><text x="715.470109301158" y="245.45363397440127" font-size="11" fill="#0f172a">3</text></g><g><circle cx="866.8673965505862" cy="258.7235734185383" r="4.5" fill="#db2777" /><text x="873.8673965505862" y="251.7235734185383" font-size="11" fill="#0f172a">4</text></g><g><circle cx="870.644889441329" cy="152.53895668176784" r="4.5" fill="#db2777" /><text x="877.644889441329" y="145.53895668176784" font-size="11" fill="#0f172a">5</text></g><g><circle cx="759.7561293169606" cy="111.51704181209851" r="4.5" fill="#db2777" /><text x="766.7561293169606" y="104.51704181209851" font-size="11" fill="#0f172a">6</text></g><g><circle cx="582.1754711706861" cy="227.44133832206" r="4.5" fill="#db2777" /><text x="589.1754711706861" y="220.44133832206" font-size="11" fill="#0f172a">7</text></g><g><circle cx="533.758568890531" cy="99.15711486397913" r="4.5" fill="#db2777" /><text x="540.758568890531" y="92.15711486397913" font-size="11" fill="#0f172a">8</text></g><g><circle cx="441.1755473765971" cy="122.36015374531218" r="4.5" fill="#db2777" /><text x="448.1755473765971" y="115.36015374531218" font-size="11" fill="#0f172a">9</text></g><g><circle cx="126.34925461637829" cy="138.30130203443179" r="4.5" fill="#db2777" /><text x="133.3492546163783" y="131.30130203443179" font-size="11" fill="#0f172a">10</text></g></g>
+<g class="route-layer" data-route-index="13" data-route-id="C-01"><polyline points="490,310 529.232549905415,236.50281645591411 541.9286707552061,168.59055400426524 622.5199639877703,163.2721358812231 710.6937040942323,175.66470185568443 795.9517825992924,207.61835558135306 643.3656326301315,94.27395970454398 504.4560823799411,30 384.75510423083966,60.49455298233454 477.37792945550086,187.88222051794656 434.4507191774663,216.0818746087786 415.37525552315844,247.47956140663103 490,310" fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="529.232549905415" cy="236.50281645591411" r="4.5" fill="#7c3aed" /><text x="536.232549905415" y="229.50281645591411" font-size="11" fill="#0f172a">1</text></g><g><circle cx="541.9286707552061" cy="168.59055400426524" r="4.5" fill="#7c3aed" /><text x="548.9286707552061" y="161.59055400426524" font-size="11" fill="#0f172a">2</text></g><g><circle cx="622.5199639877703" cy="163.2721358812231" r="4.5" fill="#7c3aed" /><text x="629.5199639877703" y="156.2721358812231" font-size="11" fill="#0f172a">3</text></g><g><circle cx="710.6937040942323" cy="175.66470185568443" r="4.5" fill="#7c3aed" /><text x="717.6937040942323" y="168.66470185568443" font-size="11" fill="#0f172a">4</text></g><g><circle cx="795.9517825992924" cy="207.61835558135306" r="4.5" fill="#7c3aed" /><text x="802.9517825992924" y="200.61835558135306" font-size="11" fill="#0f172a">5</text></g><g><circle cx="643.3656326301315" cy="94.27395970454398" r="4.5" fill="#7c3aed" /><text x="650.3656326301315" y="87.27395970454398" font-size="11" fill="#0f172a">6</text></g><g><circle cx="504.4560823799411" cy="30" r="4.5" fill="#7c3aed" /><text x="511.4560823799411" y="23" font-size="11" fill="#0f172a">7</text></g><g><circle cx="384.75510423083966" cy="60.49455298233454" r="4.5" fill="#7c3aed" /><text x="391.75510423083966" y="53.49455298233454" font-size="11" fill="#0f172a">8</text></g><g><circle cx="477.37792945550086" cy="187.88222051794656" r="4.5" fill="#7c3aed" /><text x="484.37792945550086" y="180.88222051794656" font-size="11" fill="#0f172a">9</text></g><g><circle cx="434.4507191774663" cy="216.0818746087786" r="4.5" fill="#7c3aed" /><text x="441.4507191774663" y="209.0818746087786" font-size="11" fill="#0f172a">10</text></g><g><circle cx="415.37525552315844" cy="247.47956140663103" r="4.5" fill="#7c3aed" /><text x="422.37525552315844" y="240.47956140663103" font-size="11" fill="#0f172a">11</text></g></g>
+<g class="route-layer" data-route-index="14" data-route-id="C-01"><polyline points="490,310 332.57570438096525,201.3095922432853 372.8773719470816,158.49671487317357 293.4247175864066,107.67525653924764 235.48950031126256,164.52096755115377 96.52107545869399,215.1717139406428 211.90970949919642,223.7514294024407 219.7941290537436,278.62507077597843 320.2742720037344,244.43664731015525 332.5224327434377,282.1512836221115 363.0408015754242,310 253.0079706099949,323.63620850567884 490,310" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="332.57570438096525" cy="201.3095922432853" r="4.5" fill="#059669" /><text x="339.57570438096525" y="194.3095922432853" font-size="11" fill="#0f172a">1</text></g><g><circle cx="372.8773719470816" cy="158.49671487317357" r="4.5" fill="#059669" /><text x="379.8773719470816" y="151.49671487317357" font-size="11" fill="#0f172a">2</text></g><g><circle cx="293.4247175864066" cy="107.67525653924764" r="4.5" fill="#059669" /><text x="300.4247175864066" y="100.67525653924764" font-size="11" fill="#0f172a">3</text></g><g><circle cx="235.48950031126256" cy="164.52096755115377" r="4.5" fill="#059669" /><text x="242.48950031126256" y="157.52096755115377" font-size="11" fill="#0f172a">4</text></g><g><circle cx="96.52107545869399" cy="215.1717139406428" r="4.5" fill="#059669" /><text x="103.52107545869399" y="208.1717139406428" font-size="11" fill="#0f172a">5</text></g><g><circle cx="211.90970949919642" cy="223.7514294024407" r="4.5" fill="#059669" /><text x="218.90970949919642" y="216.7514294024407" font-size="11" fill="#0f172a">6</text></g><g><circle cx="219.7941290537436" cy="278.62507077597843" r="4.5" fill="#059669" /><text x="226.7941290537436" y="271.62507077597843" font-size="11" fill="#0f172a">7</text></g><g><circle cx="320.2742720037344" cy="244.43664731015525" r="4.5" fill="#059669" /><text x="327.2742720037344" y="237.43664731015525" font-size="11" fill="#0f172a">8</text></g><g><circle cx="332.5224327434377" cy="282.1512836221115" r="4.5" fill="#059669" /><text x="339.5224327434377" y="275.1512836221115" font-size="11" fill="#0f172a">9</text></g><g><circle cx="363.0408015754242" cy="310" r="4.5" fill="#059669" /><text x="370.0408015754242" y="303" font-size="11" fill="#0f172a">10</text></g><g><circle cx="253.0079706099949" cy="323.63620850567884" r="4.5" fill="#059669" /><text x="260.0079706099949" y="316.63620850567884" font-size="11" fill="#0f172a">11</text></g></g>
+<g class="route-layer" data-route-index="15" data-route-id="C-01"><polyline points="490,310 303.09751084287916,355.0434358782072 289.47657600281497,424.6198437475814 211.90970949919642,396.2485705975593 147.04639456821718,349.8220255535887 105.54626343399018,287.8790395352555 48.046827376742996,388.1560749960214 132.6826779025958,448.02811092595755 234.62280932912154,486.31999480530664 368.82345604641625,434.72073227031547 440.0086745096501,428.51508733341393 463.4272199063205,567.0900620674834 490,310" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="303.09751084287916" cy="355.0434358782072" r="4.5" fill="#ef4444" /><text x="310.09751084287916" y="348.0434358782072" font-size="11" fill="#0f172a">1</text></g><g><circle cx="289.47657600281497" cy="424.6198437475814" r="4.5" fill="#ef4444" /><text x="296.47657600281497" y="417.6198437475814" font-size="11" fill="#0f172a">2</text></g><g><circle cx="211.90970949919642" cy="396.2485705975593" r="4.5" fill="#ef4444" /><text x="218.90970949919642" y="389.2485705975593" font-size="11" fill="#0f172a">3</text></g><g><circle cx="147.04639456821718" cy="349.8220255535887" r="4.5" fill="#ef4444" /><text x="154.04639456821718" y="342.8220255535887" font-size="11" fill="#0f172a">4</text></g><g><circle cx="105.54626343399018" cy="287.8790395352555" r="4.5" fill="#ef4444" /><text x="112.54626343399018" y="280.8790395352555" font-size="11" fill="#0f172a">5</text></g><g><circle cx="48.046827376742996" cy="388.1560749960214" r="4.5" fill="#ef4444" /><text x="55.046827376742996" y="381.1560749960214" font-size="11" fill="#0f172a">6</text></g><g><circle cx="132.6826779025958" cy="448.02811092595755" r="4.5" fill="#ef4444" /><text x="139.6826779025958" y="441.02811092595755" font-size="11" fill="#0f172a">7</text></g><g><circle cx="234.62280932912154" cy="486.31999480530664" r="4.5" fill="#ef4444" /><text x="241.62280932912154" y="479.31999480530664" font-size="11" fill="#0f172a">8</text></g><g><circle cx="368.82345604641625" cy="434.72073227031547" r="4.5" fill="#ef4444" /><text x="375.82345604641625" y="427.72073227031547" font-size="11" fill="#0f172a">9</text></g><g><circle cx="440.0086745096501" cy="428.51508733341393" r="4.5" fill="#ef4444" /><text x="447.0086745096501" y="421.51508733341393" font-size="11" fill="#0f172a">10</text></g><g><circle cx="463.4272199063205" cy="567.0900620674834" r="4.5" fill="#ef4444" /><text x="470.4272199063205" y="560.0900620674834" font-size="11" fill="#0f172a">11</text></g></g>
+<g class="route-layer" data-route-index="16" data-route-id="C-01"><polyline points="490,310 415.37525552315844,372.52043859336897 360.4232976219265,371.17999582680903 341.3443567020646,502.29263112249816 334.1036312399797,573.5766744850112 441.1755473765971,497.6398462546878 574.2398436695571,539.3975457264345 658.1984158306318,496.2315198430314 524.4764482167805,476.11863677382354 495.1510178595215,409.7701149425035 584.5404584706304,442.98180566156617 618.1341614255591,404.2794051392658 490,310" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="415.37525552315844" cy="372.52043859336897" r="4.5" fill="#2563eb" /><text x="422.37525552315844" y="365.52043859336897" font-size="11" fill="#0f172a">1</text></g><g><circle cx="360.4232976219265" cy="371.17999582680903" r="4.5" fill="#2563eb" /><text x="367.4232976219265" y="364.17999582680903" font-size="11" fill="#0f172a">2</text></g><g><circle cx="341.3443567020646" cy="502.29263112249816" r="4.5" fill="#2563eb" /><text x="348.3443567020646" y="495.29263112249816" font-size="11" fill="#0f172a">3</text></g><g><circle cx="334.1036312399797" cy="573.5766744850112" r="4.5" fill="#2563eb" /><text x="341.1036312399797" y="566.5766744850112" font-size="11" fill="#0f172a">4</text></g><g><circle cx="441.1755473765971" cy="497.6398462546878" r="4.5" fill="#2563eb" /><text x="448.1755473765971" y="490.6398462546878" font-size="11" fill="#0f172a">5</text></g><g><circle cx="574.2398436695571" cy="539.3975457264345" r="4.5" fill="#2563eb" /><text x="581.2398436695571" y="532.3975457264345" font-size="11" fill="#0f172a">6</text></g><g><circle cx="658.1984158306318" cy="496.2315198430314" r="4.5" fill="#2563eb" /><text x="665.1984158306318" y="489.2315198430314" font-size="11" fill="#0f172a">7</text></g><g><circle cx="524.4764482167805" cy="476.11863677382354" r="4.5" fill="#2563eb" /><text x="531.4764482167805" y="469.11863677382354" font-size="11" fill="#0f172a">8</text></g><g><circle cx="495.1510178595215" cy="409.7701149425035" r="4.5" fill="#2563eb" /><text x="502.1510178595215" y="402.7701149425035" font-size="11" fill="#0f172a">9</text></g><g><circle cx="584.5404584706304" cy="442.98180566156617" r="4.5" fill="#2563eb" /><text x="591.5404584706304" y="435.98180566156617" font-size="11" fill="#0f172a">10</text></g><g><circle cx="618.1341614255591" cy="404.2794051392658" r="4.5" fill="#2563eb" /><text x="625.1341614255591" y="397.2794051392658" font-size="11" fill="#0f172a">11</text></g></g>
+<g class="route-layer" data-route-index="17" data-route-id="C-01"><polyline points="490,310 529.232549905415,383.4971835440859 625.632087042312,366.1068085386562 710.6937040942323,444.3352981443155 748.6859997370827,541.6968892251274 816.079145594451,474.19938306251396 844.4070661996593,403.35299377487024 610.745372965303,333.8806825511069 836.3847398663389,336.6356506290349 950,318.7993544921577 490,310" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="529.232549905415" cy="383.4971835440859" r="4.5" fill="#16a34a" /><text x="536.232549905415" y="376.4971835440859" font-size="11" fill="#0f172a">1</text></g><g><circle cx="625.632087042312" cy="366.1068085386562" r="4.5" fill="#16a34a" /><text x="632.632087042312" y="359.1068085386562" font-size="11" fill="#0f172a">2</text></g><g><circle cx="710.6937040942323" cy="444.3352981443155" r="4.5" fill="#16a34a" /><text x="717.6937040942323" y="437.3352981443155" font-size="11" fill="#0f172a">3</text></g><g><circle cx="748.6859997370827" cy="541.6968892251274" r="4.5" fill="#16a34a" /><text x="755.6859997370827" y="534.6968892251274" font-size="11" fill="#0f172a">4</text></g><g><circle cx="816.079145594451" cy="474.19938306251396" r="4.5" fill="#16a34a" /><text x="823.079145594451" y="467.19938306251396" font-size="11" fill="#0f172a">5</text></g><g><circle cx="844.4070661996593" cy="403.35299377487024" r="4.5" fill="#16a34a" /><text x="851.4070661996593" y="396.35299377487024" font-size="11" fill="#0f172a">6</text></g><g><circle cx="610.745372965303" cy="333.8806825511069" r="4.5" fill="#16a34a" /><text x="617.745372965303" y="326.8806825511069" font-size="11" fill="#0f172a">7</text></g><g><circle cx="836.3847398663389" cy="336.6356506290349" r="4.5" fill="#16a34a" /><text x="843.3847398663389" y="329.6356506290349" font-size="11" fill="#0f172a">8</text></g><g><circle cx="950" cy="318.7993544921577" r="4.5" fill="#16a34a" /><text x="957" y="311.7993544921577" font-size="11" fill="#0f172a">9</text></g></g>
+<g class="route-layer" data-route-index="18" data-route-id="C-01"><polyline points="490,310 731.0529196236866,390.6643259056103 722.3155184215972,341.60875611184616 490,310" fill="none" stroke="#9333ea" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><g><circle cx="731.0529196236866" cy="390.6643259056103" r="4.5" fill="#9333ea" /><text x="738.0529196236866" y="383.6643259056103" font-size="11" fill="#0f172a">1</text></g><g><circle cx="722.3155184215972" cy="341.60875611184616" r="4.5" fill="#9333ea" /><text x="729.3155184215972" y="334.60875611184616" font-size="11" fill="#0f172a">2</text></g></g>
+      <circle cx="490" cy="310" r="8" fill="#0f172a"></circle>
+      <text x="500" y="300" font-size="12" fill="#0f172a">Magatzem</text>
+    </svg>
+  </div>
+
+  <div class="card">
+    <h2>Resum per camio</h2>
+    <p class="small">Aquest resum i la taula d'arribades es filtren amb el selector de ruta.</p>
+    <table>
+      <thead>
+        <tr><th>Camio</th><th>Parades</th><th>Ocupacio</th><th>Sortida</th><th>Tornada</th></tr>
+      </thead>
+      <tbody>
+      <tr class="summary-row" data-route-index="0" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#ef4444;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>12</td>
+        <td>120/120 (100.0%)</td>
+        <td>00:00</td>
+        <td>12:20</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="1" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#2563eb;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>11</td>
+        <td>116/120 (96.7%)</td>
+        <td>00:00</td>
+        <td>12:00</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="2" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#16a34a;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>11</td>
+        <td>120/120 (100.0%)</td>
+        <td>08:20</td>
+        <td>12:44</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="3" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#9333ea;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>11</td>
+        <td>120/120 (100.0%)</td>
+        <td>09:00</td>
+        <td>12:20</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="4" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#ea580c;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>11</td>
+        <td>116/120 (96.7%)</td>
+        <td>00:00</td>
+        <td>11:12</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="5" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#0891b2;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>11</td>
+        <td>120/120 (100.0%)</td>
+        <td>08:20</td>
+        <td>12:12</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="6" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#4f46e5;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>11</td>
+        <td>116/120 (96.7%)</td>
+        <td>08:00</td>
+        <td>12:04</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="7" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#65a30d;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>12</td>
+        <td>120/120 (100.0%)</td>
+        <td>08:00</td>
+        <td>12:04</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="8" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#be123c;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>11</td>
+        <td>116/120 (96.7%)</td>
+        <td>09:40</td>
+        <td>12:56</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="9" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#0f766e;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>11</td>
+        <td>116/120 (96.7%)</td>
+        <td>08:20</td>
+        <td>12:08</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="10" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#a855f7;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>12</td>
+        <td>120/120 (100.0%)</td>
+        <td>00:00</td>
+        <td>12:16</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="11" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#ca8a04;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>11</td>
+        <td>117/120 (97.5%)</td>
+        <td>00:00</td>
+        <td>15:58</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="12" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#db2777;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>10</td>
+        <td>110/120 (91.7%)</td>
+        <td>14:50</td>
+        <td>19:12</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="13" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#7c3aed;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>11</td>
+        <td>113/120 (94.2%)</td>
+        <td>14:00</td>
+        <td>18:15</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="14" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#059669;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>11</td>
+        <td>113/120 (94.2%)</td>
+        <td>14:25</td>
+        <td>18:04</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="15" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#ef4444;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>11</td>
+        <td>113/120 (94.2%)</td>
+        <td>14:00</td>
+        <td>18:40</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="16" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#2563eb;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>11</td>
+        <td>118/120 (98.3%)</td>
+        <td>14:50</td>
+        <td>18:08</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="17" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#16a34a;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>9</td>
+        <td>97/120 (80.8%)</td>
+        <td>14:00</td>
+        <td>19:01</td>
+      </tr>
+    
+      <tr class="summary-row" data-route-index="18" data-route-id="C-01">
+        <td><span style="display:inline-block;width:10px;height:10px;background:#9333ea;border-radius:999px;margin-right:8px;"></span>Camio 01</td>
+        <td>2</td>
+        <td>21/120 (17.5%)</td>
+        <td>14:00</td>
+        <td>14:43</td>
+      </tr>
+    </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Arribades per entrega</h2>
+    <table>
+      <thead>
+        <tr><th>Camio</th><th>Entrega</th><th>Arribada</th><th>Franja</th><th>Delta</th></tr>
+      </thead>
+      <tbody>
+      <tr class="delivery-row" data-route-index="0" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0200</td>
+        <td>00:00</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="0" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0002</td>
+        <td>00:20</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="0" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0003</td>
+        <td>09:00</td>
+        <td>09:00 - 11:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="0" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0005</td>
+        <td>09:16</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="0" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0006</td>
+        <td>10:00</td>
+        <td>10:00 - 12:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="0" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0008</td>
+        <td>10:16</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="0" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0009</td>
+        <td>10:36</td>
+        <td>08:20 - 10:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="0" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0015</td>
+        <td>10:52</td>
+        <td>10:20 - 12:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="0" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0014</td>
+        <td>11:08</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="0" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0012</td>
+        <td>11:28</td>
+        <td>09:20 - 11:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="0" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0011</td>
+        <td>11:44</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="0" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0030</td>
+        <td>12:04</td>
+        <td>10:00 - 12:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="1" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0020</td>
+        <td>00:00</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="1" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0032</td>
+        <td>00:20</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="1" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0023</td>
+        <td>00:40</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="1" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0021</td>
+        <td>09:40</td>
+        <td>09:40 - 12:10</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="1" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0024</td>
+        <td>09:56</td>
+        <td>08:00 - 10:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="1" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0017</td>
+        <td>10:12</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="1" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0018</td>
+        <td>10:32</td>
+        <td>08:40 - 11:10</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="1" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0026</td>
+        <td>10:48</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="1" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0027</td>
+        <td>11:08</td>
+        <td>09:00 - 11:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="1" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0029</td>
+        <td>11:24</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="1" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0036</td>
+        <td>11:44</td>
+        <td>09:20 - 11:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="2" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0033</td>
+        <td>08:20</td>
+        <td>08:20 - 10:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="2" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0035</td>
+        <td>08:36</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="2" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0038</td>
+        <td>08:56</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="2" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0039</td>
+        <td>10:20</td>
+        <td>10:20 - 12:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="2" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0042</td>
+        <td>10:36</td>
+        <td>08:40 - 11:10</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="2" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0041</td>
+        <td>10:52</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="2" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0050</td>
+        <td>11:12</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="2" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0044</td>
+        <td>11:32</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="2" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0045</td>
+        <td>11:52</td>
+        <td>09:40 - 12:10</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="2" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0047</td>
+        <td>12:08</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="2" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0054</td>
+        <td>12:28</td>
+        <td>10:00 - 12:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="3" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0051</td>
+        <td>09:00</td>
+        <td>09:00 - 11:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="3" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0053</td>
+        <td>09:16</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="3" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0048</td>
+        <td>09:36</td>
+        <td>08:00 - 10:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="3" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0059</td>
+        <td>09:52</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="3" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0057</td>
+        <td>10:12</td>
+        <td>08:20 - 10:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="3" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0056</td>
+        <td>10:28</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="3" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0060</td>
+        <td>10:48</td>
+        <td>09:20 - 11:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="3" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0062</td>
+        <td>11:04</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="3" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0063</td>
+        <td>11:24</td>
+        <td>10:20 - 12:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="3" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0065</td>
+        <td>11:40</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="3" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0068</td>
+        <td>12:00</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="4" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0080</td>
+        <td>00:00</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="4" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0071</td>
+        <td>00:20</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="4" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0072</td>
+        <td>08:00</td>
+        <td>08:00 - 10:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="4" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0083</td>
+        <td>08:16</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="4" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0074</td>
+        <td>08:36</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="4" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0066</td>
+        <td>08:56</td>
+        <td>08:40 - 11:10</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="4" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0069</td>
+        <td>09:40</td>
+        <td>09:40 - 12:10</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="4" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0078</td>
+        <td>10:00</td>
+        <td>10:00 - 12:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="4" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0077</td>
+        <td>10:16</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="4" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0075</td>
+        <td>10:36</td>
+        <td>09:00 - 11:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="4" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0086</td>
+        <td>10:52</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="5" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0081</td>
+        <td>08:20</td>
+        <td>08:20 - 10:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="5" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0090</td>
+        <td>08:40</td>
+        <td>08:40 - 11:10</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="5" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0101</td>
+        <td>08:56</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="5" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0092</td>
+        <td>09:16</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="5" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0084</td>
+        <td>09:36</td>
+        <td>09:20 - 11:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="5" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0087</td>
+        <td>10:20</td>
+        <td>10:20 - 12:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="5" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0089</td>
+        <td>10:36</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="5" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0098</td>
+        <td>10:56</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="5" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0095</td>
+        <td>11:16</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="5" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0093</td>
+        <td>11:36</td>
+        <td>09:40 - 12:10</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="5" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0104</td>
+        <td>11:52</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="6" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0096</td>
+        <td>08:00</td>
+        <td>08:00 - 10:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="6" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0099</td>
+        <td>09:00</td>
+        <td>09:00 - 11:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="6" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0108</td>
+        <td>09:20</td>
+        <td>09:20 - 11:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="6" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0107</td>
+        <td>09:36</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="6" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0105</td>
+        <td>09:56</td>
+        <td>08:20 - 10:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="6" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0102</td>
+        <td>10:12</td>
+        <td>10:00 - 12:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="6" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0110</td>
+        <td>10:28</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="6" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0111</td>
+        <td>10:48</td>
+        <td>10:20 - 12:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="6" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0113</td>
+        <td>11:04</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="6" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0116</td>
+        <td>11:24</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="6" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0119</td>
+        <td>11:44</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="7" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0120</td>
+        <td>08:00</td>
+        <td>08:00 - 10:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="7" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0131</td>
+        <td>08:16</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="7" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0122</td>
+        <td>08:36</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="7" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0114</td>
+        <td>08:56</td>
+        <td>08:40 - 11:10</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="7" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0117</td>
+        <td>09:40</td>
+        <td>09:40 - 12:10</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="7" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0128</td>
+        <td>09:56</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="7" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0126</td>
+        <td>10:16</td>
+        <td>10:00 - 12:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="7" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0125</td>
+        <td>10:32</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="7" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0135</td>
+        <td>10:52</td>
+        <td>10:20 - 12:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="7" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0134</td>
+        <td>11:08</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="7" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0123</td>
+        <td>11:28</td>
+        <td>09:00 - 11:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="7" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0140</td>
+        <td>11:44</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="8" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0141</td>
+        <td>09:40</td>
+        <td>09:40 - 12:10</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="8" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0132</td>
+        <td>09:56</td>
+        <td>09:20 - 11:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="8" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0129</td>
+        <td>10:12</td>
+        <td>08:20 - 10:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="8" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0137</td>
+        <td>10:28</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="8" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0138</td>
+        <td>10:48</td>
+        <td>08:40 - 11:10</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="8" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0149</td>
+        <td>11:04</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="8" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0147</td>
+        <td>11:24</td>
+        <td>09:00 - 11:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="8" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0146</td>
+        <td>11:40</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="8" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0143</td>
+        <td>12:00</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="8" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0150</td>
+        <td>12:20</td>
+        <td>10:00 - 12:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="8" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0152</td>
+        <td>12:36</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="9" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0153</td>
+        <td>08:20</td>
+        <td>08:20 - 10:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="9" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0144</td>
+        <td>08:36</td>
+        <td>08:00 - 10:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="9" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0155</td>
+        <td>08:52</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="9" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0156</td>
+        <td>09:20</td>
+        <td>09:20 - 11:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="9" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0158</td>
+        <td>09:36</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="9" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0159</td>
+        <td>10:20</td>
+        <td>10:20 - 12:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="9" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0161</td>
+        <td>10:36</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="9" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0162</td>
+        <td>10:56</td>
+        <td>08:40 - 11:10</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="9" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0164</td>
+        <td>11:12</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="9" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0165</td>
+        <td>11:32</td>
+        <td>09:40 - 12:10</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="9" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0167</td>
+        <td>11:48</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="10" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0170</td>
+        <td>00:00</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="10" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0171</td>
+        <td>09:00</td>
+        <td>09:00 - 11:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="10" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0173</td>
+        <td>09:16</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="10" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0168</td>
+        <td>09:36</td>
+        <td>08:00 - 10:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="10" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0179</td>
+        <td>09:52</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="10" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0177</td>
+        <td>10:12</td>
+        <td>08:20 - 10:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="10" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0176</td>
+        <td>10:28</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="10" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0174</td>
+        <td>10:48</td>
+        <td>10:00 - 12:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="10" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0180</td>
+        <td>11:04</td>
+        <td>09:20 - 11:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="10" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0182</td>
+        <td>11:20</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="10" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0183</td>
+        <td>11:40</td>
+        <td>10:20 - 12:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="10" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0188</td>
+        <td>11:56</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="11" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0191</td>
+        <td>00:00</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="11" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0192</td>
+        <td>08:00</td>
+        <td>08:00 - 10:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="11" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0185</td>
+        <td>08:16</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="11" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0186</td>
+        <td>08:40</td>
+        <td>08:40 - 11:10</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="11" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0189</td>
+        <td>09:40</td>
+        <td>09:40 - 12:10</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="11" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0198</td>
+        <td>10:00</td>
+        <td>10:00 - 12:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="11" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0197</td>
+        <td>10:16</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="11" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0195</td>
+        <td>10:36</td>
+        <td>09:00 - 11:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="11" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0194</td>
+        <td>10:52</td>
+        <td>-- - --</td>
+        <td>sense franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="11" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0001</td>
+        <td>14:25</td>
+        <td>14:25 - 17:15</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="11" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0004</td>
+        <td>15:40</td>
+        <td>15:40 - 18:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="12" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0010</td>
+        <td>14:50</td>
+        <td>14:50 - 17:40</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="12" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0022</td>
+        <td>16:30</td>
+        <td>16:30 - 19:20</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="12" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0013</td>
+        <td>16:48</td>
+        <td>16:05 - 18:55</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="12" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0007</td>
+        <td>17:06</td>
+        <td>16:55 - 19:45</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="12" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0019</td>
+        <td>17:24</td>
+        <td>15:15 - 18:05</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="12" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0028</td>
+        <td>17:42</td>
+        <td>15:40 - 18:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="12" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0031</td>
+        <td>18:00</td>
+        <td>16:55 - 19:45</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="12" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0046</td>
+        <td>18:18</td>
+        <td>16:30 - 19:20</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="12" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0055</td>
+        <td>18:36</td>
+        <td>16:55 - 19:45</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="12" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0079</td>
+        <td>18:54</td>
+        <td>16:55 - 19:45</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="13" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0040</td>
+        <td>14:00</td>
+        <td>14:00 - 16:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="13" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0043</td>
+        <td>15:15</td>
+        <td>15:15 - 18:05</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="13" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0034</td>
+        <td>15:33</td>
+        <td>14:50 - 17:40</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="13" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0025</td>
+        <td>15:51</td>
+        <td>14:25 - 17:15</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="13" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0016</td>
+        <td>16:09</td>
+        <td>14:00 - 16:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="13" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0037</td>
+        <td>16:27</td>
+        <td>16:05 - 18:55</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="13" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0049</td>
+        <td>16:45</td>
+        <td>14:25 - 17:15</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="13" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0058</td>
+        <td>17:03</td>
+        <td>14:50 - 17:40</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="13" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0052</td>
+        <td>17:21</td>
+        <td>15:40 - 18:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="13" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0061</td>
+        <td>17:39</td>
+        <td>16:05 - 18:55</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="13" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0070</td>
+        <td>17:57</td>
+        <td>16:30 - 19:20</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="14" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0073</td>
+        <td>14:25</td>
+        <td>14:25 - 17:15</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="14" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0064</td>
+        <td>14:43</td>
+        <td>14:00 - 16:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="14" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0067</td>
+        <td>15:15</td>
+        <td>15:15 - 18:05</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="14" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0076</td>
+        <td>15:40</td>
+        <td>15:40 - 18:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="14" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0088</td>
+        <td>15:58</td>
+        <td>14:00 - 16:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="14" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0085</td>
+        <td>16:16</td>
+        <td>16:05 - 18:55</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="14" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0094</td>
+        <td>16:34</td>
+        <td>16:30 - 19:20</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="14" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0082</td>
+        <td>16:52</td>
+        <td>14:50 - 17:40</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="14" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0091</td>
+        <td>17:10</td>
+        <td>15:15 - 18:05</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="14" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0100</td>
+        <td>17:28</td>
+        <td>15:40 - 18:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="14" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0103</td>
+        <td>17:46</td>
+        <td>16:55 - 19:45</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="15" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0112</td>
+        <td>14:00</td>
+        <td>14:00 - 16:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="15" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0124</td>
+        <td>15:40</td>
+        <td>15:40 - 18:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="15" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0115</td>
+        <td>15:58</td>
+        <td>15:15 - 18:05</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="15" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0106</td>
+        <td>16:16</td>
+        <td>14:50 - 17:40</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="15" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0097</td>
+        <td>16:34</td>
+        <td>14:25 - 17:15</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="15" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0109</td>
+        <td>16:52</td>
+        <td>16:05 - 18:55</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="15" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0118</td>
+        <td>17:10</td>
+        <td>16:30 - 19:20</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="15" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0127</td>
+        <td>17:28</td>
+        <td>16:55 - 19:45</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="15" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0133</td>
+        <td>17:46</td>
+        <td>16:05 - 18:55</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="15" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0142</td>
+        <td>18:04</td>
+        <td>16:30 - 19:20</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="15" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0148</td>
+        <td>18:22</td>
+        <td>15:40 - 18:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="16" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0130</td>
+        <td>14:50</td>
+        <td>14:50 - 17:40</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="16" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0121</td>
+        <td>15:08</td>
+        <td>14:25 - 17:15</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="16" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0136</td>
+        <td>15:26</td>
+        <td>14:00 - 16:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="16" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0139</td>
+        <td>15:44</td>
+        <td>15:15 - 18:05</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="16" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0145</td>
+        <td>16:02</td>
+        <td>14:25 - 17:15</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="16" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0157</td>
+        <td>16:20</td>
+        <td>16:05 - 18:55</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="16" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0166</td>
+        <td>16:38</td>
+        <td>16:30 - 19:20</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="16" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0154</td>
+        <td>16:56</td>
+        <td>14:50 - 17:40</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="16" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0151</td>
+        <td>17:14</td>
+        <td>16:55 - 19:45</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="16" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0163</td>
+        <td>17:32</td>
+        <td>15:15 - 18:05</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="16" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0172</td>
+        <td>17:50</td>
+        <td>15:40 - 18:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="17" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0160</td>
+        <td>14:00</td>
+        <td>14:00 - 16:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="17" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0181</td>
+        <td>16:05</td>
+        <td>16:05 - 18:55</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="17" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0175</td>
+        <td>16:55</td>
+        <td>16:55 - 19:45</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="17" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0169</td>
+        <td>17:13</td>
+        <td>14:25 - 17:15</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="17" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0178</td>
+        <td>17:31</td>
+        <td>14:50 - 17:40</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="17" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0187</td>
+        <td>17:49</td>
+        <td>15:15 - 18:05</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="17" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0190</td>
+        <td>18:07</td>
+        <td>16:30 - 19:20</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="17" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0196</td>
+        <td>18:25</td>
+        <td>15:40 - 18:30</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="17" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0199</td>
+        <td>18:43</td>
+        <td>16:55 - 19:45</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="18" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0184</td>
+        <td>14:00</td>
+        <td>14:00 - 16:50</td>
+        <td>dins franja</td>
+      </tr>
+    
+      <tr class="delivery-row" data-route-index="18" data-route-id="C-01">
+        <td>Camio 01</td>
+        <td>S-0193</td>
+        <td>14:25</td>
+        <td>14:25 - 17:15</td>
+        <td>dins franja</td>
+      </tr>
+    </tbody>
+    </table>
+  </div>
+  <script>
+    const filter = document.getElementById('routeFilter');
+    const routeLayers = Array.from(document.querySelectorAll('.route-layer'));
+    const summaryRows = Array.from(document.querySelectorAll('.summary-row'));
+    const deliveryRows = Array.from(document.querySelectorAll('.delivery-row'));
+    const legendItems = Array.from(document.querySelectorAll('.legend-item'));
+
+    function applyFilter(value) {
+      const showAll = value === 'all';
+      routeLayers.forEach((el) => {
+        const show = showAll || el.dataset.routeIndex === value;
+        el.style.display = show ? '' : 'none';
+      });
+      summaryRows.forEach((el) => {
+        const show = showAll || el.dataset.routeIndex === value;
+        el.style.display = show ? '' : 'none';
+      });
+      deliveryRows.forEach((el) => {
+        const show = showAll || el.dataset.routeIndex === value;
+        el.style.display = show ? '' : 'none';
+      });
+      legendItems.forEach((el) => {
+        const active = showAll || el.dataset.routeIndex === value;
+        el.style.opacity = active ? '1' : '0.35';
+      });
+    }
+
+    filter.addEventListener('change', (e) => applyFilter(e.target.value));
+    applyFilter('all');
+  </script>
+</body>
+</html>

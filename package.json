@@ -6,7 +6,9 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "node --watch src/index.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "prova:sweep": "node src/scripts/prova-sweep.js",
+    "prova:bars40": "node src/scripts/prova-bars-bcn-40.js"
   },
   "keywords": [
     "hackemate",
@@ -18,6 +20,7 @@
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "xlsx": "^0.18.5"
   }
 }
