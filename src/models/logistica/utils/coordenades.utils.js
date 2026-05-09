@@ -1,3 +1,4 @@
+// Normalitza diferents formats d'entrada ({x,y} o [x,y]) a coordenades cartesians.
 export function normalitzaCoordenades(coordenades) {
   if (!coordenades) return null;
 
@@ -13,6 +14,7 @@ export function normalitzaCoordenades(coordenades) {
   return null;
 }
 
+// Converteix coordenades cartesianes a polars respecte d'un centre.
 export function coordenadesPolarsRespecteCentre(coordenades, centre) {
   const punt = normalitzaCoordenades(coordenades);
   const centreNormalitzat = normalitzaCoordenades(centre);
@@ -34,6 +36,7 @@ export function coordenadesPolarsRespecteCentre(coordenades, centre) {
   return { r, thetaRadians, thetaGraus };
 }
 
+// Valida i normalitza punts d'entrada per calculs de rutes.
 export function normalitzaPuntRuta(punt, nomCamp) {
   if (Array.isArray(punt) && punt.length >= 2) {
     return { x: Number(punt[0]), y: Number(punt[1]) };

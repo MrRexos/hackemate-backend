@@ -1,6 +1,7 @@
 import { Pedido } from './pedido.model.js';
 import { coordenadesPolarsRespecteCentre, normalitzaCoordenades } from '../utils/coordenades.utils.js';
 
+// Model d'entrega: ubicacio, pedidos, finestres horaries i coordenades.
 export class Entrega {
   constructor({ ubicacio, pedidos = [], horaInici, horaFinal, identificador, coordenades }) {
     this.ubicacio = ubicacio;
@@ -12,23 +13,28 @@ export class Entrega {
     this.coordenades = Entrega.normalitzaCoordenades(coordenades);
   }
 
+  // Converteix qualsevol entrada de pedidos a instancies de Pedido.
   static normalitzaPedidos(pedidos) {
     if (!Array.isArray(pedidos)) return [];
     return pedidos.map((pedido) => (pedido instanceof Pedido ? pedido : new Pedido(pedido)));
   }
 
+  // Suma el volum total dels pedidos de l'entrega.
   static calculaVolumTotal(pedidos) {
     return pedidos.reduce((total, pedido) => total + Number(pedido.volum || 0), 0);
   }
 
+  // Porta la normalitzacio de coordenades al model.
   static normalitzaCoordenades(coordenades) {
     return normalitzaCoordenades(coordenades);
   }
 
+  // Calcula polar d'una entrega respecte a un centre (magatzem o centre geometric).
   static coordenadesPolarsRespecteMagatzem(coordenades, magatzem) {
     return coordenadesPolarsRespecteCentre(coordenades, magatzem);
   }
 
+  // Geocodifica l'adreca textual i desa coordenades x/y.
   async actualitzaCoordenadesDesDeAdreca(fetchImpl = fetch) {
     if (!this.ubicacio || typeof this.ubicacio !== 'string') {
       throw new Error("L'entrega no te una adreca valida a 'ubicacio'.");
@@ -61,6 +67,7 @@ export class Entrega {
     return this.coordenades;
   }
 
+  // Helper d'instancia per obtenir la posicio polar de l'entrega.
   obtenirCoordenadesPolars(magatzem) {
     return Entrega.coordenadesPolarsRespecteMagatzem(this.coordenades, magatzem);
   }

@@ -2,11 +2,13 @@ import { asseguraArray } from '../validators/logistica.validators.js';
 import { construeixEntrega } from '../utils/entrega.utils.js';
 import { coordenadesPolarsRespecteCentre } from '../utils/coordenades.utils.js';
 
+// Assegura que totes les entregues siguin instancies del model Entrega.
 export function normalitzaEntregues(entregues, EntregaClass) {
   const entreguesArray = asseguraArray(entregues, 'entregues');
   return entreguesArray.map((entrega) => construeixEntrega(entrega, EntregaClass));
 }
 
+// Calcula centre geometric i ordena entregues per angle polar.
 export function obtenirEntreguesAmbAngleDesDeCentre(entregues) {
   const entreguesValides = entregues.filter((entrega) => entrega.constructor.normalitzaCoordenades(entrega.coordenades));
 
@@ -42,6 +44,7 @@ export function obtenirEntreguesAmbAngleDesDeCentre(entregues) {
   return { centre, entreguesAmbAngle };
 }
 
+// Crida OSRM i retorna distancia/durada estimades entre dos punts.
 export async function calculaTempsRutaAproximat(origen, desti, options = {}) {
   const { fetchImpl = fetch, osrmBaseUrl = 'https://router.project-osrm.org' } = options;
   const puntOrigen = normalitzaPuntRutaService(origen, 'origen');
@@ -75,6 +78,7 @@ export async function calculaTempsRutaAproximat(origen, desti, options = {}) {
   };
 }
 
+// Valida i normalitza coordenades d'entrada per al calcul de rutes.
 function normalitzaPuntRutaService(punt, nomCamp) {
   if (Array.isArray(punt) && punt.length >= 2) {
     return { x: Number(punt[0]), y: Number(punt[1]) };
