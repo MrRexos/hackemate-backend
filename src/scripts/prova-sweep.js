@@ -3,8 +3,12 @@ import { generarRutes } from '../models/logistica/services/sweep-optimizer.servi
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { generaPuntsSobreCarrer } from './utils/punts-sobre-carrer.js';
 
 async function main() {
+  console.log("Generant 200 punts sobre carrer per a l'escenari d'escala (OSRM nearest)...");
+  const entreguesEscala200 = await generaEntreguesEscala200({ fetchImpl: fetch });
+
   const escenaris = [
     {
       nom: 'Escala 200 entregues / objectiu 10 per camio',
@@ -31,7 +35,7 @@ async function main() {
         { id: 'C-19', capacitatMaxima: 120 },
         { id: 'C-20', capacitatMaxima: 120 },
       ],
-      entregues: generaEntreguesEscala200(),
+      entregues: entreguesEscala200,
       velocitatKmH: 38,
     },
   ];
@@ -312,16 +316,12 @@ function generaEntreguesFinestresEstricte() {
   ];
 }
 
-function generaEntreguesEscala200() {
+async function generaEntreguesEscala200(options = {}) {
+  const coords = await generaPuntsSobreCarrer(200, options);
   const entregues = [];
-  const baseX = 2.1734;
-  const baseY = 41.3851;
 
   for (let i = 1; i <= 200; i += 1) {
-    const angle = (i / 200) * 2 * Math.PI;
-    const radi = 0.012 + (i % 10) * 0.0035;
-    const x = baseX + Math.cos(angle) * radi;
-    const y = baseY + Math.sin(angle) * radi;
+    const { x, y } = coords[i - 1];
 
     let horaInici = null;
     let horaFinal = null;
@@ -348,7 +348,7 @@ function generaEntreguesEscala200() {
     entregues.push(
       creaEntrega({
         id: `S-${String(i).padStart(4, '0')}`,
-        adreca: `Punt simulat ${i}, Barcelona`,
+        adreca: `Entrega simulada carrer ${i}, Barcelona`,
         horaInici,
         horaFinal,
         x,
