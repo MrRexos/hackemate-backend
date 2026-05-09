@@ -483,13 +483,13 @@ async function generaInformeVisual(escenari, resultat) {
   }).join('\n');
 
   const routeOptions = resultat.rutes
-    .map((ruta, idx) => `<option value="${idx}">${escapeHtml(ruta.camio.id)} (ruta ${idx + 1})</option>`)
+    .map((ruta, idx) => `<option value="${idx}">${escapeHtml(nomCamioVisual(ruta.camio.id))} (ruta ${idx + 1})</option>`)
     .join('');
 
   const legendItems = resultat.rutes
     .map((ruta, idx) => {
       const color = colors[idx % colors.length];
-      return `<span class="legend-item" data-route-index="${idx}"><span class="legend-dot" style="background:${color}"></span>${escapeHtml(ruta.camio.id)} · Ruta ${idx + 1}</span>`;
+      return `<span class="legend-item" data-route-index="${idx}"><span class="legend-dot" style="background:${color}"></span>${escapeHtml(nomCamioVisual(ruta.camio.id))} · Ruta ${idx + 1}</span>`;
     })
     .join('');
 
@@ -498,7 +498,7 @@ async function generaInformeVisual(escenari, resultat) {
     const ocupacio = ((Number(ruta.volumOcupat || 0) / Number(ruta.camio.capacitatMaxima || 1)) * 100).toFixed(1);
     return `
       <tr class="summary-row" data-route-index="${idx}" data-route-id="${escapeHtml(ruta.camio.id)}">
-        <td><span style="display:inline-block;width:10px;height:10px;background:${color};border-radius:999px;margin-right:8px;"></span>${ruta.camio.id}</td>
+        <td><span style="display:inline-block;width:10px;height:10px;background:${color};border-radius:999px;margin-right:8px;"></span>${nomCamioVisual(ruta.camio.id)}</td>
         <td>${ruta.entregues.length}</td>
         <td>${ruta.volumOcupat}/${ruta.camio.capacitatMaxima} (${ocupacio}%)</td>
         <td>${ruta.horaSortidaMagatzem ?? '--:--'}</td>
@@ -510,7 +510,7 @@ async function generaInformeVisual(escenari, resultat) {
   const deliveryRows = resultat.rutes.flatMap((ruta, idx) =>
     ruta.entregues.map((e) => `
       <tr class="delivery-row" data-route-index="${idx}" data-route-id="${escapeHtml(ruta.camio.id)}">
-        <td>${ruta.camio.id}</td>
+        <td>${nomCamioVisual(ruta.camio.id)}</td>
         <td>${e.identificador}</td>
         <td>${e.arribadaHora ?? '--:--'}</td>
         <td>${e.horaInici ?? '--'} - ${e.horaFinal ?? '--'}</td>
@@ -664,4 +664,11 @@ function escapeHtml(text) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#039;');
+}
+
+function nomCamioVisual(idCamio) {
+  const raw = String(idCamio ?? '').trim();
+  const digits = raw.match(/\d+/)?.[0];
+  if (digits) return `Camio ${digits.padStart(2, '0')}`;
+  return raw ? `Camio ${raw}` : 'Camio sense id';
 }
