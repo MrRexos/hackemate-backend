@@ -1,4 +1,4 @@
-export class Pedido {
+export class Pedido { 
   constructor({ nom, volum, quantitat }) {
     this.nom = nom;
     this.volum = volum * quantitat;
