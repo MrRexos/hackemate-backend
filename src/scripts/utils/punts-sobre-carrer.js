@@ -13,6 +13,18 @@ export const BCN_BBOX_CARRER = {
   maxLat: 41.428,
 };
 
+/**
+ * Comarca del Barcelonès: Barcelona, L'Hospitalet de Llobregat,
+ * Badalona, Santa Coloma de Gramenet i Sant Adrià de Besòs.
+ * S'eviten franges de muntanya (Collserola alta) i mar.
+ */
+export const BARCELONES_BBOX_CARRER = {
+  minLon: 2.092,
+  maxLon: 2.252,
+  minLat: 41.352,
+  maxLat: 41.468,
+};
+
 function aleatoriEntre(min, max) {
   return min + Math.random() * (max - min);
 }

@@ -3,15 +3,23 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Entrega } from '../models/logistica/classes/entrega.model.js';
 import { generarRutes } from '../models/logistica/services/sweep-optimizer.service.js';
-import { generaPuntsSobreCarrer } from './utils/punts-sobre-carrer.js';
+import { generaPuntsSobreCarrer, BARCELONES_BBOX_CARRER } from './utils/punts-sobre-carrer.js';
 
-const NOMS_CAMIONS = ['Joel', 'Pol', 'Oier', 'Jan', 'Nil', 'Victor'];
-const CENTRE = { x: 2.170047, y: 41.387016 }; // Placa Catalunya
-const NUM_PUNTS = 55;
+const NOMS_CAMIONS = [
+  'Joel', 'Pol', 'Oier', 'Jan', 'Nil',
+  'Victor', 'Aleix', 'Marc', 'Roger', 'Bernat',
+  'Quim', 'Toni', 'Edu', 'Arnau', 'Marti',
+];
+const CENTRE = { x: 2.0846, y: 41.4727 }; // Sant Cugat del Valles (Placa d'Octavia)
+const NUM_PUNTS = 200;
+const NOM_MAGATZEM = 'Sant Cugat del Valles';
 
 async function main() {
-  console.log(`Generant ${NUM_PUNTS} punts sobre carrer (OSRM nearest)...`);
-  const coords = await generaPuntsSobreCarrer(NUM_PUNTS, { fetchImpl: fetch });
+  console.log(`Generant ${NUM_PUNTS} punts sobre carrer al Barcelones (OSRM nearest)...`);
+  const coords = await generaPuntsSobreCarrer(NUM_PUNTS, {
+    fetchImpl: fetch,
+    bbox: BARCELONES_BBOX_CARRER,
+  });
   const punts = coords.map((c, i) => ({ nom: `Bar carrer ${i + 1}`, x: c.x, y: c.y }));
   const entregues = creaEntregues(punts);
   const flotaCamions = creaFlotaVariable(NOMS_CAMIONS);
@@ -27,7 +35,7 @@ async function main() {
   const visualData = await calculaGeometriesRutes(resultat.rutes, CENTRE);
   const outputPath = await generaVisualHtml({ centre: CENTRE, resultat, visualData });
 
-  console.log('=== Ruta bars Barcelona (55 punts) amb Sweep ===');
+  console.log(`=== Ruta bars Barcelones (${NUM_PUNTS} punts) amb Sweep des de ${NOM_MAGATZEM} ===`);
   console.log(`Punts totals: ${NUM_PUNTS}`);
   console.log(`Camions maxims: ${flotaCamions.length}`);
   console.log(`Rutes generades: ${resultat.rutes.length}`);
@@ -103,7 +111,7 @@ async function generaVisualHtml({ centre, resultat, visualData }) {
   const __dirname = path.dirname(__filename);
   const outputDir = path.join(__dirname, 'output');
   await mkdir(outputDir, { recursive: true });
-  const outputPath = path.join(outputDir, 'bars-bcn-55-sweep-placa-catalunya.html');
+  const outputPath = path.join(outputDir, 'bars-barcelones-200-sweep-sant-cugat.html');
 
   const payload = JSON.stringify({
     centre,
@@ -127,7 +135,7 @@ async function generaVisualHtml({ centre, resultat, visualData }) {
   const html = `<!doctype html>
 <html lang="ca"><head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Sweep Barcelona - Plaça Catalunya</title>
+<title>Sweep Barcelonès - Sant Cugat del Vallès</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 body{font-family:Inter,Segoe UI,Arial,sans-serif;background:#f8fafc;margin:0;color:#0f172a}
@@ -140,20 +148,20 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px
 .pill.filtered{opacity:0.35}
 </style></head>
 <body><div class="wrap">
-<div class="card"><h2 style="margin:0 0 8px">Sweep des de Plaça Catalunya</h2><div id="meta"></div></div>
+<div class="card"><h2 style="margin:0 0 8px">Sweep Barcelonès des de Sant Cugat del Vallès</h2><div id="meta"></div></div>
 <div class="card">
 <div class="toolbar">
 <label for="routeSelector"><strong>Mostra:</strong></label>
 <select id="routeSelector"><option value="all">Totes les rutes</option></select>
 </div>
 <div class="legend" id="legend"></div><div id="map"></div></div>
-<div class="card"><h3 style="margin:0 0 8px">Resum per ruta</h3><table><thead><tr><th>Camio</th><th>Sortida Plaça Catalunya</th><th>Tornada</th><th>KM ruta</th><th>Entregues</th></tr></thead><tbody id="tbodyRutes"></tbody></table></div>
+<div class="card"><h3 style="margin:0 0 8px">Resum per ruta</h3><table><thead><tr><th>Camio</th><th>Sortida Sant Cugat</th><th>Tornada</th><th>KM ruta</th><th>Entregues</th></tr></thead><tbody id="tbodyRutes"></tbody></table></div>
 <div class="card"><h3 style="margin:0 0 8px">Entregues per camio</h3><table><thead><tr><th>Camio</th><th>#</th><th>Entrega</th><th>Arribada</th><th>Franja</th></tr></thead><tbody id="tbody"></tbody></table></div>
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const data=${payload};
-const colors=['#ef4444','#2563eb','#16a34a','#9333ea','#ea580c','#0891b2'];
+const colors=['#ef4444','#2563eb','#16a34a','#9333ea','#ea580c','#0891b2','#db2777','#65a30d','#7c3aed','#0d9488','#ca8a04','#dc2626','#1d4ed8','#15803d','#c026d3'];
 document.getElementById('meta').textContent='Rutes: '+data.rutes.length+' · No assignades: '+data.noAssignades;
 const selector=document.getElementById('routeSelector');
 data.rutes.forEach((ruta,idx)=>{
@@ -161,7 +169,7 @@ data.rutes.forEach((ruta,idx)=>{
 });
 const map=L.map('map');
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(map);
-const warehouse=L.circleMarker([data.centre.y,data.centre.x],{radius:8,color:'#111827',fillColor:'#111827',fillOpacity:1}).addTo(map).bindPopup('Plaça Catalunya');
+const warehouse=L.circleMarker([data.centre.y,data.centre.x],{radius:8,color:'#111827',fillColor:'#111827',fillOpacity:1}).addTo(map).bindPopup('Sant Cugat del Vallès');
 const boundsAll=[];
 boundsAll.push([data.centre.y,data.centre.x]);
 const legend=document.getElementById('legend');
