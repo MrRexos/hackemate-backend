@@ -395,9 +395,17 @@ export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, 
 
   corregirSobrecàrregaRutes(rutes, context, entreguesNoAssignades);
 
+  for (const ruta of rutes) {
+    recalculaVolum(ruta);
+  }
+
   actualitzaEtasRutes(rutes, context);
 
   resoleSolapamentsTemporalCamions(rutes, context);
+
+  for (const ruta of rutes) {
+    recalculaVolum(ruta);
+  }
 
   return {
     rutes: rutes.filter((r) => r.entregues.length > 0),
@@ -1282,15 +1290,15 @@ function afegeixEntrega(ruta, entrega) {
 }
 
 function desfesUltimaEntrega(ruta) {
-  const eliminada = ruta.entregues.pop();
-  ruta.volumOcupat -= Number(eliminada?.volumTotal || 0);
+  ruta.entregues.pop();
+  recalculaVolum(ruta);
 }
 
 function eliminaEntrega(ruta, entrega) {
   const idx = ruta.entregues.indexOf(entrega);
   if (idx >= 0) {
     ruta.entregues.splice(idx, 1);
-    ruta.volumOcupat -= Number(entrega.volumTotal || 0);
+    recalculaVolum(ruta);
   }
 }
 
@@ -1356,7 +1364,6 @@ function corregirSobrecàrregaRutes(rutes, context, entreguesNoAssignades) {
       if (!millor) continue;
 
       ruta.entregues.splice(millor.pos, 0, e);
-      ruta.volumOcupat += Number(e.volumTotal || 0);
       recalculaVolum(ruta);
       if (teFinestresValides(ruta, context)) {
         intentaOptimitzacioIncremental(ruta, context);
@@ -1369,7 +1376,8 @@ function corregirSobrecàrregaRutes(rutes, context, entreguesNoAssignades) {
 
     if (reinserida) continue;
 
-    const novaRuta = creaRutaNova(e, context, rutes.length + 1, true);
+    /** Només camió virtual si la passada «assignació completa» està activa (evita VIRTUAL-* en correcció habitual). */
+    const novaRuta = creaRutaNova(e, context, rutes.length + 1, context.assignacioCompletaActiva === true);
     if (!novaRuta) {
       marcaNoAssignada(e, 'CAPACITAT_FLOTA');
       entreguesNoAssignades.push(e);
@@ -1418,7 +1426,8 @@ function insereixEntregaMinimCost(ruta, entrega, context) {
 }
 
 function recalculaVolum(ruta) {
-  ruta.volumOcupat = ruta.entregues.reduce((acc, e) => acc + Number(e.volumTotal || 0), 0);
+  const sum = ruta.entregues.reduce((acc, e) => acc + Number(e.volumTotal || 0), 0);
+  ruta.volumOcupat = Number.isFinite(sum) ? Math.max(0, sum) : 0;
 }
 
 function teFranjaMati(entrega) {

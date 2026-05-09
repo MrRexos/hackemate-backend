@@ -10,7 +10,7 @@ export class Ruta {
     entregues = [],
     volumOcupat = 0,
     horaSortidaMagatzemAproximada = null,
-    horaArribadaMagatzemAproximada = null,
+    horaArribadaMagatzemAproximada = null, 
   }) {
     this.camio = camio;
     this.entregues = normalitzaEntregues(entregues, Entrega);

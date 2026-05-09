@@ -1,0 +1,2850 @@
+{
+  "generat": "2026-05-09T23:34:16.686Z",
+  "magatzem": {
+    "x": 2.2136,
+    "y": 41.5403
+  },
+  "distanciaAnellKm": 20,
+  "dataset": {
+    "totalEntregues": 25,
+    "totalReferenciesPedido": 100,
+    "pedidosPerEntrega": 4,
+    "optimitzacioIntraRutaCarreteraOsrm": false,
+    "osrmRouterUrlPerDefecte": "https://router.project-osrm.org"
+  },
+  "estadistiques": {
+    "nombreRutes": 17,
+    "mitjanaPercentatgeOcupacioUtilPerRuta_fisics": 53.9,
+    "mitjanaPercentatgeOcupacioUtilPerRuta_incloentVirtuals": 53.9,
+    "nombreCamionsAmbAlMenysUnaRuta": 13
+  },
+  "perCamio": {
+    "VHC-MOL-09": [
+      {
+        "indexRuta": 0,
+        "camio": {
+          "id": "VHC-MOL-09",
+          "capacitatMaxima": 88,
+          "capacitatOperativaMaxima": 81.84
+        },
+        "volumOcupat": 44.339999999999996,
+        "percentatgeOcupacioUtil": 54.2,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "10:55",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-012",
+            "nom": "Logística Penedès 12 SL",
+            "adreca": "Carrer Major 23, 08470 Sant Celoni",
+            "coordenades": {
+              "x": 2.452524194680203,
+              "y": 41.55979006506806
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 44.339999999999996,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-045 · Paquets A4 (caixa)",
+                "volumPerCaixa": 0.385,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "papereria",
+                "volumTotal": 6.545
+              },
+              {
+                "nom": "REF-PED-046 · Caixes calçat numerades",
+                "volumPerCaixa": 0.49,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "textil",
+                "volumTotal": 13.719999999999999
+              },
+              {
+                "nom": "REF-PED-047 · Bidons detergents",
+                "volumPerCaixa": 0.595,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "químic",
+                "volumTotal": 23.205
+              },
+              {
+                "nom": "REF-PED-048 · Medicaments estanteria",
+                "volumPerCaixa": 0.14500000000000002,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "farma",
+                "volumTotal": 0.8700000000000001
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 2
+      },
+      {
+        "indexRuta": 13,
+        "camio": {
+          "id": "VHC-MOL-09",
+          "capacitatMaxima": 88,
+          "capacitatOperativaMaxima": 81.84
+        },
+        "volumOcupat": 54.839999999999996,
+        "percentatgeOcupacioUtil": 67,
+        "virtual": false,
+        "horaSortidaMagatzem": "15:00",
+        "horaArribadaMagatzem": "19:06",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-005",
+            "nom": "Serveis Occidental 05 SL",
+            "adreca": "Anell 20 km · 65.1° (referència)",
+            "coordenades": {
+              "x": 2.431820669979923,
+              "y": 41.615823190346575
+            },
+            "horaInici": "15:00",
+            "horaFinal": "19:30",
+            "volumTotal": 32.81999999999999,
+            "horaDEntrega": "15:00",
+            "pedidos": [
+              {
+                "nom": "REF-PED-017 · Làctics nevera",
+                "volumPerCaixa": 0.22,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 3.74
+              },
+              {
+                "nom": "REF-PED-018 · Accessoris ferreteria",
+                "volumPerCaixa": 0.32499999999999996,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "ferreteria",
+                "volumTotal": 9.099999999999998
+              },
+              {
+                "nom": "REF-PED-019 · Embalatge buit",
+                "volumPerCaixa": 0.42999999999999994,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "envàs",
+                "volumTotal": 16.769999999999996
+              },
+              {
+                "nom": "REF-PED-020 · Beguda isotònica",
+                "volumPerCaixa": 0.535,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "beguda",
+                "volumTotal": 3.21
+              }
+            ]
+          },
+          {
+            "identificador": "ENT-2026-MOL-010",
+            "nom": "Outlet Vallès 10 SL",
+            "adreca": "Avinguda Francesc Macià 112, 08402 Granollers",
+            "coordenades": {
+              "x": 2.4386108723331583,
+              "y": 41.6036583310224
+            },
+            "horaInici": "15:00",
+            "horaFinal": "19:30",
+            "volumTotal": 22.020000000000003,
+            "horaDEntrega": "17:25",
+            "pedidos": [
+              {
+                "nom": "REF-PED-037 · Làctics nevera",
+                "volumPerCaixa": 0.1,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 1.7000000000000002
+              },
+              {
+                "nom": "REF-PED-038 · Accessoris ferreteria",
+                "volumPerCaixa": 0.20500000000000002,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "ferreteria",
+                "volumTotal": 5.74
+              },
+              {
+                "nom": "REF-PED-039 · Embalatge buit",
+                "volumPerCaixa": 0.31,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "envàs",
+                "volumTotal": 12.09
+              },
+              {
+                "nom": "REF-PED-040 · Beguda isotònica",
+                "volumPerCaixa": 0.41500000000000004,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "beguda",
+                "volumTotal": 2.49
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 2,
+        "totalViatgesCamio": 2
+      }
+    ],
+    "VHC-MOL-10": [
+      {
+        "indexRuta": 1,
+        "camio": {
+          "id": "VHC-MOL-10",
+          "capacitatMaxima": 88,
+          "capacitatOperativaMaxima": 81.84
+        },
+        "volumOcupat": 42.989999999999995,
+        "percentatgeOcupacioUtil": 52.5,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "10:55",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-008",
+            "nom": "Comercial Interior 08 SL",
+            "adreca": "Carrer de Barcelona 15, 08740 Sant Andreu de la Barca",
+            "coordenades": {
+              "x": 2.410518689065391,
+              "y": 41.643555119852074
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 42.989999999999995,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-029 · Caixes fruita",
+                "volumPerCaixa": 0.37,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 6.29
+              },
+              {
+                "nom": "REF-PED-030 · Petit electrodomèstic",
+                "volumPerCaixa": 0.475,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "electro",
+                "volumTotal": 13.299999999999999
+              },
+              {
+                "nom": "REF-PED-031 · Aigua mineral",
+                "volumPerCaixa": 0.58,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "beguda",
+                "volumTotal": 22.619999999999997
+              },
+              {
+                "nom": "REF-PED-032 · Roba planxada",
+                "volumPerCaixa": 0.13,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "textil",
+                "volumTotal": 0.78
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 2
+      },
+      {
+        "indexRuta": 14,
+        "camio": {
+          "id": "VHC-MOL-10",
+          "capacitatMaxima": 88,
+          "capacitatOperativaMaxima": 81.84
+        },
+        "volumOcupat": 39.57000000000001,
+        "percentatgeOcupacioUtil": 48.4,
+        "virtual": false,
+        "horaSortidaMagatzem": "15:00",
+        "horaArribadaMagatzem": "17:26",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-025",
+            "nom": "Distribucions Montseny 25 SL",
+            "adreca": "Anell 20 km · 353.1° (referència)",
+            "coordenades": {
+              "x": 2.184650722391947,
+              "y": 41.71885800110045
+            },
+            "horaInici": "15:00",
+            "horaFinal": "19:30",
+            "volumTotal": 39.57000000000001,
+            "horaDEntrega": "15:00",
+            "pedidos": [
+              {
+                "nom": "REF-PED-097 · Làctics nevera",
+                "volumPerCaixa": 0.29500000000000004,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 5.015000000000001
+              },
+              {
+                "nom": "REF-PED-098 · Accessoris ferreteria",
+                "volumPerCaixa": 0.4,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "ferreteria",
+                "volumTotal": 11.200000000000001
+              },
+              {
+                "nom": "REF-PED-099 · Embalatge buit",
+                "volumPerCaixa": 0.505,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "envàs",
+                "volumTotal": 19.695
+              },
+              {
+                "nom": "REF-PED-100 · Beguda isotònica",
+                "volumPerCaixa": 0.61,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "beguda",
+                "volumTotal": 3.66
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 2,
+        "totalViatgesCamio": 2
+      }
+    ],
+    "VHC-MOL-08": [
+      {
+        "indexRuta": 2,
+        "camio": {
+          "id": "VHC-MOL-08",
+          "capacitatMaxima": 90,
+          "capacitatOperativaMaxima": 83.7
+        },
+        "volumOcupat": 62.25000000000001,
+        "percentatgeOcupacioUtil": 74.4,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "12:35",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-003",
+            "nom": "Magatzem Maresme 03 SL",
+            "adreca": "Anell 20 km · 36.3° (referència)",
+            "coordenades": {
+              "x": 2.356182363224568,
+              "y": 41.68516979816904
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 32.145,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-009 · Caixes fruita",
+                "volumPerCaixa": 0.49,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 8.33
+              },
+              {
+                "nom": "REF-PED-010 · Petit electrodomèstic",
+                "volumPerCaixa": 0.595,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "electro",
+                "volumTotal": 16.66
+              },
+              {
+                "nom": "REF-PED-011 · Aigua mineral",
+                "volumPerCaixa": 0.14500000000000002,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "beguda",
+                "volumTotal": 5.655000000000001
+              },
+              {
+                "nom": "REF-PED-012 · Roba planxada",
+                "volumPerCaixa": 0.25,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "textil",
+                "volumTotal": 1.5
+              }
+            ]
+          },
+          {
+            "identificador": "ENT-2026-MOL-006",
+            "nom": "Logística Penedès 06 SL",
+            "adreca": "Plaça de l'Església 4, 08140 Caldes de Montbui",
+            "coordenades": {
+              "x": 2.3699952509668276,
+              "y": 41.67696408476544
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 30.105000000000004,
+            "horaDEntrega": "10:55",
+            "pedidos": [
+              {
+                "nom": "REF-PED-021 · Arròs sac 25 kg",
+                "volumPerCaixa": 0.64,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "sec",
+                "volumTotal": 10.88
+              },
+              {
+                "nom": "REF-PED-022 · Oli gira-sol 5L",
+                "volumPerCaixa": 0.19,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "líquid",
+                "volumTotal": 5.32
+              },
+              {
+                "nom": "REF-PED-023 · Marisc congelat mix",
+                "volumPerCaixa": 0.29500000000000004,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "congelat",
+                "volumTotal": 11.505
+              },
+              {
+                "nom": "REF-PED-024 · Postres individual",
+                "volumPerCaixa": 0.4,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "fresc",
+                "volumTotal": 2.4000000000000004
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 2
+      },
+      {
+        "indexRuta": 15,
+        "camio": {
+          "id": "VHC-MOL-08",
+          "capacitatMaxima": 90,
+          "capacitatOperativaMaxima": 83.7
+        },
+        "volumOcupat": 36.195,
+        "percentatgeOcupacioUtil": 43.2,
+        "virtual": false,
+        "horaSortidaMagatzem": "15:00",
+        "horaArribadaMagatzem": "17:26",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-015",
+            "nom": "Magatzem Maresme 15 SL",
+            "adreca": "Anell 20 km · 209.1° (referència)",
+            "coordenades": {
+              "x": 2.097015216946996,
+              "y": 41.38308059578953
+            },
+            "horaInici": "15:00",
+            "horaFinal": "19:30",
+            "volumTotal": 36.195,
+            "horaDEntrega": "15:00",
+            "pedidos": [
+              {
+                "nom": "REF-PED-057 · Làctics nevera",
+                "volumPerCaixa": 0.535,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 9.095
+              },
+              {
+                "nom": "REF-PED-058 · Accessoris ferreteria",
+                "volumPerCaixa": 0.64,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "ferreteria",
+                "volumTotal": 17.92
+              },
+              {
+                "nom": "REF-PED-059 · Embalatge buit",
+                "volumPerCaixa": 0.19,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "envàs",
+                "volumTotal": 7.41
+              },
+              {
+                "nom": "REF-PED-060 · Beguda isotònica",
+                "volumPerCaixa": 0.29500000000000004,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "beguda",
+                "volumTotal": 1.7700000000000002
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 2,
+        "totalViatgesCamio": 2
+      }
+    ],
+    "VHC-MOL-06": [
+      {
+        "indexRuta": 3,
+        "camio": {
+          "id": "VHC-MOL-06",
+          "capacitatMaxima": 95,
+          "capacitatOperativaMaxima": 88.35000000000001
+        },
+        "volumOcupat": 41.63999999999999,
+        "percentatgeOcupacioUtil": 47.1,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "10:55",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-004",
+            "nom": "Outlet Vallès 04 SL",
+            "adreca": "Carrer Major 23, 08470 Sant Celoni",
+            "coordenades": {
+              "x": 2.3195836756589983,
+              "y": 41.70177453623988
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 41.63999999999999,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-013 · Recanvis filtres",
+                "volumPerCaixa": 0.355,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "recanvi",
+                "volumTotal": 6.035
+              },
+              {
+                "nom": "REF-PED-014 · Material didàctic",
+                "volumPerCaixa": 0.45999999999999996,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "educació",
+                "volumTotal": 12.879999999999999
+              },
+              {
+                "nom": "REF-PED-015 · Sacos morter",
+                "volumPerCaixa": 0.565,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "construcció",
+                "volumTotal": 22.034999999999997
+              },
+              {
+                "nom": "REF-PED-016 · Conserves peix",
+                "volumPerCaixa": 0.115,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "sec",
+                "volumTotal": 0.6900000000000001
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 2
+      },
+      {
+        "indexRuta": 16,
+        "camio": {
+          "id": "VHC-MOL-06",
+          "capacitatMaxima": 95,
+          "capacitatOperativaMaxima": 88.35000000000001
+        },
+        "volumOcupat": 47.04,
+        "percentatgeOcupacioUtil": 53.2,
+        "virtual": false,
+        "horaSortidaMagatzem": "15:00",
+        "horaArribadaMagatzem": "17:26",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-020",
+            "nom": "Comercial Interior 20 SL",
+            "adreca": "Carrer Major 23, 08470 Sant Celoni",
+            "coordenades": {
+              "x": 2.3635224602577076,
+              "y": 41.39983093427315
+            },
+            "horaInici": "15:00",
+            "horaFinal": "19:30",
+            "volumTotal": 47.04,
+            "horaDEntrega": "15:00",
+            "pedidos": [
+              {
+                "nom": "REF-PED-077 · Làctics nevera",
+                "volumPerCaixa": 0.41500000000000004,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 7.055000000000001
+              },
+              {
+                "nom": "REF-PED-078 · Accessoris ferreteria",
+                "volumPerCaixa": 0.52,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "ferreteria",
+                "volumTotal": 14.56
+              },
+              {
+                "nom": "REF-PED-079 · Embalatge buit",
+                "volumPerCaixa": 0.625,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "envàs",
+                "volumTotal": 24.375
+              },
+              {
+                "nom": "REF-PED-080 · Beguda isotònica",
+                "volumPerCaixa": 0.175,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "beguda",
+                "volumTotal": 1.0499999999999998
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 2,
+        "totalViatgesCamio": 2
+      }
+    ],
+    "VHC-MOL-07": [
+      {
+        "indexRuta": 4,
+        "camio": {
+          "id": "VHC-MOL-07",
+          "capacitatMaxima": 95,
+          "capacitatOperativaMaxima": 88.35000000000001
+        },
+        "volumOcupat": 60.225,
+        "percentatgeOcupacioUtil": 68.2,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "12:35",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-001",
+            "nom": "Distribucions Montseny 01 SL",
+            "adreca": "Anell 20 km · 7.5° (referència)",
+            "coordenades": {
+              "x": 2.2450526761370497,
+              "y": 41.718621278738496
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 31.470000000000002,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-001 · Arròs sac 25 kg",
+                "volumPerCaixa": 0.20500000000000002,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "sec",
+                "volumTotal": 3.4850000000000003
+              },
+              {
+                "nom": "REF-PED-002 · Oli gira-sol 5L",
+                "volumPerCaixa": 0.31,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "líquid",
+                "volumTotal": 8.68
+              },
+              {
+                "nom": "REF-PED-003 · Marisc congelat mix",
+                "volumPerCaixa": 0.41500000000000004,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "congelat",
+                "volumTotal": 16.185000000000002
+              },
+              {
+                "nom": "REF-PED-004 · Postres individual",
+                "volumPerCaixa": 0.52,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "fresc",
+                "volumTotal": 3.12
+              }
+            ]
+          },
+          {
+            "identificador": "ENT-2026-MOL-002",
+            "nom": "Comercial Interior 02 SL",
+            "adreca": "Avinguda Francesc Macià 112, 08402 Granollers",
+            "coordenades": {
+              "x": 2.2624636395802167,
+              "y": 41.71641692015794
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 28.755,
+            "horaDEntrega": "10:55",
+            "pedidos": [
+              {
+                "nom": "REF-PED-005 · Paquets A4 (caixa)",
+                "volumPerCaixa": 0.625,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "papereria",
+                "volumTotal": 10.625
+              },
+              {
+                "nom": "REF-PED-006 · Caixes calçat numerades",
+                "volumPerCaixa": 0.175,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "textil",
+                "volumTotal": 4.8999999999999995
+              },
+              {
+                "nom": "REF-PED-007 · Bidons detergents",
+                "volumPerCaixa": 0.28,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "químic",
+                "volumTotal": 10.920000000000002
+              },
+              {
+                "nom": "REF-PED-008 · Medicaments estanteria",
+                "volumPerCaixa": 0.385,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "farma",
+                "volumTotal": 2.31
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      }
+    ],
+    "VHC-MOL-05": [
+      {
+        "indexRuta": 5,
+        "camio": {
+          "id": "VHC-MOL-05",
+          "capacitatMaxima": 100,
+          "capacitatOperativaMaxima": 93
+        },
+        "volumOcupat": 23.355,
+        "percentatgeOcupacioUtil": 25.1,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "10:55",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-023",
+            "nom": "Serveis Occidental 23 SL",
+            "adreca": "Anell 20 km · 324.3° (referència)",
+            "coordenades": {
+              "x": 2.0730556330367325,
+              "y": 41.68627940403617
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 23.355,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-089 · Caixes fruita",
+                "volumPerCaixa": 0.565,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 9.604999999999999
+              },
+              {
+                "nom": "REF-PED-090 · Petit electrodomèstic",
+                "volumPerCaixa": 0.115,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "electro",
+                "volumTotal": 3.22
+              },
+              {
+                "nom": "REF-PED-091 · Aigua mineral",
+                "volumPerCaixa": 0.22,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "beguda",
+                "volumTotal": 8.58
+              },
+              {
+                "nom": "REF-PED-092 · Roba planxada",
+                "volumPerCaixa": 0.32499999999999996,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "textil",
+                "volumTotal": 1.9499999999999997
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      }
+    ],
+    "VHC-MOL-15": [
+      {
+        "indexRuta": 6,
+        "camio": {
+          "id": "VHC-MOL-15",
+          "capacitatMaxima": 102,
+          "capacitatOperativaMaxima": 94.86
+        },
+        "volumOcupat": 38.220000000000006,
+        "percentatgeOcupacioUtil": 40.3,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "10:55",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-021",
+            "nom": "Magatzem Maresme 21 SL",
+            "adreca": "Anell 20 km · 295.5° (referència)",
+            "coordenades": {
+              "x": 1.9964462913019083,
+              "y": 41.61752946964994
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 38.220000000000006,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-081 · Arròs sac 25 kg",
+                "volumPerCaixa": 0.28,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "sec",
+                "volumTotal": 4.760000000000001
+              },
+              {
+                "nom": "REF-PED-082 · Oli gira-sol 5L",
+                "volumPerCaixa": 0.385,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "líquid",
+                "volumTotal": 10.780000000000001
+              },
+              {
+                "nom": "REF-PED-083 · Marisc congelat mix",
+                "volumPerCaixa": 0.49,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "congelat",
+                "volumTotal": 19.11
+              },
+              {
+                "nom": "REF-PED-084 · Postres individual",
+                "volumPerCaixa": 0.595,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "fresc",
+                "volumTotal": 3.57
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      }
+    ],
+    "VHC-MOL-04": [
+      {
+        "indexRuta": 7,
+        "camio": {
+          "id": "VHC-MOL-04",
+          "capacitatMaxima": 105,
+          "capacitatOperativaMaxima": 97.65
+        },
+        "volumOcupat": 22.005000000000003,
+        "percentatgeOcupacioUtil": 22.5,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "10:55",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-019",
+            "nom": "Distribucions Montseny 19 SL",
+            "adreca": "Anell 20 km · 266.7° (referència)",
+            "coordenades": {
+              "x": 1.973734408295231,
+              "y": 41.52969704429827
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 22.005000000000003,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-073 · Recanvis filtres",
+                "volumPerCaixa": 0.5499999999999999,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "recanvi",
+                "volumTotal": 9.35
+              },
+              {
+                "nom": "REF-PED-074 · Material didàctic",
+                "volumPerCaixa": 0.1,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "educació",
+                "volumTotal": 2.8000000000000003
+              },
+              {
+                "nom": "REF-PED-075 · Sacos morter",
+                "volumPerCaixa": 0.20500000000000002,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "construcció",
+                "volumTotal": 7.995000000000001
+              },
+              {
+                "nom": "REF-PED-076 · Conserves peix",
+                "volumPerCaixa": 0.31,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "sec",
+                "volumTotal": 1.8599999999999999
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      }
+    ],
+    "VHC-MOL-14": [
+      {
+        "indexRuta": 8,
+        "camio": {
+          "id": "VHC-MOL-14",
+          "capacitatMaxima": 108,
+          "capacitatOperativaMaxima": 100.44000000000001
+        },
+        "volumOcupat": 36.87,
+        "percentatgeOcupacioUtil": 36.7,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "10:55",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-017",
+            "nom": "Serveis Occidental 17 SL",
+            "adreca": "Anell 20 km · 237.9° (referència)",
+            "coordenades": {
+              "x": 2.0103346046696253,
+              "y": 41.44454123745786
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 36.87,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-065 · Paquets A4 (caixa)",
+                "volumPerCaixa": 0.265,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "papereria",
+                "volumTotal": 4.505
+              },
+              {
+                "nom": "REF-PED-066 · Caixes calçat numerades",
+                "volumPerCaixa": 0.37,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "textil",
+                "volumTotal": 10.36
+              },
+              {
+                "nom": "REF-PED-067 · Bidons detergents",
+                "volumPerCaixa": 0.475,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "químic",
+                "volumTotal": 18.525
+              },
+              {
+                "nom": "REF-PED-068 · Medicaments estanteria",
+                "volumPerCaixa": 0.58,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "farma",
+                "volumTotal": 3.4799999999999995
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      }
+    ],
+    "VHC-MOL-03": [
+      {
+        "indexRuta": 9,
+        "camio": {
+          "id": "VHC-MOL-03",
+          "capacitatMaxima": 110,
+          "capacitatOperativaMaxima": 102.30000000000001
+        },
+        "volumOcupat": 83.91,
+        "percentatgeOcupacioUtil": 82,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "12:35",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-013",
+            "nom": "Distribucions Montseny 13 SL",
+            "adreca": "Anell 20 km · 180.3° (referència)",
+            "coordenades": {
+              "x": 2.2123452673972737,
+              "y": 41.36043813752162
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 35.519999999999996,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-049 · Caixes fruita",
+                "volumPerCaixa": 0.25,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 4.25
+              },
+              {
+                "nom": "REF-PED-050 · Petit electrodomèstic",
+                "volumPerCaixa": 0.355,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "electro",
+                "volumTotal": 9.94
+              },
+              {
+                "nom": "REF-PED-051 · Aigua mineral",
+                "volumPerCaixa": 0.45999999999999996,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "beguda",
+                "volumTotal": 17.939999999999998
+              },
+              {
+                "nom": "REF-PED-052 · Roba planxada",
+                "volumPerCaixa": 0.565,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "textil",
+                "volumTotal": 3.3899999999999997
+              }
+            ]
+          },
+          {
+            "identificador": "ENT-2026-MOL-024",
+            "nom": "Logística Penedès 24 SL",
+            "adreca": "Carrer de Barcelona 15, 08740 Sant Andreu de la Barca",
+            "coordenades": {
+              "x": 2.254802330459122,
+              "y": 41.363106614847254
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 48.39,
+            "horaDEntrega": "10:55",
+            "pedidos": [
+              {
+                "nom": "REF-PED-093 · Recanvis filtres",
+                "volumPerCaixa": 0.42999999999999994,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "recanvi",
+                "volumTotal": 7.309999999999999
+              },
+              {
+                "nom": "REF-PED-094 · Material didàctic",
+                "volumPerCaixa": 0.535,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "educació",
+                "volumTotal": 14.98
+              },
+              {
+                "nom": "REF-PED-095 · Sacos morter",
+                "volumPerCaixa": 0.64,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "construcció",
+                "volumTotal": 24.96
+              },
+              {
+                "nom": "REF-PED-096 · Conserves peix",
+                "volumPerCaixa": 0.19,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "sec",
+                "volumTotal": 1.1400000000000001
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      }
+    ],
+    "VHC-MOL-13": [
+      {
+        "indexRuta": 10,
+        "camio": {
+          "id": "VHC-MOL-13",
+          "capacitatMaxima": 115,
+          "capacitatOperativaMaxima": 106.95
+        },
+        "volumOcupat": 60.915,
+        "percentatgeOcupacioUtil": 57,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "12:35",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-022",
+            "nom": "Outlet Vallès 22 SL",
+            "adreca": "Plaça de l'Església 4, 08140 Caldes de Montbui",
+            "coordenades": {
+              "x": 2.312238355972511,
+              "y": 41.37632886321153
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 26.07,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-085 · Paquets A4 (caixa)",
+                "volumPerCaixa": 0.14500000000000002,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "papereria",
+                "volumTotal": 2.4650000000000003
+              },
+              {
+                "nom": "REF-PED-086 · Caixes calçat numerades",
+                "volumPerCaixa": 0.25,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "textil",
+                "volumTotal": 7
+              },
+              {
+                "nom": "REF-PED-087 · Bidons detergents",
+                "volumPerCaixa": 0.355,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "químic",
+                "volumTotal": 13.844999999999999
+              },
+              {
+                "nom": "REF-PED-088 · Medicaments estanteria",
+                "volumPerCaixa": 0.45999999999999996,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "farma",
+                "volumTotal": 2.76
+              }
+            ]
+          },
+          {
+            "identificador": "ENT-2026-MOL-011",
+            "nom": "Serveis Occidental 11 SL",
+            "adreca": "Anell 20 km · 151.5° (referència)",
+            "coordenades": {
+              "x": 2.327983359724628,
+              "y": 41.38217540516876
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 34.845,
+            "horaDEntrega": "10:55",
+            "pedidos": [
+              {
+                "nom": "REF-PED-041 · Arròs sac 25 kg",
+                "volumPerCaixa": 0.52,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "sec",
+                "volumTotal": 8.84
+              },
+              {
+                "nom": "REF-PED-042 · Oli gira-sol 5L",
+                "volumPerCaixa": 0.625,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "líquid",
+                "volumTotal": 17.5
+              },
+              {
+                "nom": "REF-PED-043 · Marisc congelat mix",
+                "volumPerCaixa": 0.175,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "congelat",
+                "volumTotal": 6.824999999999999
+              },
+              {
+                "nom": "REF-PED-044 · Postres individual",
+                "volumPerCaixa": 0.28,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "fresc",
+                "volumTotal": 1.6800000000000002
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      }
+    ],
+    "VHC-MOL-01": [
+      {
+        "indexRuta": 11,
+        "camio": {
+          "id": "VHC-MOL-01",
+          "capacitatMaxima": 120,
+          "capacitatOperativaMaxima": 111.60000000000001
+        },
+        "volumOcupat": 104.58,
+        "percentatgeOcupacioUtil": 93.7,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "15:00",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-016",
+            "nom": "Outlet Vallès 16 SL",
+            "adreca": "Carrer de Barcelona 15, 08740 Sant Andreu de la Barca",
+            "coordenades": {
+              "x": 2.4353746655946553,
+              "y": 41.47125573087965
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 45.690000000000005,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-061 · Arròs sac 25 kg",
+                "volumPerCaixa": 0.4,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "sec",
+                "volumTotal": 6.800000000000001
+              },
+              {
+                "nom": "REF-PED-062 · Oli gira-sol 5L",
+                "volumPerCaixa": 0.505,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "líquid",
+                "volumTotal": 14.14
+              },
+              {
+                "nom": "REF-PED-063 · Marisc congelat mix",
+                "volumPerCaixa": 0.61,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "congelat",
+                "volumTotal": 23.79
+              },
+              {
+                "nom": "REF-PED-064 · Postres individual",
+                "volumPerCaixa": 0.16,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "fresc",
+                "volumTotal": 0.96
+              }
+            ]
+          },
+          {
+            "identificador": "ENT-2026-MOL-009",
+            "nom": "Magatzem Maresme 09 SL",
+            "adreca": "Anell 20 km · 122.7° (referència)",
+            "coordenades": {
+              "x": 2.4155140656009535,
+              "y": 41.442953294909415
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 34.169999999999995,
+            "horaDEntrega": "10:10",
+            "pedidos": [
+              {
+                "nom": "REF-PED-033 · Recanvis filtres",
+                "volumPerCaixa": 0.23500000000000001,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "recanvi",
+                "volumTotal": 3.995
+              },
+              {
+                "nom": "REF-PED-034 · Material didàctic",
+                "volumPerCaixa": 0.33999999999999997,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "educació",
+                "volumTotal": 9.52
+              },
+              {
+                "nom": "REF-PED-035 · Sacos morter",
+                "volumPerCaixa": 0.44499999999999995,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "construcció",
+                "volumTotal": 17.354999999999997
+              },
+              {
+                "nom": "REF-PED-036 · Conserves peix",
+                "volumPerCaixa": 0.5499999999999999,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "sec",
+                "volumTotal": 3.3
+              }
+            ]
+          },
+          {
+            "identificador": "ENT-2026-MOL-018",
+            "nom": "Logística Penedès 18 SL",
+            "adreca": "Avinguda Francesc Macià 112, 08402 Granollers",
+            "coordenades": {
+              "x": 2.405446222207902,
+              "y": 41.43214624837215
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 24.72,
+            "horaDEntrega": "12:35",
+            "pedidos": [
+              {
+                "nom": "REF-PED-069 · Caixes fruita",
+                "volumPerCaixa": 0.13,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 2.21
+              },
+              {
+                "nom": "REF-PED-070 · Petit electrodomèstic",
+                "volumPerCaixa": 0.23500000000000001,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "electro",
+                "volumTotal": 6.58
+              },
+              {
+                "nom": "REF-PED-071 · Aigua mineral",
+                "volumPerCaixa": 0.33999999999999997,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "beguda",
+                "volumTotal": 13.259999999999998
+              },
+              {
+                "nom": "REF-PED-072 · Roba planxada",
+                "volumPerCaixa": 0.44499999999999995,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "textil",
+                "volumTotal": 2.67
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      }
+    ],
+    "VHC-MOL-02": [
+      {
+        "indexRuta": 12,
+        "camio": {
+          "id": "VHC-MOL-02",
+          "capacitatMaxima": 120,
+          "capacitatOperativaMaxima": 111.60000000000001
+        },
+        "volumOcupat": 56.865,
+        "percentatgeOcupacioUtil": 51,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "12:35",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-007",
+            "nom": "Distribucions Montseny 07 SL",
+            "adreca": "Anell 20 km · 93.9° (referència)",
+            "coordenades": {
+              "x": 2.4533006444526233,
+              "y": 41.527817573358085
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 33.495000000000005,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-025 · Paquets A4 (caixa)",
+                "volumPerCaixa": 0.505,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "papereria",
+                "volumTotal": 8.585
+              },
+              {
+                "nom": "REF-PED-026 · Caixes calçat numerades",
+                "volumPerCaixa": 0.61,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "textil",
+                "volumTotal": 17.08
+              },
+              {
+                "nom": "REF-PED-027 · Bidons detergents",
+                "volumPerCaixa": 0.16,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "químic",
+                "volumTotal": 6.24
+              },
+              {
+                "nom": "REF-PED-028 · Medicaments estanteria",
+                "volumPerCaixa": 0.265,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "farma",
+                "volumTotal": 1.59
+              }
+            ]
+          },
+          {
+            "identificador": "ENT-2026-MOL-014",
+            "nom": "Comercial Interior 14 SL",
+            "adreca": "Plaça de l'Església 4, 08140 Caldes de Montbui",
+            "coordenades": {
+              "x": 2.451411948736642,
+              "y": 41.514711871419046
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 23.369999999999997,
+            "horaDEntrega": "10:55",
+            "pedidos": [
+              {
+                "nom": "REF-PED-053 · Recanvis filtres",
+                "volumPerCaixa": 0.115,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "recanvi",
+                "volumTotal": 1.955
+              },
+              {
+                "nom": "REF-PED-054 · Material didàctic",
+                "volumPerCaixa": 0.22,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "educació",
+                "volumTotal": 6.16
+              },
+              {
+                "nom": "REF-PED-055 · Sacos morter",
+                "volumPerCaixa": 0.32499999999999996,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "construcció",
+                "volumTotal": 12.674999999999999
+              },
+              {
+                "nom": "REF-PED-056 · Conserves peix",
+                "volumPerCaixa": 0.42999999999999994,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "sec",
+                "volumTotal": 2.5799999999999996
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      }
+    ]
+  },
+  "resultat": {
+    "rutes": [
+      {
+        "indexRuta": 0,
+        "camio": {
+          "id": "VHC-MOL-09",
+          "capacitatMaxima": 88,
+          "capacitatOperativaMaxima": 81.84
+        },
+        "volumOcupat": 44.339999999999996,
+        "percentatgeOcupacioUtil": 54.2,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "10:55",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-012",
+            "nom": "Logística Penedès 12 SL",
+            "adreca": "Carrer Major 23, 08470 Sant Celoni",
+            "coordenades": {
+              "x": 2.452524194680203,
+              "y": 41.55979006506806
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 44.339999999999996,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-045 · Paquets A4 (caixa)",
+                "volumPerCaixa": 0.385,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "papereria",
+                "volumTotal": 6.545
+              },
+              {
+                "nom": "REF-PED-046 · Caixes calçat numerades",
+                "volumPerCaixa": 0.49,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "textil",
+                "volumTotal": 13.719999999999999
+              },
+              {
+                "nom": "REF-PED-047 · Bidons detergents",
+                "volumPerCaixa": 0.595,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "químic",
+                "volumTotal": 23.205
+              },
+              {
+                "nom": "REF-PED-048 · Medicaments estanteria",
+                "volumPerCaixa": 0.14500000000000002,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "farma",
+                "volumTotal": 0.8700000000000001
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 2
+      },
+      {
+        "indexRuta": 1,
+        "camio": {
+          "id": "VHC-MOL-10",
+          "capacitatMaxima": 88,
+          "capacitatOperativaMaxima": 81.84
+        },
+        "volumOcupat": 42.989999999999995,
+        "percentatgeOcupacioUtil": 52.5,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "10:55",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-008",
+            "nom": "Comercial Interior 08 SL",
+            "adreca": "Carrer de Barcelona 15, 08740 Sant Andreu de la Barca",
+            "coordenades": {
+              "x": 2.410518689065391,
+              "y": 41.643555119852074
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 42.989999999999995,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-029 · Caixes fruita",
+                "volumPerCaixa": 0.37,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 6.29
+              },
+              {
+                "nom": "REF-PED-030 · Petit electrodomèstic",
+                "volumPerCaixa": 0.475,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "electro",
+                "volumTotal": 13.299999999999999
+              },
+              {
+                "nom": "REF-PED-031 · Aigua mineral",
+                "volumPerCaixa": 0.58,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "beguda",
+                "volumTotal": 22.619999999999997
+              },
+              {
+                "nom": "REF-PED-032 · Roba planxada",
+                "volumPerCaixa": 0.13,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "textil",
+                "volumTotal": 0.78
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 2
+      },
+      {
+        "indexRuta": 2,
+        "camio": {
+          "id": "VHC-MOL-08",
+          "capacitatMaxima": 90,
+          "capacitatOperativaMaxima": 83.7
+        },
+        "volumOcupat": 62.25000000000001,
+        "percentatgeOcupacioUtil": 74.4,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "12:35",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-003",
+            "nom": "Magatzem Maresme 03 SL",
+            "adreca": "Anell 20 km · 36.3° (referència)",
+            "coordenades": {
+              "x": 2.356182363224568,
+              "y": 41.68516979816904
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 32.145,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-009 · Caixes fruita",
+                "volumPerCaixa": 0.49,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 8.33
+              },
+              {
+                "nom": "REF-PED-010 · Petit electrodomèstic",
+                "volumPerCaixa": 0.595,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "electro",
+                "volumTotal": 16.66
+              },
+              {
+                "nom": "REF-PED-011 · Aigua mineral",
+                "volumPerCaixa": 0.14500000000000002,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "beguda",
+                "volumTotal": 5.655000000000001
+              },
+              {
+                "nom": "REF-PED-012 · Roba planxada",
+                "volumPerCaixa": 0.25,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "textil",
+                "volumTotal": 1.5
+              }
+            ]
+          },
+          {
+            "identificador": "ENT-2026-MOL-006",
+            "nom": "Logística Penedès 06 SL",
+            "adreca": "Plaça de l'Església 4, 08140 Caldes de Montbui",
+            "coordenades": {
+              "x": 2.3699952509668276,
+              "y": 41.67696408476544
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 30.105000000000004,
+            "horaDEntrega": "10:55",
+            "pedidos": [
+              {
+                "nom": "REF-PED-021 · Arròs sac 25 kg",
+                "volumPerCaixa": 0.64,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "sec",
+                "volumTotal": 10.88
+              },
+              {
+                "nom": "REF-PED-022 · Oli gira-sol 5L",
+                "volumPerCaixa": 0.19,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "líquid",
+                "volumTotal": 5.32
+              },
+              {
+                "nom": "REF-PED-023 · Marisc congelat mix",
+                "volumPerCaixa": 0.29500000000000004,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "congelat",
+                "volumTotal": 11.505
+              },
+              {
+                "nom": "REF-PED-024 · Postres individual",
+                "volumPerCaixa": 0.4,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "fresc",
+                "volumTotal": 2.4000000000000004
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 2
+      },
+      {
+        "indexRuta": 3,
+        "camio": {
+          "id": "VHC-MOL-06",
+          "capacitatMaxima": 95,
+          "capacitatOperativaMaxima": 88.35000000000001
+        },
+        "volumOcupat": 41.63999999999999,
+        "percentatgeOcupacioUtil": 47.1,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "10:55",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-004",
+            "nom": "Outlet Vallès 04 SL",
+            "adreca": "Carrer Major 23, 08470 Sant Celoni",
+            "coordenades": {
+              "x": 2.3195836756589983,
+              "y": 41.70177453623988
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 41.63999999999999,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-013 · Recanvis filtres",
+                "volumPerCaixa": 0.355,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "recanvi",
+                "volumTotal": 6.035
+              },
+              {
+                "nom": "REF-PED-014 · Material didàctic",
+                "volumPerCaixa": 0.45999999999999996,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "educació",
+                "volumTotal": 12.879999999999999
+              },
+              {
+                "nom": "REF-PED-015 · Sacos morter",
+                "volumPerCaixa": 0.565,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "construcció",
+                "volumTotal": 22.034999999999997
+              },
+              {
+                "nom": "REF-PED-016 · Conserves peix",
+                "volumPerCaixa": 0.115,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "sec",
+                "volumTotal": 0.6900000000000001
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 2
+      },
+      {
+        "indexRuta": 4,
+        "camio": {
+          "id": "VHC-MOL-07",
+          "capacitatMaxima": 95,
+          "capacitatOperativaMaxima": 88.35000000000001
+        },
+        "volumOcupat": 60.225,
+        "percentatgeOcupacioUtil": 68.2,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "12:35",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-001",
+            "nom": "Distribucions Montseny 01 SL",
+            "adreca": "Anell 20 km · 7.5° (referència)",
+            "coordenades": {
+              "x": 2.2450526761370497,
+              "y": 41.718621278738496
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 31.470000000000002,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-001 · Arròs sac 25 kg",
+                "volumPerCaixa": 0.20500000000000002,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "sec",
+                "volumTotal": 3.4850000000000003
+              },
+              {
+                "nom": "REF-PED-002 · Oli gira-sol 5L",
+                "volumPerCaixa": 0.31,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "líquid",
+                "volumTotal": 8.68
+              },
+              {
+                "nom": "REF-PED-003 · Marisc congelat mix",
+                "volumPerCaixa": 0.41500000000000004,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "congelat",
+                "volumTotal": 16.185000000000002
+              },
+              {
+                "nom": "REF-PED-004 · Postres individual",
+                "volumPerCaixa": 0.52,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "fresc",
+                "volumTotal": 3.12
+              }
+            ]
+          },
+          {
+            "identificador": "ENT-2026-MOL-002",
+            "nom": "Comercial Interior 02 SL",
+            "adreca": "Avinguda Francesc Macià 112, 08402 Granollers",
+            "coordenades": {
+              "x": 2.2624636395802167,
+              "y": 41.71641692015794
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 28.755,
+            "horaDEntrega": "10:55",
+            "pedidos": [
+              {
+                "nom": "REF-PED-005 · Paquets A4 (caixa)",
+                "volumPerCaixa": 0.625,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "papereria",
+                "volumTotal": 10.625
+              },
+              {
+                "nom": "REF-PED-006 · Caixes calçat numerades",
+                "volumPerCaixa": 0.175,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "textil",
+                "volumTotal": 4.8999999999999995
+              },
+              {
+                "nom": "REF-PED-007 · Bidons detergents",
+                "volumPerCaixa": 0.28,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "químic",
+                "volumTotal": 10.920000000000002
+              },
+              {
+                "nom": "REF-PED-008 · Medicaments estanteria",
+                "volumPerCaixa": 0.385,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "farma",
+                "volumTotal": 2.31
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      },
+      {
+        "indexRuta": 5,
+        "camio": {
+          "id": "VHC-MOL-05",
+          "capacitatMaxima": 100,
+          "capacitatOperativaMaxima": 93
+        },
+        "volumOcupat": 23.355,
+        "percentatgeOcupacioUtil": 25.1,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "10:55",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-023",
+            "nom": "Serveis Occidental 23 SL",
+            "adreca": "Anell 20 km · 324.3° (referència)",
+            "coordenades": {
+              "x": 2.0730556330367325,
+              "y": 41.68627940403617
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 23.355,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-089 · Caixes fruita",
+                "volumPerCaixa": 0.565,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 9.604999999999999
+              },
+              {
+                "nom": "REF-PED-090 · Petit electrodomèstic",
+                "volumPerCaixa": 0.115,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "electro",
+                "volumTotal": 3.22
+              },
+              {
+                "nom": "REF-PED-091 · Aigua mineral",
+                "volumPerCaixa": 0.22,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "beguda",
+                "volumTotal": 8.58
+              },
+              {
+                "nom": "REF-PED-092 · Roba planxada",
+                "volumPerCaixa": 0.32499999999999996,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "textil",
+                "volumTotal": 1.9499999999999997
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      },
+      {
+        "indexRuta": 6,
+        "camio": {
+          "id": "VHC-MOL-15",
+          "capacitatMaxima": 102,
+          "capacitatOperativaMaxima": 94.86
+        },
+        "volumOcupat": 38.220000000000006,
+        "percentatgeOcupacioUtil": 40.3,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "10:55",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-021",
+            "nom": "Magatzem Maresme 21 SL",
+            "adreca": "Anell 20 km · 295.5° (referència)",
+            "coordenades": {
+              "x": 1.9964462913019083,
+              "y": 41.61752946964994
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 38.220000000000006,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-081 · Arròs sac 25 kg",
+                "volumPerCaixa": 0.28,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "sec",
+                "volumTotal": 4.760000000000001
+              },
+              {
+                "nom": "REF-PED-082 · Oli gira-sol 5L",
+                "volumPerCaixa": 0.385,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "líquid",
+                "volumTotal": 10.780000000000001
+              },
+              {
+                "nom": "REF-PED-083 · Marisc congelat mix",
+                "volumPerCaixa": 0.49,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "congelat",
+                "volumTotal": 19.11
+              },
+              {
+                "nom": "REF-PED-084 · Postres individual",
+                "volumPerCaixa": 0.595,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "fresc",
+                "volumTotal": 3.57
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      },
+      {
+        "indexRuta": 7,
+        "camio": {
+          "id": "VHC-MOL-04",
+          "capacitatMaxima": 105,
+          "capacitatOperativaMaxima": 97.65
+        },
+        "volumOcupat": 22.005000000000003,
+        "percentatgeOcupacioUtil": 22.5,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "10:55",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-019",
+            "nom": "Distribucions Montseny 19 SL",
+            "adreca": "Anell 20 km · 266.7° (referència)",
+            "coordenades": {
+              "x": 1.973734408295231,
+              "y": 41.52969704429827
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 22.005000000000003,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-073 · Recanvis filtres",
+                "volumPerCaixa": 0.5499999999999999,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "recanvi",
+                "volumTotal": 9.35
+              },
+              {
+                "nom": "REF-PED-074 · Material didàctic",
+                "volumPerCaixa": 0.1,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "educació",
+                "volumTotal": 2.8000000000000003
+              },
+              {
+                "nom": "REF-PED-075 · Sacos morter",
+                "volumPerCaixa": 0.20500000000000002,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "construcció",
+                "volumTotal": 7.995000000000001
+              },
+              {
+                "nom": "REF-PED-076 · Conserves peix",
+                "volumPerCaixa": 0.31,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "sec",
+                "volumTotal": 1.8599999999999999
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      },
+      {
+        "indexRuta": 8,
+        "camio": {
+          "id": "VHC-MOL-14",
+          "capacitatMaxima": 108,
+          "capacitatOperativaMaxima": 100.44000000000001
+        },
+        "volumOcupat": 36.87,
+        "percentatgeOcupacioUtil": 36.7,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "10:55",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-017",
+            "nom": "Serveis Occidental 17 SL",
+            "adreca": "Anell 20 km · 237.9° (referència)",
+            "coordenades": {
+              "x": 2.0103346046696253,
+              "y": 41.44454123745786
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 36.87,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-065 · Paquets A4 (caixa)",
+                "volumPerCaixa": 0.265,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "papereria",
+                "volumTotal": 4.505
+              },
+              {
+                "nom": "REF-PED-066 · Caixes calçat numerades",
+                "volumPerCaixa": 0.37,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "textil",
+                "volumTotal": 10.36
+              },
+              {
+                "nom": "REF-PED-067 · Bidons detergents",
+                "volumPerCaixa": 0.475,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "químic",
+                "volumTotal": 18.525
+              },
+              {
+                "nom": "REF-PED-068 · Medicaments estanteria",
+                "volumPerCaixa": 0.58,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "farma",
+                "volumTotal": 3.4799999999999995
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      },
+      {
+        "indexRuta": 9,
+        "camio": {
+          "id": "VHC-MOL-03",
+          "capacitatMaxima": 110,
+          "capacitatOperativaMaxima": 102.30000000000001
+        },
+        "volumOcupat": 83.91,
+        "percentatgeOcupacioUtil": 82,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "12:35",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-013",
+            "nom": "Distribucions Montseny 13 SL",
+            "adreca": "Anell 20 km · 180.3° (referència)",
+            "coordenades": {
+              "x": 2.2123452673972737,
+              "y": 41.36043813752162
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 35.519999999999996,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-049 · Caixes fruita",
+                "volumPerCaixa": 0.25,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 4.25
+              },
+              {
+                "nom": "REF-PED-050 · Petit electrodomèstic",
+                "volumPerCaixa": 0.355,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "electro",
+                "volumTotal": 9.94
+              },
+              {
+                "nom": "REF-PED-051 · Aigua mineral",
+                "volumPerCaixa": 0.45999999999999996,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "beguda",
+                "volumTotal": 17.939999999999998
+              },
+              {
+                "nom": "REF-PED-052 · Roba planxada",
+                "volumPerCaixa": 0.565,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "textil",
+                "volumTotal": 3.3899999999999997
+              }
+            ]
+          },
+          {
+            "identificador": "ENT-2026-MOL-024",
+            "nom": "Logística Penedès 24 SL",
+            "adreca": "Carrer de Barcelona 15, 08740 Sant Andreu de la Barca",
+            "coordenades": {
+              "x": 2.254802330459122,
+              "y": 41.363106614847254
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 48.39,
+            "horaDEntrega": "10:55",
+            "pedidos": [
+              {
+                "nom": "REF-PED-093 · Recanvis filtres",
+                "volumPerCaixa": 0.42999999999999994,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "recanvi",
+                "volumTotal": 7.309999999999999
+              },
+              {
+                "nom": "REF-PED-094 · Material didàctic",
+                "volumPerCaixa": 0.535,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "educació",
+                "volumTotal": 14.98
+              },
+              {
+                "nom": "REF-PED-095 · Sacos morter",
+                "volumPerCaixa": 0.64,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "construcció",
+                "volumTotal": 24.96
+              },
+              {
+                "nom": "REF-PED-096 · Conserves peix",
+                "volumPerCaixa": 0.19,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "sec",
+                "volumTotal": 1.1400000000000001
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      },
+      {
+        "indexRuta": 10,
+        "camio": {
+          "id": "VHC-MOL-13",
+          "capacitatMaxima": 115,
+          "capacitatOperativaMaxima": 106.95
+        },
+        "volumOcupat": 60.915,
+        "percentatgeOcupacioUtil": 57,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "12:35",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-022",
+            "nom": "Outlet Vallès 22 SL",
+            "adreca": "Plaça de l'Església 4, 08140 Caldes de Montbui",
+            "coordenades": {
+              "x": 2.312238355972511,
+              "y": 41.37632886321153
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 26.07,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-085 · Paquets A4 (caixa)",
+                "volumPerCaixa": 0.14500000000000002,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "papereria",
+                "volumTotal": 2.4650000000000003
+              },
+              {
+                "nom": "REF-PED-086 · Caixes calçat numerades",
+                "volumPerCaixa": 0.25,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "textil",
+                "volumTotal": 7
+              },
+              {
+                "nom": "REF-PED-087 · Bidons detergents",
+                "volumPerCaixa": 0.355,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "químic",
+                "volumTotal": 13.844999999999999
+              },
+              {
+                "nom": "REF-PED-088 · Medicaments estanteria",
+                "volumPerCaixa": 0.45999999999999996,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "farma",
+                "volumTotal": 2.76
+              }
+            ]
+          },
+          {
+            "identificador": "ENT-2026-MOL-011",
+            "nom": "Serveis Occidental 11 SL",
+            "adreca": "Anell 20 km · 151.5° (referència)",
+            "coordenades": {
+              "x": 2.327983359724628,
+              "y": 41.38217540516876
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 34.845,
+            "horaDEntrega": "10:55",
+            "pedidos": [
+              {
+                "nom": "REF-PED-041 · Arròs sac 25 kg",
+                "volumPerCaixa": 0.52,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "sec",
+                "volumTotal": 8.84
+              },
+              {
+                "nom": "REF-PED-042 · Oli gira-sol 5L",
+                "volumPerCaixa": 0.625,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "líquid",
+                "volumTotal": 17.5
+              },
+              {
+                "nom": "REF-PED-043 · Marisc congelat mix",
+                "volumPerCaixa": 0.175,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "congelat",
+                "volumTotal": 6.824999999999999
+              },
+              {
+                "nom": "REF-PED-044 · Postres individual",
+                "volumPerCaixa": 0.28,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "fresc",
+                "volumTotal": 1.6800000000000002
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      },
+      {
+        "indexRuta": 11,
+        "camio": {
+          "id": "VHC-MOL-01",
+          "capacitatMaxima": 120,
+          "capacitatOperativaMaxima": 111.60000000000001
+        },
+        "volumOcupat": 104.58,
+        "percentatgeOcupacioUtil": 93.7,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "15:00",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-016",
+            "nom": "Outlet Vallès 16 SL",
+            "adreca": "Carrer de Barcelona 15, 08740 Sant Andreu de la Barca",
+            "coordenades": {
+              "x": 2.4353746655946553,
+              "y": 41.47125573087965
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 45.690000000000005,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-061 · Arròs sac 25 kg",
+                "volumPerCaixa": 0.4,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "sec",
+                "volumTotal": 6.800000000000001
+              },
+              {
+                "nom": "REF-PED-062 · Oli gira-sol 5L",
+                "volumPerCaixa": 0.505,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "líquid",
+                "volumTotal": 14.14
+              },
+              {
+                "nom": "REF-PED-063 · Marisc congelat mix",
+                "volumPerCaixa": 0.61,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "congelat",
+                "volumTotal": 23.79
+              },
+              {
+                "nom": "REF-PED-064 · Postres individual",
+                "volumPerCaixa": 0.16,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "fresc",
+                "volumTotal": 0.96
+              }
+            ]
+          },
+          {
+            "identificador": "ENT-2026-MOL-009",
+            "nom": "Magatzem Maresme 09 SL",
+            "adreca": "Anell 20 km · 122.7° (referència)",
+            "coordenades": {
+              "x": 2.4155140656009535,
+              "y": 41.442953294909415
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 34.169999999999995,
+            "horaDEntrega": "10:10",
+            "pedidos": [
+              {
+                "nom": "REF-PED-033 · Recanvis filtres",
+                "volumPerCaixa": 0.23500000000000001,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "recanvi",
+                "volumTotal": 3.995
+              },
+              {
+                "nom": "REF-PED-034 · Material didàctic",
+                "volumPerCaixa": 0.33999999999999997,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "educació",
+                "volumTotal": 9.52
+              },
+              {
+                "nom": "REF-PED-035 · Sacos morter",
+                "volumPerCaixa": 0.44499999999999995,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "construcció",
+                "volumTotal": 17.354999999999997
+              },
+              {
+                "nom": "REF-PED-036 · Conserves peix",
+                "volumPerCaixa": 0.5499999999999999,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "sec",
+                "volumTotal": 3.3
+              }
+            ]
+          },
+          {
+            "identificador": "ENT-2026-MOL-018",
+            "nom": "Logística Penedès 18 SL",
+            "adreca": "Avinguda Francesc Macià 112, 08402 Granollers",
+            "coordenades": {
+              "x": 2.405446222207902,
+              "y": 41.43214624837215
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 24.72,
+            "horaDEntrega": "12:35",
+            "pedidos": [
+              {
+                "nom": "REF-PED-069 · Caixes fruita",
+                "volumPerCaixa": 0.13,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 2.21
+              },
+              {
+                "nom": "REF-PED-070 · Petit electrodomèstic",
+                "volumPerCaixa": 0.23500000000000001,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "electro",
+                "volumTotal": 6.58
+              },
+              {
+                "nom": "REF-PED-071 · Aigua mineral",
+                "volumPerCaixa": 0.33999999999999997,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "beguda",
+                "volumTotal": 13.259999999999998
+              },
+              {
+                "nom": "REF-PED-072 · Roba planxada",
+                "volumPerCaixa": 0.44499999999999995,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "textil",
+                "volumTotal": 2.67
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      },
+      {
+        "indexRuta": 12,
+        "camio": {
+          "id": "VHC-MOL-02",
+          "capacitatMaxima": 120,
+          "capacitatOperativaMaxima": 111.60000000000001
+        },
+        "volumOcupat": 56.865,
+        "percentatgeOcupacioUtil": 51,
+        "virtual": false,
+        "horaSortidaMagatzem": "08:30",
+        "horaArribadaMagatzem": "12:35",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-007",
+            "nom": "Distribucions Montseny 07 SL",
+            "adreca": "Anell 20 km · 93.9° (referència)",
+            "coordenades": {
+              "x": 2.4533006444526233,
+              "y": 41.527817573358085
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 33.495000000000005,
+            "horaDEntrega": "08:30",
+            "pedidos": [
+              {
+                "nom": "REF-PED-025 · Paquets A4 (caixa)",
+                "volumPerCaixa": 0.505,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "papereria",
+                "volumTotal": 8.585
+              },
+              {
+                "nom": "REF-PED-026 · Caixes calçat numerades",
+                "volumPerCaixa": 0.61,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "textil",
+                "volumTotal": 17.08
+              },
+              {
+                "nom": "REF-PED-027 · Bidons detergents",
+                "volumPerCaixa": 0.16,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "químic",
+                "volumTotal": 6.24
+              },
+              {
+                "nom": "REF-PED-028 · Medicaments estanteria",
+                "volumPerCaixa": 0.265,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "farma",
+                "volumTotal": 1.59
+              }
+            ]
+          },
+          {
+            "identificador": "ENT-2026-MOL-014",
+            "nom": "Comercial Interior 14 SL",
+            "adreca": "Plaça de l'Església 4, 08140 Caldes de Montbui",
+            "coordenades": {
+              "x": 2.451411948736642,
+              "y": 41.514711871419046
+            },
+            "horaInici": "08:30",
+            "horaFinal": "13:30",
+            "volumTotal": 23.369999999999997,
+            "horaDEntrega": "10:55",
+            "pedidos": [
+              {
+                "nom": "REF-PED-053 · Recanvis filtres",
+                "volumPerCaixa": 0.115,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "recanvi",
+                "volumTotal": 1.955
+              },
+              {
+                "nom": "REF-PED-054 · Material didàctic",
+                "volumPerCaixa": 0.22,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "educació",
+                "volumTotal": 6.16
+              },
+              {
+                "nom": "REF-PED-055 · Sacos morter",
+                "volumPerCaixa": 0.32499999999999996,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "construcció",
+                "volumTotal": 12.674999999999999
+              },
+              {
+                "nom": "REF-PED-056 · Conserves peix",
+                "volumPerCaixa": 0.42999999999999994,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "sec",
+                "volumTotal": 2.5799999999999996
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 1
+      },
+      {
+        "indexRuta": 13,
+        "camio": {
+          "id": "VHC-MOL-09",
+          "capacitatMaxima": 88,
+          "capacitatOperativaMaxima": 81.84
+        },
+        "volumOcupat": 54.839999999999996,
+        "percentatgeOcupacioUtil": 67,
+        "virtual": false,
+        "horaSortidaMagatzem": "15:00",
+        "horaArribadaMagatzem": "19:06",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-005",
+            "nom": "Serveis Occidental 05 SL",
+            "adreca": "Anell 20 km · 65.1° (referència)",
+            "coordenades": {
+              "x": 2.431820669979923,
+              "y": 41.615823190346575
+            },
+            "horaInici": "15:00",
+            "horaFinal": "19:30",
+            "volumTotal": 32.81999999999999,
+            "horaDEntrega": "15:00",
+            "pedidos": [
+              {
+                "nom": "REF-PED-017 · Làctics nevera",
+                "volumPerCaixa": 0.22,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 3.74
+              },
+              {
+                "nom": "REF-PED-018 · Accessoris ferreteria",
+                "volumPerCaixa": 0.32499999999999996,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "ferreteria",
+                "volumTotal": 9.099999999999998
+              },
+              {
+                "nom": "REF-PED-019 · Embalatge buit",
+                "volumPerCaixa": 0.42999999999999994,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "envàs",
+                "volumTotal": 16.769999999999996
+              },
+              {
+                "nom": "REF-PED-020 · Beguda isotònica",
+                "volumPerCaixa": 0.535,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "beguda",
+                "volumTotal": 3.21
+              }
+            ]
+          },
+          {
+            "identificador": "ENT-2026-MOL-010",
+            "nom": "Outlet Vallès 10 SL",
+            "adreca": "Avinguda Francesc Macià 112, 08402 Granollers",
+            "coordenades": {
+              "x": 2.4386108723331583,
+              "y": 41.6036583310224
+            },
+            "horaInici": "15:00",
+            "horaFinal": "19:30",
+            "volumTotal": 22.020000000000003,
+            "horaDEntrega": "17:25",
+            "pedidos": [
+              {
+                "nom": "REF-PED-037 · Làctics nevera",
+                "volumPerCaixa": 0.1,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 1.7000000000000002
+              },
+              {
+                "nom": "REF-PED-038 · Accessoris ferreteria",
+                "volumPerCaixa": 0.20500000000000002,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "ferreteria",
+                "volumTotal": 5.74
+              },
+              {
+                "nom": "REF-PED-039 · Embalatge buit",
+                "volumPerCaixa": 0.31,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "envàs",
+                "volumTotal": 12.09
+              },
+              {
+                "nom": "REF-PED-040 · Beguda isotònica",
+                "volumPerCaixa": 0.41500000000000004,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "beguda",
+                "volumTotal": 2.49
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 2,
+        "totalViatgesCamio": 2
+      },
+      {
+        "indexRuta": 14,
+        "camio": {
+          "id": "VHC-MOL-10",
+          "capacitatMaxima": 88,
+          "capacitatOperativaMaxima": 81.84
+        },
+        "volumOcupat": 39.57000000000001,
+        "percentatgeOcupacioUtil": 48.4,
+        "virtual": false,
+        "horaSortidaMagatzem": "15:00",
+        "horaArribadaMagatzem": "17:26",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-025",
+            "nom": "Distribucions Montseny 25 SL",
+            "adreca": "Anell 20 km · 353.1° (referència)",
+            "coordenades": {
+              "x": 2.184650722391947,
+              "y": 41.71885800110045
+            },
+            "horaInici": "15:00",
+            "horaFinal": "19:30",
+            "volumTotal": 39.57000000000001,
+            "horaDEntrega": "15:00",
+            "pedidos": [
+              {
+                "nom": "REF-PED-097 · Làctics nevera",
+                "volumPerCaixa": 0.29500000000000004,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 5.015000000000001
+              },
+              {
+                "nom": "REF-PED-098 · Accessoris ferreteria",
+                "volumPerCaixa": 0.4,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "ferreteria",
+                "volumTotal": 11.200000000000001
+              },
+              {
+                "nom": "REF-PED-099 · Embalatge buit",
+                "volumPerCaixa": 0.505,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "envàs",
+                "volumTotal": 19.695
+              },
+              {
+                "nom": "REF-PED-100 · Beguda isotònica",
+                "volumPerCaixa": 0.61,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "beguda",
+                "volumTotal": 3.66
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 2,
+        "totalViatgesCamio": 2
+      },
+      {
+        "indexRuta": 15,
+        "camio": {
+          "id": "VHC-MOL-08",
+          "capacitatMaxima": 90,
+          "capacitatOperativaMaxima": 83.7
+        },
+        "volumOcupat": 36.195,
+        "percentatgeOcupacioUtil": 43.2,
+        "virtual": false,
+        "horaSortidaMagatzem": "15:00",
+        "horaArribadaMagatzem": "17:26",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-015",
+            "nom": "Magatzem Maresme 15 SL",
+            "adreca": "Anell 20 km · 209.1° (referència)",
+            "coordenades": {
+              "x": 2.097015216946996,
+              "y": 41.38308059578953
+            },
+            "horaInici": "15:00",
+            "horaFinal": "19:30",
+            "volumTotal": 36.195,
+            "horaDEntrega": "15:00",
+            "pedidos": [
+              {
+                "nom": "REF-PED-057 · Làctics nevera",
+                "volumPerCaixa": 0.535,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 9.095
+              },
+              {
+                "nom": "REF-PED-058 · Accessoris ferreteria",
+                "volumPerCaixa": 0.64,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "ferreteria",
+                "volumTotal": 17.92
+              },
+              {
+                "nom": "REF-PED-059 · Embalatge buit",
+                "volumPerCaixa": 0.19,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "envàs",
+                "volumTotal": 7.41
+              },
+              {
+                "nom": "REF-PED-060 · Beguda isotònica",
+                "volumPerCaixa": 0.29500000000000004,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "beguda",
+                "volumTotal": 1.7700000000000002
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 2,
+        "totalViatgesCamio": 2
+      },
+      {
+        "indexRuta": 16,
+        "camio": {
+          "id": "VHC-MOL-06",
+          "capacitatMaxima": 95,
+          "capacitatOperativaMaxima": 88.35000000000001
+        },
+        "volumOcupat": 47.04,
+        "percentatgeOcupacioUtil": 53.2,
+        "virtual": false,
+        "horaSortidaMagatzem": "15:00",
+        "horaArribadaMagatzem": "17:26",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-2026-MOL-020",
+            "nom": "Comercial Interior 20 SL",
+            "adreca": "Carrer Major 23, 08470 Sant Celoni",
+            "coordenades": {
+              "x": 2.3635224602577076,
+              "y": 41.39983093427315
+            },
+            "horaInici": "15:00",
+            "horaFinal": "19:30",
+            "volumTotal": 47.04,
+            "horaDEntrega": "15:00",
+            "pedidos": [
+              {
+                "nom": "REF-PED-077 · Làctics nevera",
+                "volumPerCaixa": 0.41500000000000004,
+                "quantitatCaixes": 17,
+                "tipusCarrega": "fresc",
+                "volumTotal": 7.055000000000001
+              },
+              {
+                "nom": "REF-PED-078 · Accessoris ferreteria",
+                "volumPerCaixa": 0.52,
+                "quantitatCaixes": 28,
+                "tipusCarrega": "ferreteria",
+                "volumTotal": 14.56
+              },
+              {
+                "nom": "REF-PED-079 · Embalatge buit",
+                "volumPerCaixa": 0.625,
+                "quantitatCaixes": 39,
+                "tipusCarrega": "envàs",
+                "volumTotal": 24.375
+              },
+              {
+                "nom": "REF-PED-080 · Beguda isotònica",
+                "volumPerCaixa": 0.175,
+                "quantitatCaixes": 6,
+                "tipusCarrega": "beguda",
+                "volumTotal": 1.0499999999999998
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 2,
+        "totalViatgesCamio": 2
+      }
+    ],
+    "entreguesNoAssignades": []
+  }
+}

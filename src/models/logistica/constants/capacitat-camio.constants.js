@@ -1,5 +1,5 @@
 /** Fracció màxima de la capacitat nominal utilitzable amb càrrega (reserva ~3%). */
-export const FRACCIO_MAX_UTILITZACIO_CAPACITAT_CAMIO = 0.97;
+export const FRACCIO_MAX_UTILITZACIO_CAPACITAT_CAMIO = 0.93;
 
 /** Volum màxim operatiu (fracció de la capacitat nominal del camió). */
 export function volumCarregaMaximaOperativa(camio) {
