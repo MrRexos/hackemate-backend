@@ -158,4 +158,53 @@ export class Ruta {
       entreguesAmbAngle,
     };
   }
+
+  /**
+   * Calcula temps i distancia aproximats entre dos punts
+   * tenint en compte la xarxa de carreteres (OSRM).
+   */
+  static async calculaTempsRutaAproximat(origen, desti, options = {}) {
+    const { fetchImpl = fetch, osrmBaseUrl = 'https://router.project-osrm.org' } = options;
+    const puntOrigen = Ruta.normalitzaPuntRuta(origen, 'origen');
+    const puntDesti = Ruta.normalitzaPuntRuta(desti, 'desti');
+
+    const coordenades = `${puntOrigen.x},${puntOrigen.y};${puntDesti.x},${puntDesti.y}`;
+    const url = new URL(`${osrmBaseUrl}/route/v1/driving/${coordenades}`);
+    url.searchParams.set('overview', 'false');
+    url.searchParams.set('alternatives', 'false');
+    url.searchParams.set('steps', 'false');
+
+    const response = await fetchImpl(url);
+    if (!response.ok) {
+      throw new Error(`No s'ha pogut calcular la ruta per carretera (${response.status}).`);
+    }
+
+    const data = await response.json();
+    if (data.code !== 'Ok' || !Array.isArray(data.routes) || data.routes.length === 0) {
+      throw new Error("L'API de rutes no ha retornat cap trajecte valid.");
+    }
+
+    const millorRuta = data.routes[0];
+    const distanciaMetres = Number(millorRuta.distance);
+    const duradaSegons = Number(millorRuta.duration);
+
+    return {
+      distanciaMetres,
+      distanciaKm: distanciaMetres / 1000,
+      duradaSegons,
+      duradaMinuts: duradaSegons / 60,
+    };
+  }
+
+  static normalitzaPuntRuta(punt, nomCamp) {
+    if (Array.isArray(punt) && punt.length >= 2) {
+      return { x: Number(punt[0]), y: Number(punt[1]) };
+    }
+
+    if (punt && typeof punt === 'object' && punt.x != null && punt.y != null) {
+      return { x: Number(punt.x), y: Number(punt.y) };
+    }
+
+    throw new Error(`El punt '${nomCamp}' no te un format de coordenades valid.`);
+  }
 }
