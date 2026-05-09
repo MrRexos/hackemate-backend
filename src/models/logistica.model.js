@@ -1,7 +1,8 @@
 export class Pedido {
-  constructor({ nom, volum }) {
+  constructor({ nom, volum, quantitat }) {
     this.nom = nom;
-    this.volum = volum;
+    this.volum = volum * quantitat;
+    this.quantitat = quantitat;
   }
 }
 
