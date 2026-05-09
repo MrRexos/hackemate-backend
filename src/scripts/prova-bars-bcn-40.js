@@ -3,13 +3,16 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Entrega } from '../models/logistica/classes/entrega.model.js';
 import { generarRutes } from '../models/logistica/services/sweep-optimizer.service.js';
+import { generaPuntsSobreCarrer } from './utils/punts-sobre-carrer.js';
 
 const NOMS_CAMIONS = ['Joel', 'Pol', 'Oier', 'Jan', 'Nil', 'Victor'];
 const CENTRE = { x: 2.170047, y: 41.387016 }; // Placa Catalunya
 const NUM_PUNTS = 55;
 
 async function main() {
-  const punts = generaPuntsAleatorisBarcelona(NUM_PUNTS, CENTRE);
+  console.log(`Generant ${NUM_PUNTS} punts sobre carrer (OSRM nearest)...`);
+  const coords = await generaPuntsSobreCarrer(NUM_PUNTS, { fetchImpl: fetch });
+  const punts = coords.map((c, i) => ({ nom: `Bar carrer ${i + 1}`, x: c.x, y: c.y }));
   const entregues = creaEntregues(punts);
   const flotaCamions = creaFlotaVariable(NOMS_CAMIONS);
 
@@ -65,18 +68,6 @@ function creaEntregues(punts) {
       coordenades: { x: p.x, y: p.y },
     });
   });
-}
-
-function generaPuntsAleatorisBarcelona(total, centre) {
-  const punts = [];
-  for (let i = 0; i < total; i += 1) {
-    const angle = Math.random() * Math.PI * 2;
-    const radi = 0.01 + Math.random() * 0.06;
-    const x = centre.x + Math.cos(angle) * radi;
-    const y = centre.y + Math.sin(angle) * radi;
-    punts.push({ nom: `Bar aleatori ${i + 1}`, x, y });
-  }
-  return punts;
 }
 
 async function calculaGeometriesRutes(rutes, centre) {

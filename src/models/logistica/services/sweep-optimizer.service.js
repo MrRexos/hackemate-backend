@@ -35,6 +35,9 @@ export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, 
   const entreguesInput = asseguraArray(llistaEntregues, 'llistaEntregues');
   const camions = asseguraArray(flotaCamions, 'flotaCamions');
   const magatzem = normalitzaPuntRuta(puntMagatzem, 'puntMagatzem');
+  const fetchImplRoute = options.fetchImpl || fetch;
+  const osrmBaseUrl = options.osrmBaseUrl || 'https://router.project-osrm.org';
+  const optimIntraRutaCarrers = options.optimIntraRutaCarrers !== false;
   const velocitatKmH = Number(options.velocitatKmH) || 40;
   const tempsDescarregaMinuts = Number(options.tempsDescarregaMinuts) || TEMPS_SERVEI_MINUTS;
   const tempsBaseDescarregaMinuts = Number(options.tempsBaseDescarregaMinuts) || 2;
@@ -60,6 +63,8 @@ export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, 
     tempsDescarregaMinuts,
     tempsBaseDescarregaMinuts,
     tempsPerCaixaMinuts,
+    fetchImplRoute,
+    osrmBaseUrl,
   };
   const rutes = [];
   const entreguesNoAssignades = [];
@@ -72,6 +77,10 @@ export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, 
 
   for (const ruta of rutes) {
     optimitzaRuta2Opt(ruta, context);
+  }
+
+  if (optimIntraRutaCarrers) {
+    await optimitzaRutesPerTempsOsrm(rutes, context);
   }
 
   revalidaFinestresDespuesOptimitzar(rutes, context, entreguesNoAssignades);
@@ -199,9 +208,10 @@ function calculaPlanificacioRuta(ruta, context, tempsSortidaMin = 0) {
   let tempsActual = Math.max(0, Number(tempsSortidaMin) || 0);
   let puntActual = context.magatzem;
   const parades = [];
+  let entregaAnterior = null;
 
   for (const entrega of ruta.entregues) {
-    tempsActual += tempsViatgeMinuts(puntActual, entrega.coordenades, context.velocitatKmH);
+    tempsActual += tempsViagemOrdreIntern(ruta, entregaAnterior, entrega, context);
     const arribadaSenseEspera = tempsActual;
 
     const inici = horaATotalMinuts(entrega.horaInici);
@@ -231,12 +241,62 @@ function calculaPlanificacioRuta(ruta, context, tempsSortidaMin = 0) {
 
     tempsActual += tempsDescarregaEntrega;
     puntActual = entrega.coordenades;
+    entregaAnterior = entrega;
   }
 
   return {
     valida: true,
     parades,
   };
+}
+
+function tempsViagemOrdreIntern(ruta, entregaAnterior, entregaFi, context) {
+  const matDurSec = ruta._matDurSec;
+  const idxMap = ruta._idxOsrmPerEntrega;
+  if (matDurSec && Array.isArray(matDurSec) && idxMap instanceof Map && idxMap.has(entregaFi)) {
+    const i = entregaAnterior == null ? 0 : idxMap.get(entregaAnterior);
+    const j = idxMap.get(entregaFi);
+    if (
+      Number.isFinite(i)
+      && Number.isFinite(j)
+      && matDurSec[i]
+      && Number.isFinite(matDurSec[i][j])
+    ) {
+      return matDurSec[i][j] / 60;
+    }
+  }
+
+  const orig = entregaAnterior == null ? context.magatzem : entregaAnterior.coordenades;
+  return tempsViatgeMinuts(orig, entregaFi.coordenades, context.velocitatKmH);
+}
+
+function tempsViatgeUltimaMateDepotIntern(ruta, ultimaEntrega, context) {
+  const matDurSec = ruta._matDurSec;
+  const idxMap = ruta._idxOsrmPerEntrega;
+  if (
+    ultimaEntrega
+    && matDurSec
+    && idxMap instanceof Map
+    && idxMap.has(ultimaEntrega)
+  ) {
+    const i = idxMap.get(ultimaEntrega);
+    const sec = matDurSec[i]?.[0];
+    if (Number.isFinite(sec)) return sec / 60;
+  }
+  return tempsViatgeMinuts(ultimaEntrega.coordenades, context.magatzem, context.velocitatKmH);
+}
+
+function tempsConduccioObertTotalsMinuts(entreguesSeq, context, wrapperMatOrNull = null) {
+  if (!entreguesSeq || entreguesSeq.length === 0) return 0;
+  const rAug = wrapperMatOrNull
+    ? { entregues: entreguesSeq, _matDurSec: wrapperMatOrNull._matDurSec, _idxOsrmPerEntrega: wrapperMatOrNull._idxOsrmPerEntrega }
+    : { entregues: entreguesSeq };
+
+  let t = tempsViagemOrdreIntern(rAug, null, entreguesSeq[0], context);
+  for (let k = 1; k < entreguesSeq.length; k += 1) {
+    t += tempsViagemOrdreIntern(rAug, entreguesSeq[k - 1], entreguesSeq[k], context);
+  }
+  return t;
 }
 
 function optimitzaRuta2Opt(ruta, context) {
@@ -258,6 +318,134 @@ function optimitzaRuta2Opt(ruta, context) {
       }
     }
   }
+}
+
+function optimitzaRuta2OptPerCarrers(ruta, context) {
+  if (!ruta._matDurSec || ruta.entregues.length < 3) return;
+  const wrapper = {
+    entregues: ruta.entregues,
+    _matDurSec: ruta._matDurSec,
+    _idxOsrmPerEntrega: ruta._idxOsrmPerEntrega,
+  };
+
+  let millorada = true;
+  while (millorada) {
+    millorada = false;
+    for (let i = 0; i < ruta.entregues.length - 2; i += 1) {
+      for (let k = i + 1; k < ruta.entregues.length - 1; k += 1) {
+        const candidata = aplica2Opt(ruta.entregues, i, k);
+        const costActual = tempsConduccioObertTotalsMinuts(ruta.entregues, context, wrapper);
+        const costNou = tempsConduccioObertTotalsMinuts(candidata, context, wrapper);
+        if (
+          costNou < costActual
+          && planificacioValidaPerSeqAmbMatriu(candidata, context, wrapper).valida
+        ) {
+          ruta.entregues = candidata;
+          wrapper.entregues = candidata;
+          millorada = true;
+        }
+      }
+    }
+  }
+}
+
+function planificacioValidaPerSeqAmbMatriu(entreguesSeq, context, wrapperMatriu) {
+  const tmp = {
+    entregues: entreguesSeq,
+    _matDurSec: wrapperMatriu._matDurSec,
+    _idxOsrmPerEntrega: wrapperMatriu._idxOsrmPerEntrega,
+  };
+  return calculaPlanificacioRuta(tmp, context, 0);
+}
+
+async function optimitzaRutesPerTempsOsrm(rutes, context) {
+  const { fetchImplRoute, osrmBaseUrl } = context;
+  await Promise.all(
+    rutes.map(async (ruta) => {
+      if (!ruta.entregues || ruta.entregues.length < 2) return;
+      try {
+        const constr = await construeixMatriuDuradaRutaOsrm(ruta.entregues, context.magatzem, fetchImplRoute, osrmBaseUrl);
+        if (!constr) return;
+
+        Object.assign(ruta, constr);
+
+        const original = [...ruta.entregues];
+        optimitzaRuta2OptPerCarrers(ruta, context);
+
+        if (!planificacioValidaPerSeqAmbMatriu(ruta.entregues, context, constr).valida) {
+          ruta.entregues = original;
+        } else if (ruta._matDistMetres && ruta._idxOsrmPerEntrega) {
+          const km = sumaKmConduccioObertDesDeMatriu(ruta.entregues, ruta._idxOsrmPerEntrega, ruta._matDistMetres);
+          ruta._kmsConduccioObertaPerCarrers = km != null ? Number(km.toFixed(2)) : null;
+        }
+      } catch {
+        delete ruta._matDurSec;
+        delete ruta._matDistMetres;
+        delete ruta._idxOsrmPerEntrega;
+        delete ruta._kmsConduccioObertaPerCarrers;
+      }
+    }),
+  );
+}
+
+async function construeixMatriuDuradaRutaOsrm(entregues, magatzem, fetchImpl, osrmBaseUrl) {
+  if (!Array.isArray(entregues) || entregues.length === 0) return null;
+
+  const puntscoords = [{ x: magatzem.x, y: magatzem.y }];
+  entregues.forEach((e) => puntscoords.push(e.coordenades));
+
+  const coordStr = puntscoords.map((p) => `${p.x},${p.y}`).join(';');
+  const base = String(osrmBaseUrl || '').replace(/\/+$/, '');
+  const url = new URL(`${base}/table/v1/driving/${coordStr}`);
+  url.searchParams.set('annotations', 'duration,distance');
+
+  const response = await fetchImpl(url.toString());
+  if (!response.ok) return null;
+
+  const data = await response.json();
+  const durSec = data?.durations;
+  const distMetres = data?.distances;
+  if (!Array.isArray(durSec) || !durSec.every((row) => Array.isArray(row))) return null;
+
+  const idxOsrmPerEntrega = new Map();
+  entregues.forEach((entrega, idx) => {
+    idxOsrmPerEntrega.set(entrega, idx + 1);
+  });
+
+  const kmObert = sumaKmConduccioObertDesDeMatriu(entregues, idxOsrmPerEntrega, distMetres);
+  const kmDisplay = kmObert != null ? Number(kmObert.toFixed(2)) : null;
+
+  return {
+    _matDurSec: durSec,
+    _matDistMetres: Array.isArray(distMetres) && distMetres.every((row) => Array.isArray(row)) ? distMetres : null,
+    _idxOsrmPerEntrega: idxOsrmPerEntrega,
+    _kmsConduccioObertaPerCarrers: kmDisplay,
+  };
+}
+
+/** Suma km reals (OSRM) del tour obert magatzem -> ... -> ultima para (sense tornada). */
+function sumaKmConduccioObertDesDeMatriu(entreguesOrdered, idxMap, distMat) {
+  if (
+    !Array.isArray(entreguesOrdered)
+    || entreguesOrdered.length === 0
+    || !(idxMap instanceof Map)
+    || !Array.isArray(distMat)
+    || !distMat.every((row) => Array.isArray(row))
+  ) {
+    return null;
+  }
+  let prevIdx = 0;
+  let metres = 0;
+  for (const entrega of entreguesOrdered) {
+    const idx = idxMap.get(entrega);
+    if (!Number.isFinite(idx)) return null;
+    const raw = distMat[prevIdx]?.[idx];
+    const dm = typeof raw === 'number' ? raw : Number(raw);
+    if (!Number.isFinite(dm)) return null;
+    metres += dm;
+    prevIdx = idx;
+  }
+  return metres / 1000;
 }
 
 function intentaOptimitzacioIncremental(ruta, context) {
@@ -428,12 +616,12 @@ function actualitzaEtasRutes(rutes, context) {
 
     if (ruta.entregues.length > 0 && planificacio.parades.length > 0) {
       const primeraEntrega = ruta.entregues[0];
-      const tempsFinsPrimera = tempsViatgeMinuts(context.magatzem, primeraEntrega.coordenades, context.velocitatKmH);
+      const tempsFinsPrimera = tempsViagemOrdreIntern(ruta, null, primeraEntrega, context);
       ruta.tempsMagatzemPrimeraEntregaMinuts = tempsFinsPrimera;
 
       const ultimaEntrega = ruta.entregues[ruta.entregues.length - 1];
       const ultimaParada = planificacio.parades[planificacio.parades.length - 1];
-      const tempsRetorn = tempsViatgeMinuts(ultimaEntrega.coordenades, context.magatzem, context.velocitatKmH);
+      const tempsRetorn = tempsViatgeUltimaMateDepotIntern(ruta, ultimaEntrega, context);
       const arribadaTornadaMinuts = ultimaParada.sortidaMin + tempsRetorn;
       ruta.tornadaMagatzemMinuts = arribadaTornadaMinuts;
       ruta.horaTornadaMagatzem = minutsAHhMm(arribadaTornadaMinuts);
@@ -451,7 +639,7 @@ function calculaSortidaAproximada(ruta, context) {
   const iniciPrimera = horaATotalMinuts(primeraEntrega.horaInici);
   if (iniciPrimera == null) return 0;
 
-  const tempsFinsPrimera = tempsViatgeMinuts(context.magatzem, primeraEntrega.coordenades, context.velocitatKmH);
+  const tempsFinsPrimera = tempsViagemOrdreIntern(ruta, null, primeraEntrega, context);
   const sortida = iniciPrimera - tempsFinsPrimera;
   return Math.max(0, sortida);
 }
