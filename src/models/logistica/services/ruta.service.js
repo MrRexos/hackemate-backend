@@ -86,7 +86,7 @@ export async function geocodificarAdreces(entregues, options = {}) {
       continue;
     }
 
-    const adreca = entrega.ubicacio ?? entrega.adreca;
+    const adreca = entrega.adreca;
     if (!adreca) {
       throw new Error(`Entrega sense adreca: ${entrega.identificador ?? 'sense-id'}`);
     }

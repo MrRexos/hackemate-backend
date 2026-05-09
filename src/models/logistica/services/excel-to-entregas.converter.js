@@ -158,7 +158,7 @@ export function convertirExcelAEntregas(excelPath, options = {}) {
         identificador: idFila || null,
         idsPedidos: idFila ? [idFila] : [],
         nomEstabliment: text(obtenirCamp(fila, 'Nombre_Establecimiento', 'Establecimiento', 'Nom_Establiment')),
-        ubicacio: adrecaFila,
+        adreca: adrecaFila,
         horaInici,
         horaFinal,
         pedidos: [],
@@ -169,9 +169,9 @@ export function convertirExcelAEntregas(excelPath, options = {}) {
     const entrega = entregasMap.get(clau);
 
     if (agrupacio === 'id_o_ubicacio' && idFila) {
-      if (normalitzaAdreca(entrega.ubicacio) !== normalitzaAdreca(adrecaFila)) {
+      if (normalitzaAdreca(entrega.adreca) !== normalitzaAdreca(adrecaFila)) {
         throw new Error(
-          `ID_Pedido "${idFila}" repetit amb adreces diferents ("${entrega.ubicacio}" vs "${adrecaFila}").`,
+          `ID_Pedido "${idFila}" repetit amb adreces diferents ("${entrega.adreca}" vs "${adrecaFila}").`,
         );
       }
       if (entrega.horaInici !== horaInici || entrega.horaFinal !== horaFinal) {

@@ -45,6 +45,25 @@ async function main() {
   console.log(`Punts totals: ${NUM_PUNTS}`);
   console.log(`Camions maxims: ${flotaCamions.length}`);
   console.log(`Rutes generades: ${resultat.rutes.length}`);
+
+  const sumCapacitatRutes = resultat.rutes.reduce((acc, r) => acc + Number(r.camio.capacitatMaxima || 0), 0);
+  const sumVolumCarregat = resultat.rutes.reduce((acc, r) => acc + Number(r.volumOcupat || 0), 0);
+  const pctGlobal =
+    sumCapacitatRutes > 0 ? ((sumVolumCarregat / sumCapacitatRutes) * 100).toFixed(1) : '0.0';
+  console.log(
+    `\nOcupació global (suma de capacitats màximes dels vehicles amb ruta): ${sumVolumCarregat}/${sumCapacitatRutes} (${pctGlobal}%)`,
+  );
+  console.log('\nCapacitat i càrrega per camió (volum del model = unitats de càrrega, mateixa escala que capacitatMaxima):');
+  resultat.rutes.forEach((ruta, i) => {
+    const cap = Number(ruta.camio.capacitatMaxima || 0);
+    const vol = Number(ruta.volumOcupat || 0);
+    const pct = cap > 0 ? ((vol / cap) * 100).toFixed(1) : '—';
+    const suf = ruta.__camioVirtual ? ' [camió virtual]' : '';
+    console.log(
+      `  ${String(i + 1).padStart(2, ' ')}. ${ruta.camio.id}${suf} → ${vol}/${cap} (${pct}% ple) · ${ruta.entregues.length} parades`,
+    );
+  });
+
   console.log(`No assignades: ${resultat.entreguesNoAssignades.length}`);
   if (resultat.entreguesNoAssignades.length > 0) {
     console.log('\nMotius (no assignades):');

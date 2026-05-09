@@ -2,9 +2,8 @@ import { Pedido } from './pedido.model.js';
 import { coordenadesPolarsRespecteCentre, normalitzaCoordenades } from '../utils/coordenades.utils.js';
 
 export class Entrega {
-  constructor({ ubicacio, adreca, pedidos = [], horaInici, horaFinal, identificador, coordenades, angle = null }) {
-    this.ubicacio = ubicacio ?? adreca ?? null;
-    this.adreca = this.ubicacio;
+  constructor({ adreca, pedidos = [], horaInici, horaFinal, identificador, coordenades, angle = null }) {
+    this.adreca = adreca ?? null;
     this.pedidos = Entrega.normalitzaPedidos(pedidos);
     this.volumTotal = Entrega.calculaVolumTotal(this.pedidos);
     this.horaInici = horaInici;
@@ -32,14 +31,14 @@ export class Entrega {
   }
 
   async actualitzaCoordenadesDesDeAdreca(fetchImpl = fetch) {
-    if (!this.ubicacio || typeof this.ubicacio !== 'string') {
-      throw new Error("L'entrega no te una adreca valida a 'ubicacio'.");
+    if (!this.adreca || typeof this.adreca !== 'string') {
+      throw new Error("L'entrega no te una adreca valida.");
     }
 
     const url = new URL('https://nominatim.openstreetmap.org/search');
     url.searchParams.set('format', 'json');
     url.searchParams.set('limit', '1');
-    url.searchParams.set('q', this.ubicacio);
+    url.searchParams.set('q', this.adreca);
 
     const response = await fetchImpl(url, {
       headers: { 'User-Agent': 'HackeMate/1.0' },
@@ -51,7 +50,7 @@ export class Entrega {
 
     const resultats = await response.json();
     if (!Array.isArray(resultats) || resultats.length === 0) {
-      throw new Error(`No s'han trobat coordenades per a: ${this.ubicacio}`);
+      throw new Error(`No s'han trobat coordenades per a: ${this.adreca}`);
     }
 
     const primerResultat = resultats[0];
