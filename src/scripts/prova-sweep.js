@@ -3,38 +3,24 @@ import { generarRutes } from '../models/logistica/services/sweep-optimizer.servi
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { generaPuntsSobreCarrer } from './utils/punts-sobre-carrer.js';
+import { FLOTA_EXEMPLE_15_CAMIONS } from '../models/logistica/config/flota-exemple-15.js';
+import {
+  generaPuntsSobreCarrerRodona,
+  MOLLET_CENTRE_RODONA,
+  MOLLET_MAGATZEM_AFORES,
+} from './utils/punts-sobre-carrer.js';
 
 async function main() {
-  console.log("Generant 200 punts sobre carrer per a l'escenari d'escala (OSRM nearest)...");
-  const entreguesEscala200 = await generaEntreguesEscala200({ fetchImpl: fetch });
+  console.log('Generant 200 punts sobre vial dins 20 km de Mollet (OSRM nearest)...');
+  const entreguesEscala200 = await generaEntreguesEscala200({
+    fetchImpl: fetch,
+  });
 
   const escenaris = [
     {
-      nom: 'Escala 200 entregues / objectiu 10 per camio',
-      puntMagatzem: { x: 2.1734, y: 41.3851 },
-      flotaCamions: [
-        { id: 'C-01', capacitatMaxima: 120 },
-        { id: 'C-02', capacitatMaxima: 120 },
-        { id: 'C-03', capacitatMaxima: 120 },
-        { id: 'C-04', capacitatMaxima: 120 },
-        { id: 'C-05', capacitatMaxima: 120 },
-        { id: 'C-06', capacitatMaxima: 120 },
-        { id: 'C-07', capacitatMaxima: 120 },
-        { id: 'C-08', capacitatMaxima: 120 },
-        { id: 'C-09', capacitatMaxima: 120 },
-        { id: 'C-10', capacitatMaxima: 120 },
-        { id: 'C-11', capacitatMaxima: 120 },
-        { id: 'C-12', capacitatMaxima: 120 },
-        { id: 'C-13', capacitatMaxima: 120 },
-        { id: 'C-14', capacitatMaxima: 120 },
-        { id: 'C-15', capacitatMaxima: 120 },
-        { id: 'C-16', capacitatMaxima: 120 },
-        { id: 'C-17', capacitatMaxima: 120 },
-        { id: 'C-18', capacitatMaxima: 120 },
-        { id: 'C-19', capacitatMaxima: 120 },
-        { id: 'C-20', capacitatMaxima: 120 },
-      ],
+      nom: 'Escala 200 entregues / rodona 20 km Mollet / flota 15 exemple',
+      puntMagatzem: { ...MOLLET_MAGATZEM_AFORES },
+      flotaCamions: FLOTA_EXEMPLE_15_CAMIONS.perOptimizador(),
       entregues: entreguesEscala200,
       velocitatKmH: 38,
     },
@@ -51,6 +37,7 @@ async function main() {
         EntregaClass: Entrega,
         tempsBaseDescarregaMinuts: 10,
         tempsPerCaixaMinuts: 1,
+        assignacioCompleta: true,
       },
     );
 
@@ -317,7 +304,12 @@ function generaEntreguesFinestresEstricte() {
 }
 
 async function generaEntreguesEscala200(options = {}) {
-  const coords = await generaPuntsSobreCarrer(200, options);
+  const coords = await generaPuntsSobreCarrerRodona(200, {
+    centreRodona: MOLLET_CENTRE_RODONA,
+    radiKm: 20,
+    excloureZonaMuntanya: false,
+    ...options,
+  });
   const entregues = [];
 
   for (let i = 1; i <= 200; i += 1) {
@@ -348,7 +340,7 @@ async function generaEntreguesEscala200(options = {}) {
     entregues.push(
       creaEntrega({
         id: `S-${String(i).padStart(4, '0')}`,
-        adreca: `Entrega simulada carrer ${i}, Barcelona`,
+        adreca: `Entrega simulada vial ${i} (≤20 km Mollet)`,
         horaInici,
         horaFinal,
         x,
@@ -404,7 +396,7 @@ function pintaResultatEscenari(escenari, resultat) {
     console.log('\nNo assignades:');
     resultat.entreguesNoAssignades.forEach((entrega) => {
       console.log(
-        ` - ${entrega.identificador} | volum=${entrega.volumTotal} | franja=${entrega.horaInici ?? '--'}-${entrega.horaFinal ?? '--'}`,
+        ` - ${entrega.identificador} | volum=${entrega.volumTotal} | franja=${entrega.horaInici ?? '--'}-${entrega.horaFinal ?? '--'} | ${entrega.motiuNoAssignacio?.codi ?? ''}`,
       );
     });
   }
@@ -519,6 +511,18 @@ async function generaInformeVisual(escenari, resultat) {
     `),
   ).join('');
 
+  const noAssignadesRows = resultat.entreguesNoAssignades
+    .map(
+      (e) => `
+      <tr>
+        <td>${escapeHtml(String(e.identificador ?? ''))}</td>
+        <td>${e.volumTotal ?? ''}</td>
+        <td>${escapeHtml(`${e.horaInici ?? '--'} - ${e.horaFinal ?? '--'}`)}</td>
+        <td><code>${escapeHtml(e.motiuNoAssignacio?.codi ?? '')}</code></td>
+      </tr>`,
+    )
+    .join('');
+
   const html = `<!doctype html>
 <html lang="ca">
 <head>
@@ -593,6 +597,20 @@ async function generaInformeVisual(escenari, resultat) {
       </thead>
       <tbody>${deliveryRows}</tbody>
     </table>
+  </div>
+
+  <div class="card">
+    <h2>Entregues no assignades</h2>
+    ${
+      resultat.entreguesNoAssignades.length === 0
+        ? '<p class="small">Cap.</p>'
+        : `<table>
+      <thead>
+        <tr><th>Id</th><th>Volum</th><th>Franja</th><th>Codi</th></tr>
+      </thead>
+      <tbody>${noAssignadesRows}</tbody>
+    </table>`
+    }
   </div>
   <script>
     const filter = document.getElementById('routeFilter');
