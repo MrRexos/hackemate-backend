@@ -7,3 +7,4 @@ export { CAIXES_PER_PALE, FROTA_BASE, FROTA_BASE_AMB_CAIXES } from './config/cam
 export { crearCamionsFixos, crearFlotaFixa } from './services/camions-fixos.service.js';
 export { convertirExcelAProductes } from './services/excel-to-productes.converter.js';
 export { convertirExcelAEntregas } from './services/excel-to-entregas.converter.js';
+export { geocodificarAdreces, generarRutes } from './services/sweep-optimizer.service.js';

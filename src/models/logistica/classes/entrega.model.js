@@ -3,14 +3,16 @@ import { coordenadesPolarsRespecteCentre, normalitzaCoordenades } from '../utils
 
 // Model d'entrega: ubicacio, pedidos, finestres horaries i coordenades.
 export class Entrega {
-  constructor({ ubicacio, pedidos = [], horaInici, horaFinal, identificador, coordenades }) {
-    this.ubicacio = ubicacio;
+  constructor({ ubicacio, adreca, pedidos = [], horaInici, horaFinal, identificador, coordenades, angle = null }) {
+    this.ubicacio = ubicacio ?? adreca ?? null;
+    this.adreca = this.ubicacio;
     this.pedidos = Entrega.normalitzaPedidos(pedidos);
     this.volumTotal = Entrega.calculaVolumTotal(this.pedidos);
     this.horaInici = horaInici;
     this.horaFinal = horaFinal;
     this.identificador = identificador;
     this.coordenades = Entrega.normalitzaCoordenades(coordenades);
+    this.angle = Number.isFinite(Number(angle)) ? Number(angle) : null;
   }
 
   // Converteix qualsevol entrada de pedidos a instancies de Pedido.
@@ -21,7 +23,7 @@ export class Entrega {
 
   // Suma el volum total dels pedidos de l'entrega.
   static calculaVolumTotal(pedidos) {
-    return pedidos.reduce((total, pedido) => total + Number(pedido.volum || 0), 0);
+    return pedidos.reduce((total, pedido) => total + Number(pedido.volumTotal || 0), 0);
   }
 
   // Porta la normalitzacio de coordenades al model.
