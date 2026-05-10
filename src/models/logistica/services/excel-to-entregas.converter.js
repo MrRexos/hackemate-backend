@@ -1,5 +1,7 @@
 import XLSX from 'xlsx';
 
+import { Entrega } from '../classes/entrega.model.js';
+
 function horaExcelAHhMm(valor) {
   if (valor == null || valor === '') return null;
   if (typeof valor === 'number') return XLSX.SSF.format('hh:mm', valor);
@@ -199,4 +201,45 @@ export function convertirExcelAEntregas(excelPath, options = {}) {
   }
 
   return Array.from(entregasMap.values());
+}
+
+/**
+ * Mateixa lectura que {@link convertirExcelAEntregas} (full `xlsx`), però retorna instàncies {@link Entrega}
+ * i opcionalment geocodifica cada adreça abans de retornar.
+ *
+ * @param {string} excelPath
+ * @param {object} [options] - Mateixes opcions que `convertirExcelAEntregas` més:
+ * @param {(adreca: string) => Promise<{ x: number, y: number }|null>} [options.geocodificar]
+ * @param {number} [options.pausaEntreGeocodificacionsMs=0]
+ * @returns {Promise<Entrega[]>}
+ */
+export async function excelToEntregas(excelPath, options = {}) {
+  const plain = convertirExcelAEntregas(excelPath, options);
+  const { geocodificar, pausaEntreGeocodificacionsMs = 0 } = options;
+
+  const entregues = [];
+
+  for (const p of plain) {
+    let coordenades = null;
+    if (typeof geocodificar === 'function') {
+      coordenades = await geocodificar(p.adreca);
+    }
+
+    entregues.push(
+      new Entrega({
+        identificador: p.identificador,
+        adreca: p.adreca,
+        horaInici: p.horaInici,
+        horaFinal: p.horaFinal,
+        pedidos: p.pedidos,
+        coordenades,
+      }),
+    );
+
+    if (pausaEntreGeocodificacionsMs > 0 && typeof geocodificar === 'function') {
+      await new Promise((resolve) => setTimeout(resolve, pausaEntreGeocodificacionsMs));
+    }
+  }
+
+  return entregues;
 }
