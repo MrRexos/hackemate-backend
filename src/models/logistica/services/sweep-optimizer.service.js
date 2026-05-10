@@ -1,5 +1,9 @@
 import { geocodificarAdrecaNominatim } from './geocodificar-adreca.service.js';
 import { asseguraArray } from '../validators/logistica.validators.js';
+import {
+  FRACCIO_MAX_UTILITZACIO_CAPACITAT_CAMIO,
+  volumPermetAfegirACamio,
+} from '../constants/capacitat-camio.constants.js';
 import { construeixEntrega } from '../utils/entrega.utils.js';
 import { coordenadesPolarsRespecteCentre, normalitzaCoordenades, normalitzaPuntRuta } from '../utils/coordenades.utils.js';
 
@@ -115,6 +119,23 @@ function marcaNoAssignada(entrega, codi) {
   entrega.motiuNoAssignacio = { codi };
 }
 
+/**
+ * Desassigna totes les parades d’una ruta quan el mateix camió no pot fer-la sense solapar-se amb un altre viatge
+ * (vegeu `resoleSolapamentsTemporalCamions`).
+ */
+function expulsaRutaSolapamentTemporal(ruta, entreguesNoAssignades) {
+  const ens = [...(ruta.entregues || [])];
+  ruta.entregues = [];
+  ruta.volumOcupat = 0;
+  delete ruta.__camioVirtual;
+  delete ruta.__camioFont;
+  for (const e of ens) {
+    e.__assignada = false;
+    marcaNoAssignada(e, 'SOLAPAMENT_TEMPORAL_FLOTA');
+    entreguesNoAssignades.push(e);
+  }
+}
+
 /** Reservat per compatibilitat; no s’exposen textos explicatius del motiu. */
 export function descripcioMotiuNoAssignacio(_entrega) {
   return '';
@@ -181,9 +202,13 @@ export async function geocodificarAdreces(entregues, options = {}) {
  * - **Pausa conductor (per defecte):** una pausa de **45 min** per ruta (`pausaConductorFixaPerRutaMinuts`), abans de la segona meitat de parades (o abans del retorn si només n’hi ha una). Opcionalment mode EU amb límit acumulat: passa `maxConduccioContinuaMinuts: 270` i `pausaObligatoriaConduccioMinuts` (llindar + pauses repetides; no usa la pausa fixa per defecte). Desactiva tot amb `conduccioContinuaDesactivada: true`.
  *
  * - **`assignacioCompleta`:** si és `true`, es fan més voltes de reintegració sense llindar de km; una **passada final**
- *   ignora finestres de client, relaxa (opcionalment) la tornada màxima al magatzem i permet **camions virtuals** si la flota
- *   física no té prou capacitat. Objectiu: reduir o eliminar entregues sense assignar (pot generar rutes fora de franja o amb vehicle fictici).
- *   `capacitatCamioVirtualMinima`, `relaxacioHorariMagatzemAssignacioCompleta` (per defecte relaxa tornada en aquesta passada).
+ *   ignora finestres de client i relaxa (opcionalment) la tornada màxima al magatzem.
+ * - **`permetCamioVirtual`:** només si és **`true`** es poden crear camions `VIRTUAL-*` quan la flota física no en té prou.
+ *   Per defecte (**no definit o `false`**) només s’utilitzen els vehicles passats a `generarRutes` (flota tancada).
+ *   Després de calcular les ETA, **`resoleSolapamentsTemporalCamions`** reserva intervals `[sortida, tornada]` per id de camió:
+ *   no es permeten dos viatges solapats amb el mateix vehicle físic; si no hi ha substitut a la flota, les parades van a
+ *   `entreguesNoAssignades` amb codi `SOLAPAMENT_TEMPORAL_FLOTA`.
+ *   `capacitatCamioVirtualMinima`, `relaxacioHorariMagatzemAssignacioCompleta` (per defecte relaxa tornada en la passada completa).
  *
  * **Doble torn (matí / tarda):** el mateix camió pot tenir **dues rutes** (un viatge matí i un altre tarda): entre fases es
  * tornen a posar tots els vehicles a `camionsDisponibles`, i no s’afegeixen parades de tarda a una ruta només de matí (i viceversa).
@@ -304,6 +329,8 @@ export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, 
     capacitatCamioVirtualMinima:
       options.capacitatCamioVirtualMinima != null ? Number(options.capacitatCamioVirtualMinima) : 130,
     relaxacioHorariMagatzemAssignacioCompleta: options.relaxacioHorariMagatzemAssignacioCompleta !== false,
+    /** Només `true` permet afegir vehicles `VIRTUAL-*` fora de la flota passada. */
+    permetCamioVirtual: options.permetCamioVirtual === true,
   };
   const rutes = [];
   const entreguesNoAssignades = [];
@@ -387,6 +414,12 @@ export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, 
   compactarRutesPerQuotaMin(rutes, context);
 
   actualitzaEtasRutes(rutes, context);
+
+  resoleSolapamentsTemporalCamions(rutes, context, entreguesNoAssignades);
+
+  for (const ruta of rutes) {
+    recalculaVolum(ruta);
+  }
 
   return {
     rutes: rutes.filter((r) => r.entregues.length > 0),
@@ -1225,15 +1258,17 @@ function intentaOptimitzacioIncremental(ruta, context) {
 function creaRutaNova(entrega, context, index) {
   const volum = Number(entrega.volumTotal || 0);
   const camio = context.camionsDisponibles
-    .filter((c) => Number(c.capacitatMaxima || 0) >= volum)
+    .filter((c) => volumPermetAfegirACamio(0, volum, c))
     .sort((a, b) => Number(a.capacitatMaxima || 0) - Number(b.capacitatMaxima || 0))[0];
 
   if (!camio) {
-    if (context.assignacioCompletaActiva) {
+    const potVirtual =
+      context.permetCamioVirtual === true && context.assignacioCompletaActiva === true;
+    if (potVirtual) {
       const vol = Number(entrega.volumTotal || 0);
       const capMin = Number(context.capacitatCamioVirtualMinima) || 130;
       context.__seqCamioVirtual = (context.__seqCamioVirtual || 0) + 1;
-      const cap = Math.max(vol, capMin);
+      const cap = Math.max(vol / FRACCIO_MAX_UTILITZACIO_CAPACITAT_CAMIO, capMin);
       return {
         camio: { id: `VIRTUAL-${context.__seqCamioVirtual}`, capacitatMaxima: cap },
         entregues: [],
@@ -1285,7 +1320,7 @@ function eliminaEntrega(ruta, entrega) {
 }
 
 function teCapacitatPer(ruta, entrega) {
-  return ruta.volumOcupat + Number(entrega.volumTotal || 0) <= Number(ruta.camio.capacitatMaxima || 0);
+  return volumPermetAfegirACamio(ruta.volumOcupat, Number(entrega?.volumTotal ?? 0), ruta.camio);
 }
 
 function insereixEntregaMinimCost(ruta, entrega, context) {
@@ -1408,6 +1443,129 @@ function distanciaRuta(entregues, magatzem) {
 function planificacioValidaPerSeq(entregues, context) {
   const rutaTemp = { entregues };
   return calculaPlanificacioRuta(rutaTemp, context, tempsSortidaMinimaPerValidacio(context));
+}
+
+/** Interval en minuts arrodonits per comparar solapaments de ruta (sortida magatzem → tornada magatzem). */
+function minutsIntervalRuta(inici, fi) {
+  return {
+    inici: Math.round(Number(inici)),
+    fi: Math.round(Number(fi)),
+  };
+}
+
+/** True si [ia,fa] i [ib,fb] es creuen en el temps (mateix camió no pot fer dues coses alhora). */
+function intervalsTempsSolapen(ia, fa, ib, fb) {
+  if (![ia, fa, ib, fb].every((n) => Number.isFinite(n))) return false;
+  return ia < fb && ib < fa;
+}
+
+function camioTeIntervalLliure(reservesPerCamioId, camioIdStr, inici, fi) {
+  const bookings = reservesPerCamioId.get(camioIdStr) || [];
+  for (const b of bookings) {
+    if (intervalsTempsSolapen(inici, fi, b.inici, b.fi)) return false;
+  }
+  return true;
+}
+
+function registraIntervalCamio(reservesPerCamioId, camioIdStr, inici, fi) {
+  if (!reservesPerCamioId.has(camioIdStr)) reservesPerCamioId.set(camioIdStr, []);
+  reservesPerCamioId.get(camioIdStr).push({ inici, fi });
+}
+
+/**
+ * Bloqueig temporal de la flota física: cada id de camió només pot tenir un viatge actiu en cada instant.
+ * Processa les rutes per ordre de sortida; si l’interval es creua amb una reserva ja feta per aquell id,
+ * reassigna a un altre camió de la flota amb capacitat i interval lliure, o crea un virtual només si
+ * `context.permetCamioVirtual`; si no hi ha solució, expulsa la ruta a `entreguesNoAssignades`.
+ */
+function resoleSolapamentsTemporalCamions(rutes, context, entreguesNoAssignades) {
+  const camionsFisics = Array.isArray(context.camions) ? context.camions : [];
+  const reservesPerCamioId = new Map();
+  const permetVirtual = context.permetCamioVirtual === true;
+
+  const ambParades = rutes.filter((r) => r.entregues?.length > 0);
+  ambParades.sort((a, b) => {
+    const sa = Number(a.sortidaMagatzemMinuts);
+    const sb = Number(b.sortidaMagatzemMinuts);
+    if (Number.isFinite(sa) && Number.isFinite(sb) && sa !== sb) return sa - sb;
+    const ta = Number(a.tornadaMagatzemMinuts);
+    const tb = Number(b.tornadaMagatzemMinuts);
+    if (Number.isFinite(ta) && Number.isFinite(tb) && ta !== tb) return ta - tb;
+    return 0;
+  });
+
+  const rutesAExpulsar = [];
+
+  for (const ruta of ambParades) {
+    recalculaVolum(ruta);
+    const volum = Number(ruta.volumOcupat || 0);
+    const rawInici = ruta.sortidaMagatzemMinuts;
+    const rawFi = ruta.tornadaMagatzemMinuts;
+    if (!Number.isFinite(rawInici) || !Number.isFinite(rawFi)) continue;
+
+    const { inici, fi } = minutsIntervalRuta(rawInici, rawFi);
+    if (!Number.isFinite(inici) || !Number.isFinite(fi)) continue;
+
+    let camioIdStr = String(ruta.camio?.id ?? '').trim();
+    if (!camioIdStr) {
+      context.__anonCamioSeq = (context.__anonCamioSeq || 0) + 1;
+      camioIdStr = `__sense-id-${context.__anonCamioSeq}`;
+    }
+
+    const ocupatPelMateixId = !camioTeIntervalLliure(reservesPerCamioId, camioIdStr, inici, fi);
+
+    if (!ocupatPelMateixId) {
+      registraIntervalCamio(reservesPerCamioId, camioIdStr, inici, fi);
+      continue;
+    }
+
+    const candidats = [...camionsFisics]
+      .filter((c) => volumPermetAfegirACamio(0, volum, c))
+      .sort((a, b) => Number(a.capacitatMaxima || 0) - Number(b.capacitatMaxima || 0));
+
+    let substitut = null;
+    for (const c of candidats) {
+      const idS = String(c.id ?? '');
+      if (camioTeIntervalLliure(reservesPerCamioId, idS, inici, fi)) {
+        substitut = c;
+        break;
+      }
+    }
+
+    if (substitut) {
+      ruta.camio = {
+        id: substitut.id ?? ruta.camio?.id,
+        capacitatMaxima: Number(substitut.capacitatMaxima || 0),
+      };
+      ruta.__camioFont = substitut;
+      ruta.__camioVirtual = false;
+      registraIntervalCamio(reservesPerCamioId, String(substitut.id ?? ''), inici, fi);
+      continue;
+    }
+
+    if (permetVirtual) {
+      context.__seqCamioVirtual = (context.__seqCamioVirtual || 0) + 1;
+      const capMin = Number(context.capacitatCamioVirtualMinima) || 130;
+      const capVirt = Math.max(volum / FRACCIO_MAX_UTILITZACIO_CAPACITAT_CAMIO, capMin);
+      const vid = `VIRTUAL-${context.__seqCamioVirtual}`;
+      ruta.camio = { id: vid, capacitatMaxima: capVirt };
+      ruta.__camioFont = null;
+      ruta.__camioVirtual = true;
+      registraIntervalCamio(reservesPerCamioId, vid, inici, fi);
+      continue;
+    }
+
+    if (Array.isArray(entreguesNoAssignades)) {
+      rutesAExpulsar.push(ruta);
+    }
+  }
+
+  for (let i = rutes.length - 1; i >= 0; i -= 1) {
+    if (rutesAExpulsar.includes(rutes[i])) {
+      expulsaRutaSolapamentTemporal(rutes[i], entreguesNoAssignades);
+      rutes.splice(i, 1);
+    }
+  }
 }
 
 function actualitzaEtasRutes(rutes, context) {
