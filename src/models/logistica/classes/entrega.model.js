@@ -34,6 +34,7 @@ export class Entrega {
     return pedidos.map((pedido) => (pedido instanceof Pedido ? pedido : new Pedido(pedido)));
   }
 
+  /** Suma de caixes equivalents de totes les línies de pedido. */
   static calculaVolumTotal(pedidos) {
     return pedidos.reduce((total, pedido) => total + Number(pedido.volumTotal || 0), 0);
   }

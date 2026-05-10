@@ -5,7 +5,7 @@
 export class Camio {
   /**
    * @param {object} params
-   * @param {number} params.capacitat Volum màxim transportable (mateixa unitat que entregues.volumTotal).
+   * @param {number} params.capacitat Màxim de caixes equivalents transportables (mateixa unitat que entregues.volumTotal).
    * @param {string|number} params.numeroReferencia Identificador de vehicle / flota (matrícula, codi intern, etc.).
    * @param {string} params.tipus Categoria de vehicle (p. ex. rígid, articulat, furgoneta).
    * @param {string} [params.id] Per a l’optimizador; per defecte es deriva de `numeroReferencia`.

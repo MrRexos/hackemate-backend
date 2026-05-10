@@ -134,7 +134,7 @@ export function pintaRutesDetallades(resultat) {
 
     console.log(`─── Ruta ${n} · Camió ${idCamio}${virt} ───`);
     console.log(
-      `    Càrrega: ${vol} / ${capOp.toFixed(0)} màx. útil (${pctOp}% ple del límit 97%) · capacitat nominal camió ${capNom} (${pctNom}% respecte nominal)`,
+      `    Càrrega (caixes eq.): ${vol} / ${capOp.toFixed(0)} màx. útil (${pctOp}% del límit útil operatiu) · capacitat nominal camió ${capNom} (${pctNom}% respecte nominal)`,
     );
     console.log(
       `    Sortida magatzem (aprox.) ≈ ${ruta.horaSortidaMagatzemAproximada ?? ruta.horaSortidaMagatzem ?? '—'} · Arribada magatzem (aprox.) ≈ ${ruta.horaArribadaMagatzemAproximada ?? ruta.horaTornadaMagatzem ?? '—'}`,
@@ -158,7 +158,7 @@ export function pintaRutesDetallades(resultat) {
           ? `${Number(e.coordenades.x).toFixed(4)}, ${Number(e.coordenades.y).toFixed(4)}`
           : '—';
       console.log(
-        `      ${ordre}. ${id}${nom}  |  arribada ~${arrib}  |  client ${finestra}  |  volum ${e.volumTotal ?? '—'}`,
+        `      ${ordre}. ${id}${nom}  |  arribada ~${arrib}  |  client ${finestra}  |  caixes eq. ${e.volumTotal ?? '—'}`,
       );
       console.log(`          ${retalla(e.adreca, 78)}`);
       console.log(`          coords: ${coords}`);
@@ -189,7 +189,7 @@ function pintaResum({ entregues, resultat }) {
     const ad = e.adreca ? `${String(e.adreca).slice(0, 56)}${String(e.adreca).length > 56 ? '…' : ''}` : '';
     const nomEtiqueta = e.nom ? ` «${String(e.nom).slice(0, 28)}${String(e.nom).length > 28 ? '…' : ''}»` : '';
     console.log(
-      `  ${String(idx + 1).padStart(2, ' ')}. ${e.identificador ?? '?'}${nomEtiqueta} | ${nPed} producte(s) | volum=${e.volumTotal} | ${ad}`,
+      `  ${String(idx + 1).padStart(2, ' ')}. ${e.identificador ?? '?'}${nomEtiqueta} | ${nPed} producte(s) | caixes eq.=${e.volumTotal} | ${ad}`,
     );
   });
 
@@ -201,7 +201,7 @@ function pintaResum({ entregues, resultat }) {
   const sumVol = resultat.rutes.reduce((acc, r) => acc + Number(r.volumOcupat || 0), 0);
   const pctGOp = sumCapOp > 0 ? ((sumVol / sumCapOp) * 100).toFixed(1) : '0.0';
   console.log(
-    `Ocupació vs límit útil (97%): ${sumVol}/${sumCapOp.toFixed(0)} (${pctGOp}% del total útil de les rutes)`,
+    `Ocupació vs límit útil operatiu: ${sumVol}/${sumCapOp.toFixed(0)} (${pctGOp}% del total útil de les rutes)`,
   );
 
   resultat.rutes.forEach((ruta, i) => {
@@ -211,7 +211,7 @@ function pintaResum({ entregues, resultat }) {
     const pctOp = capOp > 0 ? ((vol / capOp) * 100).toFixed(1) : '—';
     const virt = ruta.__camioVirtual ? ' [virtual]' : '';
     console.log(
-      `  ${String(i + 1).padStart(2, ' ')}. ${ruta.camio.id}${virt} → ${vol}/${capOp.toFixed(0)} útil (${pctOp}% del 97%) · nominal ${capNom} · ${ruta.entregues.length} parades`,
+      `  ${String(i + 1).padStart(2, ' ')}. ${ruta.camio.id}${virt} → ${vol}/${capOp.toFixed(0)} útil (${pctOp}% del límit útil) · nominal ${capNom} · ${ruta.entregues.length} parades`,
     );
   });
 

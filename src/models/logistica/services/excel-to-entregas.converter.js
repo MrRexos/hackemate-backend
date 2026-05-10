@@ -1,5 +1,6 @@
 import XLSX from 'xlsx';
 import { Entrega } from '../classes/entrega.model.js';
+import { Pedido } from '../classes/pedido.model.js';
 import { geocodificarAdrecaNominatim } from './geocodificar-adreca.service.js';
 
 function horaExcelAHhMm(valor) {
@@ -37,7 +38,7 @@ function creaPedidoDeFila(fila) {
 
   return {
     nom: text(obtenirCamp(fila, 'Nombre_Carga', 'Nombre', 'Nom_Carrega')),
-    tipus: text(obtenirCamp(fila, 'Tipo_Carga', 'Tipo', 'Tipus')),
+    tipusCarrega: text(obtenirCamp(fila, 'Tipo_Carga', 'Tipo', 'Tipus')),
     volum: volumUnitari,
     quantitat: q,
   };
@@ -188,7 +189,7 @@ export function convertirExcelAEntregas(excelPath, options = {}) {
     }
 
     entrega.pedidos.push(pedido);
-    entrega.volumTotalCaixes += pedido.quantitat * pedido.volum;
+    entrega.volumTotalCaixes += new Pedido(pedido).volumTotal;
   }
 
   for (const entrega of entregasMap.values()) {
@@ -207,7 +208,7 @@ function horaIguals(a, b) {
   return String(a ?? '') === String(b ?? '');
 }
 
-/** Volum per unitat segons tipus de càrrega; si no hi ha mapa, retorna 1. */
+/** Caixes equivalents per unitat segons tipus de càrrega; si no hi ha mapa, retorna 1. */
 function volumUnitariDesDeTipus(tipusCarrega, volumPerTipus) {
   const map = volumPerTipus && typeof volumPerTipus === 'object' ? volumPerTipus : null;
   const def = map && Number(map.default) > 0 ? Number(map.default) : 1;
@@ -635,8 +636,9 @@ async function excelToEntregasFormatMotor(filePath, options = {}) {
  *
  * També accepta capçaleres tipus `ID Entrega`, `Nom Entrega`, `Dirección`, etc.
  *
- * **`volumPerTipus`**: mapa opcional `{ default: 1, palet: 80, caixa: 2 }` per derivar el volum unitari del pedido
- * (si no, volum = 1). `horaIniciPedido` es guarda al `Pedido` però l’optimizer de rutes actual no la usa.
+ * **`volumPerTipus`**: mapa opcional `{ default: 1, palet: 80, caixa: 2 }` — **caixes equivalents per unitat física**
+ * (mateixa escala que la capacitat del camió). Els barrils es converteixen també amb el factor barril→caixes al `Pedido`.
+ * `horaIniciPedido` es guarda al `Pedido` però l’optimizer de rutes actual no la usa.
  *
  * @param {string} filePath
  * @param {object} [options]

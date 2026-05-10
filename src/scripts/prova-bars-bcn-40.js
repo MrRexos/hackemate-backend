@@ -16,7 +16,7 @@ const NUM_PUNTS = 200;
 const NOM_MAGATZEM = 'Afores Mollet del Vallès';
 const RADI_RODONA_KM = 20;
 
-/** Capacitats cícliques (mateixa escala que volum d’entrega); més vehicles amb IDs únics eviten camions virtuals. */
+/** Capacitats en caixes equivalents (mateixa escala que l’entrega); més vehicles amb IDs únics eviten camions virtuals. */
 const CAPACITATS_FLOTA_BAR = [
   130, 125, 120, 120, 115, 110, 108, 105, 102, 100, 95, 95, 90, 88, 88,
 ];
@@ -72,7 +72,6 @@ async function main() {
     EntregaClass: Entrega,
     tempsBaseDescarregaMinuts: 10,
     tempsPerCaixaMinuts: 1,
-    /** Evita camions `VIRTUAL-*` per falta de capacitat en la passada final (requereix cabuda física o entregues sense assignar). */
     assignacioCompleta: false,
     /**
      * Quota de parades activa (per defecte del sweep): compacta rutes amb poques parades i omple millor els vehicles.
@@ -97,7 +96,7 @@ async function main() {
   console.log(
     `\nOcupació global (suma de capacitats màximes dels vehicles amb ruta): ${sumVolumCarregat}/${sumCapacitatRutes} (${pctGlobal}%)`,
   );
-  console.log('\nCapacitat i càrrega per camió (volum del model = unitats de càrrega, mateixa escala que capacitatMaxima):');
+  console.log('\nCapacitat i càrrega per camió (caixes equivalents; mateixa escala que capacitatMaxima):');
   resultat.rutes.forEach((ruta, i) => {
     const cap = Number(ruta.camio.capacitatMaxima || 0);
     const vol = Number(ruta.volumOcupat || 0);
@@ -162,7 +161,7 @@ function nomLocalBar(idx) {
 }
 
 /**
- * Genera entre 3 i 7 línies de pedido amb noms de producte únics, volum unitari, quantitat i volum total de línia.
+ * Genera entre 3 i 7 línies de pedido amb noms de producte únics, multiplicador CE/unitat, quantitat i total CE de línia.
  */
 function generaPedidosDetallats(idx) {
   const numLinies = 3 + (hashMix(idx + 1000) % 5);
@@ -378,7 +377,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px
 <div class="legend" id="legend"></div><div id="map"></div></div>
 <div class="card"><h3 style="margin:0 0 8px">Resum per ruta</h3><p class="small" style="margin:0 0 8px;color:#64748b;font-size:13px">Cada viatge surt i torna al magatzem (OSRM). El mateix camió amb diversos torns es veu amb colors diferents.</p><table><thead><tr><th>Camio</th><th>Viatge</th><th>Sortida magatzem</th><th>Tornada</th><th>KM ruta</th><th>Entregues</th></tr></thead><tbody id="tbodyRutes"></tbody></table></div>
 <div class="card"><h3 style="margin:0 0 8px">Entregues per camió</h3><table><thead><tr><th>Camió</th><th>#</th><th>Entrega</th><th>Client</th><th>Vol. total</th><th>Arribada</th><th>Franja</th></tr></thead><tbody id="tbody"></tbody></table></div>
-<div class="card scroll-wide"><h3 style="margin:0 0 8px">Línies de pedido (producte, quantitat, volum)</h3><p class="small" style="margin:0 0 8px;color:#64748b;font-size:13px">Cada fila és una línia de comanda: volum línia = volum/unitat × quantitat. Filtra amb el selector del mapa.</p><table><thead><tr><th>Camió</th><th>Viatge</th><th>Parada</th><th>Entrega</th><th>Client</th><th>#Línia</th><th>Producte</th><th>Tipus</th><th class="mono">Qt</th><th class="mono">m³/u</th><th class="mono">m³ línia</th></tr></thead><tbody id="tbodyPedidos"></tbody></table></div>
+<div class="card scroll-wide"><h3 style="margin:0 0 8px">Línies de pedido (producte, quantitat, caixes eq.)</h3><p class="small" style="margin:0 0 8px;color:#64748b;font-size:13px">Cada fila és una línia de comanda: total CE = multiplicador × caixes eq. (barril = 4 caixes/unitat física). Filtra amb el selector del mapa.</p><table><thead><tr><th>Camió</th><th>Viatge</th><th>Parada</th><th>Entrega</th><th>Client</th><th>#Línia</th><th>Producte</th><th>Tipus</th><th class="mono">Qt CE</th><th class="mono">×/u</th><th class="mono">CE línia</th></tr></thead><tbody id="tbodyPedidos"></tbody></table></div>
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
@@ -445,10 +444,10 @@ data.rutes.forEach((ruta,idx)=>{
     const my=(pv&&pv[ei])?pv[ei].y:e.y;
     var pedLines=(e.pedidos||[]).map(function(pd,li){
       return '<div style="margin:4px 0;padding:4px 0;border-bottom:1px solid #e5e7eb;font-size:12px"><strong>'+esc(pd.nom)+'</strong><br/>'+
-        'Qt <span class="mono">'+pd.quantitatCaixes+'</span> × '+fmt3(pd.volumPerCaixa)+' m³/u → <span class="mono">'+fmt3(pd.volumTotal)+'</span> m³ · '+esc(pd.tipusCarrega||'')+'</div>';
+        'Qt CE <span class="mono">'+pd.quantitatCaixes+'</span> × '+fmt3(pd.volumPerCaixa)+' → <span class="mono">'+fmt3(pd.volumTotal)+'</span> CE · '+esc(pd.tipusCarrega||'')+'</div>';
     }).join('');
     var pop='<div style="max-width:340px;max-height:280px;overflow:auto"><b>'+esc(ruta.camio.id)+'</b> · viatge '+ruta.tripSeq+'<br/><b>'+esc(e.id)+'</b> · '+esc(e.nomClient||'')+
-      '<br/>Vol. entrega <span class="mono">'+fmt3(e.volumTotalEntrega)+'</span> m³<br/>Arribada '+(e.arribada||'--:--')+'<hr style="margin:6px 0"/>'+pedLines+'</div>';
+      '<br/>Caixes eq. entrega <span class="mono">'+fmt3(e.volumTotalEntrega)+'</span><br/>Arribada '+(e.arribada||'--:--')+'<hr style="margin:6px 0"/>'+pedLines+'</div>';
     L.circleMarker([my,mx],{radius:5,color,fillColor:color,fillOpacity:0.9}).addTo(g).bindPopup(pop);
     boundsAll.push([my,mx]);
     bR.push([my,mx]);
