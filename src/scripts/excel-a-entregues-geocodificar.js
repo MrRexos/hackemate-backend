@@ -8,8 +8,11 @@
  *
  * Ús:
  *   npm run excel:entregues-geocode
+ *   npm run excel:entregues-geocode -- --max 0    (sense límit d’entregues; cal `--` abans dels arguments npm)
  *   node src/scripts/excel-a-entregues-geocodificar.js --salt 1
  *   node src/scripts/excel-a-entregues-geocodificar.js --totes-dies   (geocodifica tots els dies)
+ *   node src/scripts/excel-a-entregues-geocodificar.js --dia 2026-03-15   (només aquest dia; mateix format que la columna dia / ISO)
+ *   node src/scripts/excel-a-entregues-geocodificar.js --dia 15/03/2026
  *   node src/scripts/excel-a-entregues-geocodificar.js --max 0       (sense límit d’entregues geocodificades)
  *   node src/scripts/excel-a-entregues-geocodificar.js --magatzem 2.22722,41.54714   (lon,lat; per defecte igual que el magatzem fix)
  *   node src/scripts/excel-a-entregues-geocodificar.js --horaris fixtures/excel/horaris.xlsx
@@ -23,7 +26,11 @@
  *   EXCEL_PATH — camí absolut o relatiu a un altre xlsx (per defecte fixtures/excel/comandes.xlsx via `llegeixExcelAPedidos`).
  *   `--max N` — prioritari sobre l’entorn: màxim d’entregues a geocodificar (N=0 sense límit).
  *   MAX_GEOCODE_ENTREGUES — mateix límit si no passes `--max`; per defecte al codi **500**.
- *   GEOCODE_TOTES_DIES=true — igual que `--totes-dies`: geocodifica **tots** els dies (per defecte només els **N** calendaris més antics; N = {@link QUANTITAT_DIES_DEFECTE_GEOCODE}).
+ *   GEOCODE_TOTES_DIES=true — igual que `--totes-dies`: geocodifica **tots** els dies (per defecte només els **N** calendaris més antics; N = {@link QUANTITAT_DIES_DEFECTE_GEOCODE} o `GEOCODE_QUANTITAT_DIES`).
+ *   GEOCODE_QUANTITAT_DIES — enter ≥ 1: quants dies calendarístics més antics incloure quan no és `--totes-dies` ni `--dia` (per defecte {@link QUANTITAT_DIES_DEFECTE_GEOCODE}).
+ *   GEOCODE_INTERVAL_MS — pausa entre **entregues** davant Nominatim en ms (per defecte **1100**). Dins cada entrega el servei pot fer diversos intents amb la seva pròpia pausa.
+ *   GEOCODE_FAIL_ON_ERRORS=true (o EXCEL_PIPELINE_STRICT=yes) — al finalitzar, codi de sortida ≠ 0 si hi ha hagut errors de geocodificació (Nominatim / coords invàlides).
+ *   `--dia` / `EXCEL_DIA` / `GEOCODE_DIA` — filtre manual d’un sol dia calendarístic (té prioritat sobre `--totes-dies` i sobre el filtre de primers dies).
  *   MAGATZEM_XY — «lon,lat» del magatzem (alternativa a `--magatzem`), o bé MAGATZEM_X i MAGATZEM_Y.
  *   Si no es defineix res d’això, el magatzem és **sempre** el punt fix Mollet: **lon** {@link MAGATZEM_LONGITUD_DEFECTE}, **lat** {@link MAGATZEM_LATITUD_DEFECTE}.
  *   HORARIS_EXCEL_PATH — camí a `horaris.xlsx` (per defecte `fixtures/excel/horaris.xlsx`). També `--horaris camí`.
@@ -35,7 +42,7 @@
  *
  * Sortida (relativa a l’arrel del backend): `output/excel-rutes.json`, `output/excel-rutes.html`.
  *
- * Per defecte es geocodifiquen les entregues del **primer dia calendarístic** (el més antic de la columna «dia»).
+ * Per defecte es geocodifiquen les entregues del **primer dia calendarístic** (el més antic de la columna «dia»), llevat que passem **`--dia`** (o `EXCEL_DIA` / `GEOCODE_DIA`).
  */
 
 import { existsSync } from 'node:fs';
@@ -123,12 +130,6 @@ export function parseMagatzemString(str) {
 }
 
 /**
- * Prioritat: `--magatzem` / MAGATZEM_XY / MAGATZEM_X+Y → sinó magatzem fix Mollet
- * ({@link MAGATZEM_LONGITUD_DEFECTE}, {@link MAGATZEM_LATITUD_DEFECTE}). No s’usa el centre mitjà de les entregues.
- *
- * @param {unknown[]} _entreguesValides Es manté per compatibilitat amb crides anteriors; no s’utilitzen per triar el magatzem.
- */
-/**
  * Coordenades deterministes al voltant del magatzem (proves quan no es vol Nominatim).
  * @param {string|null|undefined} adreca
  * @param {{ x: number, y: number }} magatzem
@@ -157,6 +158,13 @@ export function senseGeocodeActiu(args) {
   return v === 'true' || v === '1' || v === 'yes';
 }
 
+/**
+ * Prioritat: `--magatzem` / MAGATZEM_XY / MAGATZEM_X+Y → sinó magatzem fix Mollet
+ * ({@link MAGATZEM_LONGITUD_DEFECTE}, {@link MAGATZEM_LATITUD_DEFECTE}). No s’usa el centre mitjà de les entregues.
+ *
+ * @param {unknown[]} _entreguesValides Es manté per compatibilitat amb crides anteriors; no s’utilitzen per triar el magatzem.
+ * @param {{ magatzemStr?: string|null }} args
+ */
 export function resolMagatzem(_entreguesValides, args) {
   const cli = parseMagatzemString(args.magatzemStr);
   if (cli) return { punt: cli, origen: 'CLI (--magatzem)' };
@@ -196,7 +204,8 @@ function serialitzaResultatOptim(resultat, magatzem, meta) {
       horaSortidaMagatzem: ruta.horaSortidaMagatzem ?? null,
       horaTornadaMagatzem: ruta.horaTornadaMagatzem ?? null,
       volumOcupat: ruta.volumOcupat,
-      entregues: ruta.entregues.map((e) => ({
+      entregues: ruta.entregues.map((e, idx) => ({
+        ordre: idx + 1,
         identificador: e.identificador,
         coordenades: e.coordenades,
         carrer: e.carrer ?? null,
@@ -205,6 +214,14 @@ function serialitzaResultatOptim(resultat, magatzem, meta) {
         volumTotal: e.volumTotal,
         horaInici: e.horaInici ?? null,
         horaFinal: e.horaFinal ?? null,
+        arribadaHoraAproximada: e.arribadaHora ?? e.horaDEntrega ?? null,
+        sortidaHoraAproximada: e.sortidaHora ?? null,
+        arribadaMinutsDesDeMitjanit: Number.isFinite(Number(e.arribadaMinuts)) ? e.arribadaMinuts : null,
+        sortidaMinutsDesDeMitjanit: Number.isFinite(Number(e.sortidaMinuts)) ? e.sortidaMinuts : null,
+        tempsDescarregaAproximMinuts:
+          e.tempsDescarregaMinuts != null && Number.isFinite(Number(e.tempsDescarregaMinuts))
+            ? Number(e.tempsDescarregaMinuts)
+            : null,
         pedidos: (e.pedidos || []).map((p) => ({
           nom: p.nom,
           dia: p.dia ?? null,
@@ -229,38 +246,67 @@ function espera(ms) {
 }
 
 function parseArgs(argv) {
-  /** @type {{ salt: number|null, rutaExcel: string|null, totesDies: boolean, maxEntregues?: number, magatzemStr?: string|null, rutaHoraris?: string|null, senseGeocode?: boolean }} */
+  /** @type {{ salt: number|null, rutaExcel: string|null, totesDies: boolean, diaManual?: string|null, maxEntregues?: number, magatzemStr?: string|null, rutaHoraris?: string|null, senseGeocode?: boolean, flagsDesconeguts: string[] }} */
   const out = {
     salt: null,
     rutaExcel: null,
     totesDies: false,
+    diaManual: null,
     magatzemStr: null,
     rutaHoraris: null,
     senseGeocode: false,
+    flagsDesconeguts: [],
   };
+  const consumits = new Set();
+
   for (let i = 2; i < argv.length; i += 1) {
     const a = argv[i];
     if (a === '--salt' && argv[i + 1] != null) {
       out.salt = Math.max(0, parseInt(argv[i + 1], 10) || 0);
+      consumits.add(i);
+      consumits.add(i + 1);
       i += 1;
     } else if (a === '--excel' && argv[i + 1] != null) {
       out.rutaExcel = path.resolve(process.cwd(), argv[i + 1]);
+      consumits.add(i);
+      consumits.add(i + 1);
+      i += 1;
+    } else if (a === '--dia' && argv[i + 1] != null) {
+      out.diaManual = String(argv[i + 1]).trim();
+      consumits.add(i);
+      consumits.add(i + 1);
       i += 1;
     } else if (a === '--totes-dies') {
+      consumits.add(i);
       out.totesDies = true;
     } else if (a === '--max' && argv[i + 1] != null) {
       out.maxEntregues = parseInt(argv[i + 1], 10);
+      consumits.add(i);
+      consumits.add(i + 1);
       i += 1;
     } else if (a === '--magatzem' && argv[i + 1] != null) {
       out.magatzemStr = argv[i + 1];
+      consumits.add(i);
+      consumits.add(i + 1);
       i += 1;
     } else if (a === '--horaris' && argv[i + 1] != null) {
       out.rutaHoraris = path.resolve(process.cwd(), argv[i + 1]);
+      consumits.add(i);
+      consumits.add(i + 1);
       i += 1;
     } else if (a === '--sense-geocode') {
+      consumits.add(i);
       out.senseGeocode = true;
     }
   }
+
+  const desconeguts = [];
+  for (let i = 2; i < argv.length; i += 1) {
+    if (consumits.has(i)) continue;
+    const token = argv[i];
+    if (typeof token === 'string' && token.startsWith('-')) desconeguts.push(token);
+  }
+  out.flagsDesconeguts = desconeguts;
   return out;
 }
 
@@ -290,11 +336,39 @@ export function resolLimitGeocodeMaxEntregues(args) {
 }
 
 /**
- * Dia calendari més antic entre els pedidos (clau normalitzada amb {@link normalitzaValorDia}).
- * @returns {string|null}
+ * Pausa entre geocodificacions d’**entregues** consecutives (Nominatim). Variable `GEOCODE_INTERVAL_MS`; defecte 1100 ms.
  */
+export function resolIntervalMsGeocode() {
+  const raw = process.env.GEOCODE_INTERVAL_MS?.trim();
+  if (raw !== undefined && raw !== '') {
+    const n = Number(raw);
+    if (Number.isFinite(n) && n >= 0) return Math.floor(n);
+  }
+  return 1100;
+}
+
 /**
- * Tots els dies calendarístics únics dels pedidos, ordenats (YYYY-MM-DD).
+ * Dies calendarístics més antics a incloure sense `--totes-dies` ni `--dia`. Variable `GEOCODE_QUANTITAT_DIES`; defecte {@link QUANTITAT_DIES_DEFECTE_GEOCODE}.
+ */
+export function resolQuantitatDiesPrimersGeocode() {
+  const raw = process.env.GEOCODE_QUANTITAT_DIES?.trim();
+  if (raw !== undefined && raw !== '') {
+    const n = parseInt(raw, 10);
+    if (Number.isFinite(n) && n >= 1) return n;
+  }
+  return QUANTITAT_DIES_DEFECTE_GEOCODE;
+}
+
+/** Si és cert, `process.exitCode = 1` quan hi ha geocodificacions fallides al pas Nominatim. */
+export function geoFailStrictActiu() {
+  const v = String(process.env.GEOCODE_FAIL_ON_ERRORS ?? process.env.EXCEL_PIPELINE_STRICT ?? '')
+    .trim()
+    .toLowerCase();
+  return v === 'true' || v === '1' || v === 'yes';
+}
+
+/**
+ * Tots els dies calendarístics únics dels pedidos, ordenats (YYYY-MM-DD; clau amb {@link normalitzaValorDia}).
  * @returns {string[]}
  */
 export function obtenDiesCalendaristicsOrdenats(pedidos) {
@@ -307,6 +381,10 @@ export function obtenDiesCalendaristicsOrdenats(pedidos) {
   return [...claus].sort();
 }
 
+/**
+ * Dia calendari més antic entre els pedidos (primer element de {@link obtenDiesCalendaristicsOrdenats}).
+ * @returns {string|null}
+ */
 export function obtenPrimerDiaCalendaristic(pedidos) {
   const dies = obtenDiesCalendaristicsOrdenats(pedidos);
   return dies.length > 0 ? dies[0] : null;
@@ -340,6 +418,24 @@ export function filtraPedidosNomésPrimerDia(pedidos) {
   return { pedidos: filtrats, diaSeleccionat: diesSeleccionats[0] ?? null };
 }
 
+/**
+ * Només pedidos la columna «dia» del qual coincideix amb `diaInput` (normalitzat com a l’Excel).
+ *
+ * @returns {{ pedidos: typeof pedidos, diaNormalitzat: string|null }}
+ */
+export function filtraPedidosPerDiaConcret(pedidos, diaInput) {
+  const diaNorm = normalitzaValorDia(diaInput);
+  if (diaNorm == null || String(diaNorm).trim() === '') {
+    return { pedidos: [], diaNormalitzat: null };
+  }
+  const clau = String(diaNorm).trim();
+  const filtrats = pedidos.filter((p) => {
+    const k = normalitzaValorDia(p.dia);
+    return k != null && String(k).trim() === clau;
+  });
+  return { pedidos: filtrats, diaNormalitzat: clau };
+}
+
 function coordenadesValides(entrega) {
   return normalitzaCoordenades(entrega.coordenades) != null;
 }
@@ -349,6 +445,7 @@ function imprimeixVeredicte(resum) {
     pedidosExcelTotals = null,
     diesGeocode = null,
     nomesPrimerDia = false,
+    filtreDiaManual = false,
     pedidosLlegits,
     entreguesAgrupadesTotals = null,
     entreguesTotals,
@@ -365,7 +462,10 @@ function imprimeixVeredicte(resum) {
   if (pedidosExcelTotals != null) {
     console.log(`Pedidos a l’Excel (abans de filtrar per dia): ${pedidosExcelTotals}`);
   }
-  if (nomesPrimerDia && diesGeocode && diesGeocode.length > 0) {
+  if (filtreDiaManual && diesGeocode && diesGeocode.length > 0) {
+    const diesTxt = diesGeocode.join('», «');
+    console.log(`Filtre actiu: només dia «${diesTxt}» (triat manualment amb --dia / EXCEL_DIA / GEOCODE_DIA).`);
+  } else if (nomesPrimerDia && diesGeocode && diesGeocode.length > 0) {
     const diesTxt = diesGeocode.join('», «');
     console.log(
       diesGeocode.length === 1
@@ -437,7 +537,15 @@ function imprimeixVeredicte(resum) {
 
 async function main() {
   const args = parseArgs(process.argv);
+  if (args.flagsDesconeguts.length > 0) {
+    console.warn(
+      `[excel→rutes] · Arguments CLI no reconeguts (reviseu l’ortografia): ${args.flagsDesconeguts.join(', ')}`,
+    );
+  }
+
   const envPath = process.env.EXCEL_PATH?.trim();
+  const quantitatDiesCalendariFiltre = resolQuantitatDiesPrimersGeocode();
+  const intervalMsEntreEntregues = resolIntervalMsGeocode();
   const opcionsExcel = {};
   if (args.salt != null) opcionsExcel.filesSaltadesInici = args.salt;
 
@@ -453,28 +561,71 @@ async function main() {
   const pedidosExcelTotals = pedidos.length;
   pasLog(1, `Excel · ${pedidosExcelTotals} pedidos llegits des del full`, true);
 
-  const totesDiesActiu =
+  const totesDiesActiuEnv =
     args.totesDies === true || String(process.env.GEOCODE_TOTES_DIES ?? '').toLowerCase() === 'true';
-  const nomesPrimerDia = !totesDiesActiu;
+
+  const diaManualRaw =
+    (args.diaManual != null && String(args.diaManual).trim() !== '' ? String(args.diaManual).trim() : '') ||
+    process.env.EXCEL_DIA?.trim() ||
+    process.env.GEOCODE_DIA?.trim() ||
+    '';
 
   let diesGeocode = null;
-  if (nomesPrimerDia) {
-    const { pedidos: pedFiltrats, diesSeleccionats } = filtraPedidosPrimersDies(
-      pedidos,
-      QUANTITAT_DIES_DEFECTE_GEOCODE,
-    );
-    diesGeocode = diesSeleccionats.length > 0 ? diesSeleccionats : null;
-    if (diesSeleccionats.length > 0) {
-      console.log(
-        diesSeleccionats.length === 1
-          ? `[excel→rutes] · Filtre «primer dia» (${diesSeleccionats[0]}): ${pedFiltrats.length} pedidos (de ${pedidosExcelTotals} a l’Excel).`
-          : `[excel→rutes] · Filtre «${diesSeleccionats.length} primers dies» (${diesSeleccionats.join(', ')}): ${pedFiltrats.length} pedidos (de ${pedidosExcelTotals} a l’Excel).`,
-      );
-      pedidos = pedFiltrats;
-    } else {
+  let nomesPrimerDia = false;
+  let filtreDiaManual = false;
+
+  if (diaManualRaw !== '') {
+    if (totesDiesActiuEnv) {
       console.warn(
-        '[excel→rutes] · Filtre per dies: cap valor vàlid a la columna dia; es continua amb tots els pedidos.',
+        '[excel→rutes] · S’ha definit un dia manual (`--dia` o EXCEL_DIA / GEOCODE_DIA); s’ignora `--totes-dies` / GEOCODE_TOTES_DIES.',
       );
+    }
+    const { pedidos: pedDia, diaNormalitzat } = filtraPedidosPerDiaConcret(pedidos, diaManualRaw);
+    if (diaNormalitzat == null) {
+      const disponibles = obtenDiesCalendaristicsOrdenats(pedidos);
+      console.error(
+        `[excel→rutes] · Data no vàlida per al filtre «--dia»: «${diaManualRaw}». Dies trobats a l’Excel: ${disponibles.length ? disponibles.join(', ') : '(cap)'}`,
+      );
+      process.exitCode = 1;
+      return;
+    }
+    diesGeocode = [diaNormalitzat];
+    if (pedDia.length === 0) {
+      const disponibles = obtenDiesCalendaristicsOrdenats(pedidos);
+      console.error(
+        `[excel→rutes] · Cap pedido per al dia ${diaNormalitzat} (entrada: «${diaManualRaw}»). Dies a l’Excel: ${disponibles.length ? disponibles.join(', ') : '(cap)'}`,
+      );
+      process.exitCode = 1;
+      return;
+    }
+    console.log(
+      `[excel→rutes] · Filtre dia manual (${diaNormalitzat}): ${pedDia.length} pedidos (de ${pedidosExcelTotals} a l’Excel).`,
+    );
+    pedidos = pedDia;
+    nomesPrimerDia = false;
+    filtreDiaManual = true;
+  } else {
+    const totesDiesActiu = totesDiesActiuEnv;
+    nomesPrimerDia = !totesDiesActiu;
+
+    if (nomesPrimerDia) {
+      const { pedidos: pedFiltrats, diesSeleccionats } = filtraPedidosPrimersDies(
+        pedidos,
+        quantitatDiesCalendariFiltre,
+      );
+      diesGeocode = diesSeleccionats.length > 0 ? diesSeleccionats : null;
+      if (diesSeleccionats.length > 0) {
+        console.log(
+          diesSeleccionats.length === 1
+            ? `[excel→rutes] · Filtre «primer dia» (${diesSeleccionats[0]}): ${pedFiltrats.length} pedidos (de ${pedidosExcelTotals} a l’Excel).`
+            : `[excel→rutes] · Filtre «${diesSeleccionats.length} primers dies» (${diesSeleccionats.join(', ')}): ${pedFiltrats.length} pedidos (de ${pedidosExcelTotals} a l’Excel).`,
+        );
+        pedidos = pedFiltrats;
+      } else {
+        console.warn(
+          '[excel→rutes] · Filtre per dies: cap valor vàlid a la columna dia; es continua amb tots els pedidos.',
+        );
+      }
     }
   }
 
@@ -576,7 +727,7 @@ async function main() {
     4,
     senseGeo
       ? `Coords mock (sense Nominatim) · ${ambAdrecaPrevist} entregues amb adreça · magatzem ref lon=${magatzemPerMock.x}, lat=${magatzemPerMock.y}`
-      : `Geocodificació Nominatim · ${ambAdrecaPrevist} entregues amb adreça (interval ~1,1 s entre crides)`,
+      : `Geocodificació Nominatim · ${ambAdrecaPrevist} entregues amb adreça (interval ≈ ${intervalMsEntreEntregues} ms entre entregues; cada entrega pot fer diversos intents interns)`,
     true,
   );
 
@@ -584,7 +735,7 @@ async function main() {
   let geocodeOk = 0;
   let senseAdreca = 0;
   let ambAdreca = 0;
-  const INTERVAL_MS = 1100;
+  const INTERVAL_MS = intervalMsEntreEntregues;
   let primeraPeticioGeocode = true;
   let comptadorGeocode = 0;
 
@@ -668,6 +819,7 @@ async function main() {
     pedidosExcelTotals,
     diesGeocode,
     nomesPrimerDia,
+    filtreDiaManual,
     pedidosLlegits: pedidos.length,
     entreguesAgrupadesTotals,
     entreguesTotals: entregues.length,
@@ -706,7 +858,7 @@ async function main() {
     try {
       resultat = await generarRutes(entreguesPlanificables, flota, magatzem, {
         EntregaClass: Entrega,
-        usaMock: true,
+        usaMock: false,
         assignacioCompleta: true,
         optimIntraRutaCarrers: true,
       });
@@ -736,16 +888,24 @@ async function main() {
     entreguesTotals: entreguesPlanificables.length,
   });
 
+  const GEOCODE_FALIDES_JSON_MAX = 50;
   const metaJson = {
     titol: titolHtml,
     senseGeocodeNominatim: senseGeo,
     origenMagatzem,
+    filtreDiaManual,
+    ingressDiaManual: filtreDiaManual ? diaManualRaw : null,
+    quantitatDiesCalendariFiltre: filtreDiaManual || totesDiesActiuEnv ? null : quantitatDiesCalendariFiltre,
+    geocodeIntervalMsEntreEntregues: INTERVAL_MS,
+    geoFailStrict: geoFailStrictActiu(),
     pedidosExcelTotals,
     pedidosUsats: pedidos.length,
     entreguesAgrupadesTotals,
     entreguesGeocodificadesLot: entregues.length,
     entreguesAmbCoordsVàlides: entreguesPlanificables.length,
     entreguesDescartadesSenseCoords: descartadesSenseCoords,
+    geocodeFallidesCount: geocodeFallides.length,
+    geocodeFallidesMostra: geocodeFallides.slice(0, GEOCODE_FALIDES_JSON_MAX),
     rutesGenerades: resultat.rutes.length,
     entreguesNoAssignades: resultat.entreguesNoAssignades.length,
     horaris: metaHoraris,
@@ -769,6 +929,13 @@ async function main() {
   console.log(`Vector de rutes: ${resultat.rutes.length}`);
   console.log(`Entregues no assignades (al sweep): ${resultat.entreguesNoAssignades.length}`);
   console.log(`Obre el mapa: ${pathToFileURL(htmlPath).href}\n`);
+
+  if (geoFailStrictActiu() && geocodeFallides.length > 0) {
+    process.exitCode = 1;
+    console.warn(
+      `[excel→rutes] · GEOCODE_FAIL_ON_ERRORS / EXCEL_PIPELINE_STRICT: ${geocodeFallides.length} geocodificació(ns) fallida(es); codi de sortida 1.`,
+    );
+  }
 }
 
 const execDesDelCli =

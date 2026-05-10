@@ -158,6 +158,26 @@ function mateixTorneigParella(e1, e2) {
   return true;
 }
 
+/** Amplada angular per emparellar dues entregues (perifèric ↔ perifèric més tolerant). */
+function ampladaPetalPerParella(entrega, alt, context) {
+  if (entrega.__zona === 'periferica' && alt.__zona === 'periferica') {
+    const w = Number(context.ampladaPetalPerifericaGraus);
+    return Number.isFinite(w) && w > 0 ? w : 70;
+  }
+  const b = Number(context.ampladaPetalGraus) > 0 ? Number(context.ampladaPetalGraus) : 45;
+  return b;
+}
+
+/** Amplada per bonificar inserció a ruta ja amb parades llunyanes (sector perifèric). */
+function ampladaPetalBonusInsercio(entrega, etRuta, context) {
+  const b = Number(context.ampladaPetalGraus) > 0 ? Number(context.ampladaPetalGraus) : 45;
+  if (entrega.__zona === 'periferica' && (etRuta === 'periferica' || etRuta === 'mixta')) {
+    const w = Number(context.ampladaPetalPerifericaGraus);
+    return Number.isFinite(w) && w > 0 ? w : Math.max(b * 1.5, 70);
+  }
+  return b;
+}
+
 /**
  * Estalvi de km en combinar dues parades en una sola ruta (vs dos viatges magatzem→parada→magatzem).
  * Retorna `dosRoundTrips - millorTourObert` en Haversine (positiu = convé fusionar en km).
@@ -177,8 +197,6 @@ function estalviKmCombinarDos(entrega1, entrega2, magatzem) {
  * Cerca una entrega encara no assignada al mateix pètal amb estalvi de km suficient i camió disponible.
  */
 function trobarCompanyiaPetalAngles(entrega, entreguesOrdenades, context) {
-  const amplada =
-    Number(context.ampladaPetalGraus) > 0 ? Number(context.ampladaPetalGraus) : 45;
   const minEst =
     context.minEstalviKmCombinacioParella != null && Number.isFinite(Number(context.minEstalviKmCombinacioParella))
       ? Number(context.minEstalviKmCombinacioParella)
@@ -186,11 +204,13 @@ function trobarCompanyiaPetalAngles(entrega, entreguesOrdenades, context) {
   const magatzem = context.magatzem;
 
   let millor = null;
+  let millorEst = -Infinity;
   let millorDiffAng = Infinity;
 
   for (const alt of entreguesOrdenades) {
     if (alt === entrega || alt.__assignada) continue;
     if (!mateixTorneigParella(entrega, alt)) continue;
+    const amplada = ampladaPetalPerParella(entrega, alt, context);
     if (!mateixPetalAngles(entrega.angle, alt.angle, amplada)) continue;
 
     const dAng = diferenciaAngularGraus(entrega.angle, alt.angle);
@@ -201,7 +221,12 @@ function trobarCompanyiaPetalAngles(entrega, entreguesOrdenades, context) {
     const hiHaCamio = context.camionsDisponibles.some((c) => volumPermetAfegirACamio(0, volTot, c));
     if (!hiHaCamio) continue;
 
-    if (dAng < millorDiffAng - 1e-9) {
+    const millorQueAnterior =
+      millor == null
+      || est > millorEst + 1e-6
+      || (Math.abs(est - millorEst) <= 1e-6 && dAng < millorDiffAng - 1e-9);
+    if (millorQueAnterior) {
+      millorEst = est;
       millorDiffAng = dAng;
       millor = alt;
     }
@@ -251,15 +276,15 @@ export async function geocodificarAdreces(entregues, options = {}) {
  * - **Horari magatzem (per defecte):** sortida mínima 08:00 (`minSortidaMagatzemMinuts`), tornada màxima 20:00 (`maxTornadaMagatzemMinuts`).
  * - **Quota de parades per ruta (per defecte 15–30):** `minEntreguesPerRuta`, `maxEntreguesPerRuta` (nombre enter ≥ 1). Es bloqueja afegir parades quan la ruta arriba al màxim; després d’assignar sobrants es fusionen rutes per sota del mínim cap a altres si hi caben i la seqüència és vàlida (mateixa lògica de torn que la reintegració), per reduir camions. Valors ≤ 0 o no finits desactiven només aquell límit; desactiva tot el bloc amb `perQuotaParadesDesactivada: true`.
  * - **Pausa sense circulació (per defecte 13:00–15:00):** `pausaCirculacioIniciMinuts` / `pausaCirculacioFiMinuts`; desactiva amb `pausaCirculacioDesactivada: true`.
- * - **Pausa conductor (per defecte):** una pausa de **45 min** per ruta (`pausaConductorFixaPerRutaMinuts`), abans de la segona meitat de parades (o abans del retorn si només n’hi ha una). Opcionalment mode EU amb límit acumulat: passa `maxConduccioContinuaMinuts: 270` i `pausaObligatoriaConduccioMinuts` (llindar + pauses repetides; no usa la pausa fixa per defecte). Desactiva tot amb `conduccioContinuaDesactivada: true`.
- *
+ * - **Pausa conductor:** per defecte **mode UE** (`maxConduccioContinuaMinuts` **270** = 4,5 h) amb pausa obligatòria (`pausaObligatoriaConduccioMinuts`, per defecte 45 min) i reinici del comptador si l’espera (descàrrega o pausa) arriba a `minEsperaResetConduccioMinuts`. Desactiva el llindar amb `conduccioContinuaDesactivada: true` o passant `maxConduccioContinuaMinuts: Infinity`. Sense llindar UE, la pausa fixa de **45 min** a mitja ruta (`pausaConductorFixaPerRutaMinuts`) torna a aplicar-se per defecte.
+ * - **Finestra horària client:** per defecte **no** s’espera a `horaInici` (ni es retarda la sortida del magatzem per encaixar la primera finestra): el vehicle condueix seguit; les pauses obligatòries per límit de conducció segueixen aplicant-se. Per recuperar el comportament antic (esperar fins a l’inici de franja i calcular sortida del magatzem en conseqüència), passa `esperaFinsIniciFinestraClient: true`.
  * - **Entrega massa gran per a un camió (per defecte activa):** abans del sweep es parteixen entregues en diverses parades (mateixa adreça) repartint `pedidos` en bins ≤ capacitat màxima operativa de la flota (`fragmentaEntreguesMassaGransActiva`).
  *   Després de la planificació, una passada opcional **reubica parades** entre rutes si la suma Haversine global baixa (`milloraKmGlobalReubicacioActiva`).
  * - **Fusió per baixa utilització (per defecte activa):** rutes amb ús del camió &lt; **26%** del límit operatiu (`llindarUtilitatMinimaFusio`, per defecte `0.26`)
  *   intenten fusionar-se en una altra ruta si hi caben **volum**, **quota de parades** i **torns**; només s’aplica si la suma Haversine
  *   magatzem→…→magatzem **no augmenta** (es permet empatar però eliminar un camió). Desactiva amb `fusioBaixaUtilitatActiva: false`.
  * - **Consolidació per pètal (per defecte activa):** abans d’obrir una ruta nova amb una sola parada, es busca una altra entrega
- *   encara sense assignar amb angle compatible (`ampladaPetalGraus`, per defecte **45°**) i estalvi Haversine positiu respecte a dos viatges solts
+ *   sense assignar amb angle compatible (`ampladaPetalGraus`, per defecte **45°**; entre dues parades **perifèriques** s’usa `ampladaPetalPerifericaGraus`, per defecte **max(1,5×45°, 70°)** per afavorir un sol camió llunyà). La companyia es tria prioritzant **més estalvi de km** (Haversine) i en empat angle més petit.
  *   (`minEstalviKmCombinacioParella`, per defecte **0** km). Es desactiva amb `prioritzacioPetalConsolidacio: false`.
  * - **`assignacioCompleta`:** si és `true`, es fan més voltes de reintegració sense llindar de km; una **passada final**
  *   ignora finestres de client, relaxa (opcionalment) la tornada màxima al magatzem i permet **camions virtuals** si la flota
@@ -282,8 +307,8 @@ export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, 
   const optimIntraRutaCarrers = options.optimIntraRutaCarrers !== false;
   const velocitatKmH = Number(options.velocitatKmH) || 40;
   const tempsDescarregaMinuts = Number(options.tempsDescarregaMinuts) || TEMPS_SERVEI_MINUTS;
-  const tempsBaseDescarregaMinuts = Number(options.tempsBaseDescarregaMinuts) || 2;
-  const tempsPerCaixaMinuts = Number(options.tempsPerCaixaMinuts) || 0.35;
+  const tempsBaseDescarregaMinuts = Number(options.tempsBaseDescarregaMinuts) || 5;
+  const tempsPerCaixaMinuts = Number(options.tempsPerCaixaMinuts) || 0.5;
   const radiUrbàKm = Number(options.radiUrbàKm) > 0 ? Number(options.radiUrbàKm) : 9;
   const llindarKmInsercio = Number(options.llindarKmInsercio) > 0 ? Number(options.llindarKmInsercio) : 5;
   const llindarKmInsercioCreuat =
@@ -292,6 +317,10 @@ export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, 
       : Math.min(2.5, llindarKmInsercio * 0.45);
   const ampladaPetalGraus =
     Number(options.ampladaPetalGraus) > 0 ? Number(options.ampladaPetalGraus) : 45;
+  const ampladaPetalPerifericaGraus =
+    Number(options.ampladaPetalPerifericaGraus) > 0
+      ? Number(options.ampladaPetalPerifericaGraus)
+      : Math.max(ampladaPetalGraus * 1.5, 70);
   const minEstalviKmCombinacioParella =
     options.minEstalviKmCombinacioParella != null && Number.isFinite(Number(options.minEstalviKmCombinacioParella))
       ? Number(options.minEstalviKmCombinacioParella)
@@ -325,10 +354,15 @@ export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, 
       : 15 * 60;
 
   const conduccioContinuaDesactivada = options.conduccioContinuaDesactivada === true;
-  const maxConduccioContinuaMinuts =
-    options.maxConduccioContinuaMinuts != null && Number(options.maxConduccioContinuaMinuts) > 0
-      ? Number(options.maxConduccioContinuaMinuts)
-      : Infinity;
+  let maxConduccioContinuaMinuts;
+  if (conduccioContinuaDesactivada) {
+    maxConduccioContinuaMinuts = Infinity;
+  } else if (options.maxConduccioContinuaMinuts == null) {
+    maxConduccioContinuaMinuts = 270;
+  } else {
+    const n = Number(options.maxConduccioContinuaMinuts);
+    maxConduccioContinuaMinuts = Number.isFinite(n) && n > 0 ? n : Infinity;
+  }
   const usaLlindar = !conduccioContinuaDesactivada && Number.isFinite(maxConduccioContinuaMinuts) && maxConduccioContinuaMinuts > 0;
   const pausaObligatoriaConduccioMinuts =
     options.pausaObligatoriaConduccioMinuts != null ? Number(options.pausaObligatoriaConduccioMinuts) : 45;
@@ -350,6 +384,9 @@ export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, 
     if (!Number.isFinite(n) || n <= 0) return null;
     return Math.floor(n);
   };
+  /** Si és `true`, espera a `horaInici` quan s’arriba aviat i ajusta la sortida del magatzem; per defecte `false` (trajecte sense esperes per encaixar franja). */
+  const esperaFinsIniciFinestraClient = options.esperaFinsIniciFinestraClient === true;
+
   let minEntreguesPerRuta = parseQuotaParades(options.minEntreguesPerRuta, 15);
   let maxEntreguesPerRuta = parseQuotaParades(options.maxEntreguesPerRuta, 30);
   if (
@@ -392,6 +429,7 @@ export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, 
     llindarKmInsercio,
     llindarKmInsercioCreuat,
     ampladaPetalGraus,
+    ampladaPetalPerifericaGraus,
     minEstalviKmCombinacioParella,
     prioritzacioPetalConsolidacio,
     fusioBaixaUtilitatActiva,
@@ -410,6 +448,7 @@ export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, 
     minEntreguesPerRuta,
     maxEntreguesPerRuta,
     ignoreFinestresClient: false,
+    esperaFinsIniciFinestraClient,
     assignacioCompletaActiva: false,
     assignacioCompletaOpcio: assignacioCompleta,
     capacitatCamioVirtualMinima:
@@ -600,13 +639,14 @@ function puntuacioRutaPerEntrega(ruta, entrega, context) {
   else if (et === 'periferica' && entrega.__zona === 'urbana') base = 80;
   else base = 400;
 
-  const ampladaPetal =
-    Number(context.ampladaPetalGraus) > 0 ? Number(context.ampladaPetalGraus) : 45;
+  const ampladaBonus = ampladaPetalBonusInsercio(entrega, et, context);
   const diffAng = diferenciaAngularGraus(entrega.angle, mitjanaAngleRuta(ruta));
   let bonusPetal = 0;
   if (ruta.entregues.length > 0) {
-    if (diffAng <= ampladaPetal * 0.5 + 1e-9) bonusPetal += 130;
-    else if (diffAng <= ampladaPetal + 1e-9) bonusPetal += 65;
+    const reforçPerif =
+      entrega.__zona === 'periferica' && (et === 'periferica' || et === 'mixta') ? 55 : 0;
+    if (diffAng <= ampladaBonus * 0.5 + 1e-9) bonusPetal += 130 + reforçPerif;
+    else if (diffAng <= ampladaBonus + 1e-9) bonusPetal += 65 + Math.round(reforçPerif / 2);
   }
 
   return base - diffAng / 12 + ruta.volumOcupat / 5000 + bonusPetal;
@@ -1295,7 +1335,7 @@ function calculaPlanificacioRuta(ruta, context, tempsSortidaMin = 0) {
     const inici = horaATotalMinuts(entrega.horaInici);
     const fi = horaATotalMinuts(entrega.horaFinal);
 
-    if (inici != null && tempsActual < inici) {
+    if (context.esperaFinsIniciFinestraClient && inici != null && tempsActual < inici) {
       const esperaFinestra = inici - tempsActual;
       tempsActual = aplicarEsperaSenseConduccio(tempsActual, esperaFinestra, context, estatConductor);
     }
@@ -2074,6 +2114,7 @@ function resoleSolapamentsTemporalCamions(rutes, context) {
 function calculaSortidaAproximada(ruta, context) {
   const minS = Number.isFinite(context.minSortidaMagatzemMinuts) ? context.minSortidaMagatzemMinuts : 0;
   if (!ruta.entregues || ruta.entregues.length === 0) return minS;
+  if (!context.esperaFinsIniciFinestraClient) return minS;
   const primeraEntrega = ruta.entregues[0];
   const iniciPrimera = horaATotalMinuts(primeraEntrega.horaInici);
   if (iniciPrimera == null) return minS;

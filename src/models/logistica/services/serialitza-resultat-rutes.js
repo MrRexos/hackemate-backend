@@ -40,6 +40,14 @@ export function serialitzaResultatGenerarRutes(resultat, magatzem, meta = {}) {
         horaDEntrega: e.horaDEntrega ?? null,
         arribadaHora: e.arribadaHora ?? null,
         sortidaHora: e.sortidaHora ?? null,
+        arribadaHoraAproximada: e.arribadaHora ?? e.horaDEntrega ?? null,
+        sortidaHoraAproximada: e.sortidaHora ?? null,
+        arribadaMinutsDesDeMitjanit: Number.isFinite(Number(e.arribadaMinuts)) ? e.arribadaMinuts : null,
+        sortidaMinutsDesDeMitjanit: Number.isFinite(Number(e.sortidaMinuts)) ? e.sortidaMinuts : null,
+        tempsDescarregaAproximMinuts:
+          e.tempsDescarregaMinuts != null && Number.isFinite(Number(e.tempsDescarregaMinuts))
+            ? Number(e.tempsDescarregaMinuts)
+            : null,
         pedidos: (e.pedidos || []).map((p) => ({
           nom: p.nom ?? null,
           dia: p.dia ?? null,
