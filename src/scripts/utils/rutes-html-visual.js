@@ -233,7 +233,6 @@ export function construeixPayloadVisual(resultat, visualData, centre, meta) {
           nom: p.nom,
           tipusCarrega: p.tipusCarrega ?? null,
           factorCaixesPerUnitat: p.factorCaixesPerUnitat,
-          volumPerCaixa: p.volumPerCaixa,
           quantitatCaixes: p.quantitatCaixes,
           volumTotal: p.volumTotal,
         })),

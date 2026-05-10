@@ -46,7 +46,6 @@ export function serialitzaResultatGenerarRutes(resultat, magatzem, meta = {}) {
           producte: p.producte ?? null,
           tipusCarrega: p.tipusCarrega ?? null,
           factorCaixesPerUnitat: p.factorCaixesPerUnitat,
-          volumPerCaixa: p.volumPerCaixa,
           quantitatCaixes: p.quantitatCaixes,
           volumTotal: p.volumTotal,
         })),
