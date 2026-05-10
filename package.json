@@ -7,9 +7,6 @@
   "scripts": {
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
-    "main": "node src/main.js",
-    "planificacio:informe": "node src/scripts/planificacio-rutes-informe.js",
-    "prova:100-bcn-html": "node src/scripts/prova-100-bcn-html.js",
     "excel:entregues-geocode": "node src/scripts/excel-a-entregues-geocodificar.js --max 500"
   },
   "keywords": [
@@ -20,7 +17,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@supabase/supabase-js": "^2.49.1",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",

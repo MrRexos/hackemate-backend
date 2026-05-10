@@ -18,7 +18,7 @@ export class Camio {
     this.id = id != null ? String(id) : ref ?? 'camio-sense-ref';
   }
 
-  /** Alias esperat per sweep / ruta.service. */
+  /** Alias esperat per l’optimizador (`generarRutes`). */
   get capacitatMaxima() {
     return this.capacitat;
   }
