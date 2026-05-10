@@ -134,7 +134,7 @@ function resolArgumentsExcelPedidos(arg1, arg2) {
  * Per defecte llegeix {@link RUTA_EXCEL_COMANDES_DEFECTE} (`fixtures/excel/comandes.xlsx`).
  *
  * Layout esperat per defecte (columnes 1-based Excel):
- * - 1: dia · 8: producte · 9: quantitat · 10: tipus càrrega (`CAJ`, `BRL`, `UN`; altres → 12 unitats/caixa) · 12: nom · 14–16: adreça (tres cel·les).
+ * - 1: dia · 8: producte · 9: quantitat · 10: tipus càrrega (`CAJ`, `BRL`, `UN`; altres o desconegut → 1 caixa/unitat) · 12: nom · 14–16: adreça (tres cel·les).
  *
  * @param {string | OpcionsLlegeixExcelPedidos} [rutaFitxerOCopcions] Camí al fitxer, o només opcions (objecte).
  * @param {OpcionsLlegeixExcelPedidos} [options] Opcions si el primer argument és el camí.

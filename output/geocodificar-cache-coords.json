@@ -180,6 +180,434 @@
     "girona 210, 08400, granollers|girona 210|08400|granollers": {
       "x": 2.290621,
       "y": 41.6088794
+    },
+    "federico garcia lorca 21, 08170, montornes del valles|federico garcia lorca 21|08170|montornes del valles": {
+      "x": 2.2688098,
+      "y": 41.554961
+    },
+    "c/ prat de la riba, 13, 08830, sant boi de llobregat|c/ prat de la riba, 13|08830|sant boi de llobregat": {
+      "x": 2.0312543,
+      "y": 41.3292017
+    },
+    "carrer de can puig s/n, 08107, martorelles|carrer de can puig s/n|08107|martorelles": {
+      "x": 2.2348744,
+      "y": 41.5309319
+    },
+    "anselm clave 3, 08106, santa maria de martorelles|anselm clave 3|08106|santa maria de martorelles": {
+      "x": 2.2546044,
+      "y": 41.5198863
+    },
+    "carrer de la riera 30, 08500, vic|carrer de la riera 30|08500|vic": {
+      "x": 2.2535593,
+      "y": 41.9294084
+    },
+    "carrer de les carnisseries 34, 08500, vic|carrer de les carnisseries 34|08500|vic": {
+      "x": 2.255549,
+      "y": 41.9300495
+    },
+    "avinguda de rivoli 24, 08100, mollet del valles|avinguda de rivoli 24|08100|mollet del valles": {
+      "x": 2.20806,
+      "y": 41.5467073
+    },
+    "carretera de roda 1, 08500, vic|carretera de roda 1|08500|vic": {
+      "x": 2.2607285,
+      "y": 41.932
+    },
+    "carrer de l'hospital 7, 08402, granollers|carrer de l'hospital 7|08402|granollers": {
+      "x": 2.291737,
+      "y": 41.614473
+    },
+    "plaça de l'estació 1, 08500, vic|plaça de l'estació 1|08500|vic": {
+      "x": 2.2495104,
+      "y": 41.9307273
+    },
+    "c/ramon d'abadal 21, 08500, vic|c/ramon d'abadal 21|08500|vic": {
+      "x": 2.2478308,
+      "y": 41.9279527
+    },
+    "carrer torelló 57, 08500, vic|carrer torelló 57|08500|vic": {
+      "x": 2.2664487,
+      "y": 41.9339248
+    },
+    "carrer de rupit 12, 08500, vic|carrer de rupit 12|08500|vic": {
+      "x": 2.2812451,
+      "y": 41.9524615
+    },
+    "avinguda d'antoni gaudí 12, 08100, mollet del vallès|avinguda d'antoni gaudí 12|08100|mollet del vallès": {
+      "x": 2.217975,
+      "y": 41.5446936
+    },
+    "plaça de prat de la riba 11, 08100, mollet del valles|plaça de prat de la riba 11|08100|mollet del valles": {
+      "x": 2.2135294,
+      "y": 41.5388501
+    },
+    "gran 3, 08160, montmelo|gran 3|08160|montmelo": {
+      "x": 2.2601738,
+      "y": 41.5458776
+    },
+    "esteve terrades 38, 08401, granollers|esteve terrades 38|08401|granollers": {
+      "x": 2.2902072,
+      "y": 41.5979909
+    },
+    "girona 36, 08402, granollers|girona 36|08402|granollers": {
+      "x": 2.290621,
+      "y": 41.6088794
+    },
+    "carrer de pompeu fabra 15, 08401, granollers|carrer de pompeu fabra 15|08401|granollers": {
+      "x": 2.2844133,
+      "y": 41.6092088
+    },
+    "avinguda de l'abat marcet 251, 08225, terrassa|avinguda de l'abat marcet 251|08225|terrassa": {
+      "x": 2.0107783,
+      "y": 41.5748876
+    },
+    "avinguda de barcelona 64, 08970, sant joan despi|avinguda de barcelona 64|08970|sant joan despi": {
+      "x": 2.0762494,
+      "y": 41.3707998
+    },
+    "carretera rubi 76-78, 08190, sant cugat del vallès|carretera rubi 76-78|08190|sant cugat del vallès": {
+      "x": 2.0632494,
+      "y": 41.479307
+    },
+    "ronda d'orient 1, 08100, mollet del valles|ronda d'orient 1|08100|mollet del valles": {
+      "x": 2.2175419,
+      "y": 41.5334748
+    },
+    "carrer del pla dels estudiants 40, 08560, manlleu|carrer del pla dels estudiants 40|08560|manlleu": {
+      "x": 2.2869598,
+      "y": 42.007905
+    },
+    "carrer de roger de flor 93, 08401, granollers|carrer de roger de flor 93|08401|granollers": {
+      "x": 2.2832281,
+      "y": 41.6048713
+    },
+    "carrer de milà 22, 08917, badalona|carrer de milà 22|08917|badalona": {
+      "x": 2.2189766,
+      "y": 41.4559529
+    },
+    "rambla hospital 31, 08500, vic|rambla hospital 31|08500|vic": {
+      "x": 2.2521353,
+      "y": 41.9282438
+    },
+    "carretera b-521 6, 08500, vic|carretera b-521 6|08500|vic": {
+      "x": 2.2548685,
+      "y": 41.9366846
+    },
+    "carrer de mataró 5, 08500, vic|carrer de mataró 5|08500|vic": {
+      "x": 2.2503642,
+      "y": 41.9400424
+    },
+    "manlleu 54, 08500, vic|manlleu 54|08500|vic": {
+      "x": 2.2580752,
+      "y": 41.9432061
+    },
+    "manlleu 30-32, 08500, vic|manlleu 30-32|08500|vic": {
+      "x": 2.2574209,
+      "y": 41.9433682
+    },
+    "ramon sala i saçala 15, 08500, vic|ramon sala i saçala 15|08500|vic": {
+      "x": 2.2602515,
+      "y": 41.9356846
+    },
+    "avinguda de la ribera 6, 08503, gurb|avinguda de la ribera 6|08503|gurb": {
+      "x": 2.2503758,
+      "y": 41.9493593
+    },
+    "carretera de manlleu km 4, 08503, gurb|carretera de manlleu km 4|08503|gurb": {
+      "x": 2.2623273,
+      "y": 41.9532921
+    },
+    "de les hortes 2, 08400, granollers|de les hortes 2|08400|granollers": {
+      "x": 2.2824008,
+      "y": 41.6055339
+    },
+    "carrer rafael casanova 60, 08401, granollers|carrer rafael casanova 60|08401|granollers": {
+      "x": 2.2878842,
+      "y": 41.6178938
+    },
+    "ponent 59, 08400, granollers|ponent 59|08400|granollers": {
+      "x": 2.2869478,
+      "y": 41.6129094
+    },
+    "carrer rafael casanova 50, 08401, granollers|carrer rafael casanova 50|08401|granollers": {
+      "x": 2.2878842,
+      "y": 41.6178938
+    },
+    "carrer de minetes 29, 08402, granollers|carrer de minetes 29|08402|granollers": {
+      "x": 2.293106,
+      "y": 41.6121556
+    },
+    "girona 49, 08402, granollers|girona 49|08402|granollers": {
+      "x": 2.290621,
+      "y": 41.6088794
+    },
+    "girona, 52, 08402, granollers|girona, 52|08402|granollers": {
+      "x": 2.3008107,
+      "y": 41.6061136
+    },
+    "carrer de girona 90, 08402, granollers|carrer de girona 90|08402|granollers": {
+      "x": 2.290621,
+      "y": 41.6088794
+    },
+    "carrer montseny 10, 08402, granollers|carrer montseny 10|08402|granollers": {
+      "x": 2.3029362,
+      "y": 41.609992
+    },
+    "carretera cardedeu 1, 08520, barcelona|carretera cardedeu 1|08520|barcelona": {
+      "x": 2.3735243,
+      "y": 41.6148713
+    },
+    "carrer de corró 15, 08401, granollers|carrer de corró 15|08401|granollers": {
+      "x": 2.2878566,
+      "y": 41.6094543
+    },
+    "carrer de corró 36, 08401, granollers|carrer de corró 36|08401|granollers": {
+      "x": 2.2882135,
+      "y": 41.6103062
+    },
+    "sant roc 8, 08401, granollers|sant roc 8|08401|granollers": {
+      "x": 2.2885371,
+      "y": 41.6082737
+    },
+    "calle ponent 12, 08401, granollers|calle ponent 12|08401|granollers": {
+      "x": 2.2863767,
+      "y": 41.614208
+    },
+    "carrer guayaquil 30, 08401, granollers|carrer guayaquil 30|08401|granollers": {
+      "x": 2.2875639,
+      "y": 41.6049348
+    },
+    "carrer d'alfons iv 38, 08401, granollers|carrer d'alfons iv 38|08401|granollers": {
+      "x": 2.2881422,
+      "y": 41.6045572
+    },
+    "calle joan prim 4, 08402, granollers|calle joan prim 4|08402|granollers": {
+      "x": 2.2901251,
+      "y": 41.6136387
+    },
+    "carrer de gaietà ventalló 33, 08100, mollet del valles|carrer de gaietà ventalló 33|08100|mollet del valles": {
+      "x": 2.2174068,
+      "y": 41.5416023
+    },
+    "rambla nova 10, 08100, mollet del vallès|rambla nova 10|08100|mollet del vallès": {
+      "x": 2.2112807,
+      "y": 41.5385814
+    },
+    "avinguda de jaume i 57, 08100, mollet del valles|avinguda de jaume i 57|08100|mollet del valles": {
+      "x": 2.2128459,
+      "y": 41.5397838
+    },
+    "rambla nova 3, 08100, mollet del valles|rambla nova 3|08100|mollet del valles": {
+      "x": 2.2113467,
+      "y": 41.5382678
+    },
+    "plaça major 9, 08100, mollet del valles|plaça major 9|08100|mollet del valles": {
+      "x": 2.2108503,
+      "y": 41.5364584
+    },
+    "passatge sant miquel 10, 08100, mollet del valles|passatge sant miquel 10|08100|mollet del valles": {
+      "x": 2.2120439,
+      "y": 41.5373051
+    },
+    "carrer de berenguer iii s/n, 08100, mollet del valles|carrer de berenguer iii s/n|08100|mollet del valles": {
+      "x": 2.2155201,
+      "y": 41.5362472
+    },
+    "avinguda de la llibertat 20, 08100, mollet del valles|avinguda de la llibertat 20|08100|mollet del valles": {
+      "x": 2.2113414,
+      "y": 41.535897
+    },
+    "rambla pompeu fabra 4, 08100, mollet del vallès|rambla pompeu fabra 4|08100|mollet del vallès": {
+      "x": 2.2196256,
+      "y": 41.5430079
+    },
+    "carrer de la pau 28, 08100, mollet del valles|carrer de la pau 28|08100|mollet del valles": {
+      "x": 2.2141858,
+      "y": 41.5380416
+    },
+    "rambla de pompeu fabra 14, 08100, mollet del valles|rambla de pompeu fabra 14|08100|mollet del valles": {
+      "x": 2.2176096,
+      "y": 41.5388602
+    },
+    "carrer d'anselm clavé 15, 08100, mollet del valles|carrer d'anselm clavé 15|08100|mollet del valles": {
+      "x": 2.2143873,
+      "y": 41.538729
+    },
+    "rambla pompeu fabra 7, 08100, mollet del valles|rambla pompeu fabra 7|08100|mollet del valles": {
+      "x": 2.2214413,
+      "y": 41.546403
+    },
+    "antoni gaudi 10, 08100, mollet del valles|antoni gaudi 10|08100|mollet del valles": {
+      "x": 2.217888,
+      "y": 41.5446079
+    },
+    "carrer de can pantiquet 18, 08100, mollet del valles|carrer de can pantiquet 18|08100|mollet del valles": {
+      "x": 2.2172757,
+      "y": 41.5433182
+    },
+    "carrer de can pantiquet s/n, 08100, mollet del valles|carrer de can pantiquet s/n|08100|mollet del valles": {
+      "x": 2.2172757,
+      "y": 41.5433182
+    },
+    "paisos catalans sn, 08186, lliça d´amunt|paisos catalans sn|08186|lliça d´amunt": {
+      "x": 2.2435372,
+      "y": 41.6056175
+    },
+    "carrer baronia de montbui 42, 08186, lliçà d'amunt|carrer baronia de montbui 42|08186|lliçà d'amunt": {
+      "x": 2.2385231,
+      "y": 41.6086616
+    },
+    "carrer de la ribera d'ebre 56, 08186, lliçà d'amunt|carrer de la ribera d'ebre 56|08186|lliçà d'amunt": {
+      "x": 2.2174176,
+      "y": 41.6156392
+    },
+    "carrer l'aliança 17, 08186, lliçà d'amunt|carrer l'aliança 17|08186|lliçà d'amunt": {
+      "x": 2.2394306,
+      "y": 41.6108773
+    },
+    "carretera caldes 151, 08186, lliça d'amunt|carretera caldes 151|08186|lliça d'amunt": {
+      "x": 2.2315221,
+      "y": 41.6290298
+    },
+    "plaça de la vila s/n, 08185, lliçà de vall|plaça de la vila s/n|08185|lliçà de vall": {
+      "x": 2.2398562,
+      "y": 41.5862431
+    },
+    "can roure 18, 08186, lliça d´amunt|can roure 18|08186|lliça d´amunt": {
+      "x": 2.206155,
+      "y": 41.5939961
+    },
+    "passeig de sant valerià 171, 08186, lliçà d'amunt|passeig de sant valerià 171|08186|lliçà d'amunt": {
+      "x": 2.2110415,
+      "y": 41.600613
+    },
+    "carrer de l'alzina 29, 08186, lliçà d'amunt|carrer de l'alzina 29|08186|lliçà d'amunt": {
+      "x": 2.1990757,
+      "y": 41.6023153
+    },
+    "carrer de palaudàries 88, 08186, lliçà d'amunt|carrer de palaudàries 88|08186|lliçà d'amunt": {
+      "x": 2.2111398,
+      "y": 41.6153669
+    },
+    "passeig de can salgot 29, 08186, lliçà d'amunt|passeig de can salgot 29|08186|lliçà d'amunt": {
+      "x": 2.208504,
+      "y": 41.5911301
+    },
+    "carretera palaudaries 79, 08186, lliçà d'amunt|carretera palaudaries 79|08186|lliçà d'amunt": {
+      "x": 2.2048469,
+      "y": 41.5897504
+    },
+    "la salut 37 a, 08150, parets del valles|la salut 37 a|08150|parets del valles": {
+      "x": 2.2192748,
+      "y": 41.5606736
+    },
+    "carrer de prat de la riba 31, 08150, parets del valles|carrer de prat de la riba 31|08150|parets del valles": {
+      "x": 2.2297944,
+      "y": 41.5623467
+    },
+    "avinguda de catalunya 129, 08150, parets del valles|avinguda de catalunya 129|08150|parets del valles": {
+      "x": 2.2291461,
+      "y": 41.5653225
+    },
+    "carrer major 27, 08160, montmeló|carrer major 27|08160|montmeló": {
+      "x": 2.247244,
+      "y": 41.5510434
+    },
+    "major 1, 08160, montmeló|major 1|08160|montmeló": {
+      "x": 2.247244,
+      "y": 41.5510434
+    },
+    "ronda francesc macia 18, 08302, mataró|ronda francesc macia 18|08302|mataró": {
+      "x": 2.4376667,
+      "y": 41.5333393
+    },
+    "carrer de sant quinti 45, 17534, ribes de freser|carrer de sant quinti 45|17534|ribes de freser": {
+      "x": 2.1669895,
+      "y": 42.30526
+    },
+    "plaça del dr. robert 1, 17867, camprodon|plaça del dr. robert 1|17867|camprodon": {
+      "x": 2.3645719,
+      "y": 42.3138407
+    },
+    "plaça major 36, 08500, vic|plaça major 36|08500|vic": {
+      "x": 2.2550951,
+      "y": 41.930535
+    },
+    "c-17 17, 17500, ripoll|c-17 17|17500|ripoll": {
+      "x": 2.190365,
+      "y": 42.1972307
+    },
+    "bp-4654 km 1.2, 08588, sora|bp-4654 km 1.2|08588|sora": {
+      "x": 2.1459742,
+      "y": 42.0882472
+    },
+    "carretera vidra km 1, 08584, santa maria de besora|carretera vidra km 1|08584|santa maria de besora": {
+      "x": 2.2329126,
+      "y": 42.1159925
+    },
+    "carrer del mestre quer 12, 08580, sant quirze de besora|carrer del mestre quer 12|08580|sant quirze de besora": {
+      "x": 2.2166902,
+      "y": 42.1019282
+    },
+    "avinguda gaudí 34, 08512, sant hipòlit de voltregà|avinguda gaudí 34|08512|sant hipòlit de voltregà": {
+      "x": 2.2426701,
+      "y": 42.0141895
+    },
+    "carrer núria 103, 08570, torelló|carrer núria 103|08570|torelló": {
+      "x": 2.2558746,
+      "y": 42.0502743
+    },
+    "carrer del ter 172, 08570, torelló|carrer del ter 172|08570|torelló": {
+      "x": 2.2484512,
+      "y": 42.0502768
+    },
+    "carrer francesc puget 2, 08560, manlleu|carrer francesc puget 2|08560|manlleu": {
+      "x": 2.296083,
+      "y": 42.00425
+    },
+    "carretera bv-5224 (torello) km 1, 08560, manlleu|carretera bv-5224 (torello) km 1|08560|manlleu": {
+      "x": 2.283582,
+      "y": 42.0044515
+    },
+    "carretera olot 77, 08560, manlleu|carretera olot 77|08560|manlleu": {
+      "x": 2.2916854,
+      "y": 42.003418
+    },
+    "carrer matagalls 75, 08508, les masies de voltregà|carrer matagalls 75|08508|les masies de voltregà": {
+      "x": 2.2416134,
+      "y": 42.0085305
+    },
+    "plaça de la pietat 1, 08500, vic|plaça de la pietat 1|08500|vic": {
+      "x": 2.2566345,
+      "y": 41.9290046
+    },
+    "major 45, 08170, montornès del vallès|major 45|08170|montornès del vallès": {
+      "x": 2.2715782,
+      "y": 41.5403003
+    },
+    "carrer de federico garcía lorca 12, 08170, montornes del valles|carrer de federico garcía lorca 12|08170|montornes del valles": {
+      "x": 2.2688098,
+      "y": 41.554961
+    },
+    "carrer de federico garcía lorca 25, 08170, montornès del vallès|carrer de federico garcía lorca 25|08170|montornès del vallès": {
+      "x": 2.2688098,
+      "y": 41.554961
+    },
+    "carrer major 57, 08170, montornès del vallès|carrer major 57|08170|montornès del vallès": {
+      "x": 2.265765,
+      "y": 41.5424778
+    },
+    "carrer joaquim blume 13, 08105, sant fost de campsentelles|carrer joaquim blume 13|08105|sant fost de campsentelles": {
+      "x": 2.2414088,
+      "y": 41.5116025
+    },
+    "can fenosa 1-2 -, 08107, martorelles|can fenosa 1-2 -|08107|martorelles": {
+      "x": 2.234261,
+      "y": 41.5377331
+    },
+    "ramon llull 9, 08401, granollers|ramon llull 9|08401|granollers": {
+      "x": 2.28711,
+      "y": 41.6140501
     }
   }
 }
