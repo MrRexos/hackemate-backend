@@ -1,5 +1,5 @@
 /**
- * Geometries OSRM tram per tram + HTML Leaflet (mateixa visualització que `prova-100-bcn-html.js`).
+ * Geometries OSRM tram per tram + HTML Leaflet per al pipeline Excel → rutes.
  */
 
 import { mkdir, writeFile } from 'node:fs/promises';

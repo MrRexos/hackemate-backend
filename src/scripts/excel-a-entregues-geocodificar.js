@@ -96,6 +96,7 @@ export const QUANTITAT_DIES_DEFECTE_GEOCODE = 1;
 /** Per defecte només es geocodifiquen les primeres N entregues (després d’agrupar). `0` = sense límit. */
 export const DEFAULT_MAX_ENTREGUES_GEOCODE = 500;
 
+/** Escriu una línia d’estat numerada (`pas X/7`) per seguir el pipeline a consola. */
 function pasLog(pas, msg, ok = true) {
   const estat = ok ? 'OK' : 'KO';
   console.log(`[excel→rutes] pas ${pas}/${TOTAL_PASSOS} · ${msg} · ${estat}`);
@@ -115,6 +116,7 @@ export function centreMitjanaEntregues(entregues) {
 }
 
 /**
+ * Converteix una cadena «lon,lat» (coma, espai o punt i coma) en punt per al magatzem.
  * @param {string} str «lon,lat» o separadors espais
  * @returns {{ x: number, y: number }|null}
  */
@@ -191,6 +193,9 @@ export function resolMagatzem(_entreguesValides, args) {
   };
 }
 
+/**
+ * Construeix l’objecte JSON pla que es desa a `output/excel-rutes.json` (rutes, parades, pedidos resumits, meta).
+ */
 function serialitzaResultatOptim(resultat, magatzem, meta) {
   return {
     generat: new Date().toISOString(),
@@ -241,10 +246,14 @@ function serialitzaResultatOptim(resultat, magatzem, meta) {
   };
 }
 
+/** Pausa async (respectar límit de peticions Nominatim entre entregues). */
 function espera(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/**
+ * Llegeix flags CLI (`--dia`, `--max`, `--excel`, `--horaris`, `--sense-geocode`, etc.) i retorna objecte normalitzat.
+ */
 function parseArgs(argv) {
   /** @type {{ salt: number|null, rutaExcel: string|null, totesDies: boolean, diaManual?: string|null, maxEntregues?: number, magatzemStr?: string|null, rutaHoraris?: string|null, senseGeocode?: boolean, flagsDesconeguts: string[] }} */
   const out = {
@@ -310,6 +319,7 @@ function parseArgs(argv) {
   return out;
 }
 
+/** Camí absolut al xlsx d’horaris: `--horaris`, `HORARIS_EXCEL_PATH` o defecte del mòdul reader. */
 function resolRutaHorarisExcel(args) {
   if (args.rutaHoraris) return args.rutaHoraris;
   const env = process.env.HORARIS_EXCEL_PATH?.trim();
@@ -436,10 +446,12 @@ export function filtraPedidosPerDiaConcret(pedidos, diaInput) {
   return { pedidos: filtrats, diaNormalitzat: clau };
 }
 
+/** True si l’entrega té `coordenades` amb lon/lat vàlids (pot entrar al sweep). */
 function coordenadesValides(entrega) {
   return normalitzaCoordenades(entrega.coordenades) != null;
 }
 
+/** Resum textual final del lot (filtres de dia, geocodificació, entregues descartades). */
 function imprimeixVeredicte(resum) {
   const {
     pedidosExcelTotals = null,
@@ -535,6 +547,10 @@ function imprimeixVeredicte(resum) {
   );
 }
 
+/**
+ * Pipeline sencer: llegir Excel → filtrar dies → agrupar entregues → horaris → geocodificar →
+ * {@link generarRutes} → geometries OSRM → escriure `output/excel-rutes.json` + `.html`.
+ */
 async function main() {
   const args = parseArgs(process.argv);
   if (args.flagsDesconeguts.length > 0) {
