@@ -1,6 +1,9 @@
 /**
  * Llegeix entregues des de Supabase, executa l’algoritme de rutes i escriu un informe HTML + resum per consola.
  *
+ * Script relacionat (sense BD — 100 entregues aleatòries Barcelona + mapa OSRM): vegeu
+ * `src/scripts/prova-100-bcn-html.js` · `npm run prova:100-bcn-html`
+ *
  * Ús:
  *   npm run planificacio:informe
  *

@@ -8,7 +8,8 @@
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
     "main": "node src/main.js",
-    "planificacio:informe": "node src/scripts/planificacio-rutes-informe.js"
+    "planificacio:informe": "node src/scripts/planificacio-rutes-informe.js",
+    "prova:100-bcn-html": "node src/scripts/prova-100-bcn-html.js"
   },
   "keywords": [
     "hackemate",
