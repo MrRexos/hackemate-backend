@@ -197,6 +197,10 @@ export async function calculaGeometriesRutes(rutes, centre, opts = {}) {
  */
 export function construeixPayloadVisual(resultat, visualData, centre, meta) {
   const { titol, entreguesTotals } = meta;
+  const kmTotalsFlotaOsrm =
+    Array.isArray(visualData) && visualData.length > 0
+      ? visualData.reduce((acc, v) => acc + Number(v?.distanciaMetres ?? 0) / 1000, 0)
+      : 0;
   const viatgesPerCamio = Object.create(null);
 
   const rutesVisual = resultat.rutes.map((ruta, rutaIdx) => {
@@ -243,6 +247,7 @@ export function construeixPayloadVisual(resultat, visualData, centre, meta) {
     titol,
     rutes: rutesVisual,
     visualData,
+    kmTotalsFlotaOsrm,
     noAssignades: resultat.entreguesNoAssignades.length,
     noAssignadesDetall: resultat.entreguesNoAssignades.map((e) => ({
       id: e.identificador,
@@ -325,7 +330,8 @@ document.getElementById('meta').innerHTML=
   '<strong>Entregues (entrada):</strong> '+data.entreguesTotals+
   ' · <strong>Assignades:</strong> '+data.assignades+
   ' · <strong>Rutes:</strong> '+data.rutes.length+
-  ' · <strong>No assignades:</strong> '+data.noAssignades;
+  ' · <strong>No assignades:</strong> '+data.noAssignades+
+  ' · <strong>Km totals flota (OSRM):</strong> '+Number(data.kmTotalsFlotaOsrm!=null?data.kmTotalsFlotaOsrm:0).toFixed(1)+' km';
 
 (function(){
   const w=document.getElementById('noAssignWrap');
@@ -337,15 +343,18 @@ document.getElementById('meta').innerHTML=
 (function(){
   var el=document.getElementById('kpisRutes');
   if(!data.rutes||!data.rutes.length){el.innerHTML='';return;}
-  var sumKm=0,nParades=0,c=0,sumPct=0;
+  var sumKm=Number.isFinite(Number(data.kmTotalsFlotaOsrm))?Number(data.kmTotalsFlotaOsrm):0;
+  if(!sumKm&&data.visualData&&data.visualData.length){
+    data.visualData.forEach(function(v){sumKm+=Number(v.distanciaMetres||0)/1000;});
+  }
+  var nParades=0,c=0,sumPct=0;
   data.rutes.forEach(function(r,i){
-    sumKm+=Number(data.visualData[i].distanciaMetres||0)/1000;
     nParades+=(r.entregues&&r.entregues.length)||0;
     if(Number(r.capacitatOperativaMax)>0){sumPct+=Number(r.percentatgeDelLimitOperatiu||0);c+=1;}
   });
   var avgFill=c?Math.round((sumPct/c)*10)/10:null;
-  el.innerHTML='<div class="kpi"><b>'+data.rutes.length+'</b> rutes</div>'+
-    '<div class="kpi"><b>'+sumKm.toFixed(1)+' km</b> distància OSRM (suma)</div>'+
+  el.innerHTML='<div class="kpi"><b>'+data.rutes.length+'</b> rutes / viatges</div>'+
+    '<div class="kpi"><b>'+sumKm.toFixed(1)+' km</b> totals flota (OSRM, suma de totes les rutes)</div>'+
     '<div class="kpi"><b>'+nParades+'</b> parades</div>'+
     (avgFill!=null?'<div class="kpi"><b>'+avgFill+'%</b> mitjana emplenament (vs útil)</div>':'');
 })();

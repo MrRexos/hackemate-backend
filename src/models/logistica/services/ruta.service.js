@@ -299,7 +299,8 @@ function creaRutaNovaPerEntrega(entrega, flotaCamions, index) {
     entregues: [],
     volumOcupat: 0,
     teCapacitatPer(entregaActual) {
-      return volumPermetAfegirACamio(this.volumOcupat, entregaActual?.volumTotal ?? 0, this.camio);
+      const occ = this.entregues.reduce((acc, e) => acc + Number(e.volumTotal || 0), 0);
+      return volumPermetAfegirACamio(occ, entregaActual?.volumTotal ?? 0, this.camio);
     },
     afegirEntrega(entregaActual) {
       this.entregues.push(entregaActual);

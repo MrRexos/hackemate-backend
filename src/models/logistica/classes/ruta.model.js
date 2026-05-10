@@ -45,7 +45,8 @@ export class Ruta {
   }
 
   teCapacitatPer(entrega) {
-    return volumPermetAfegirACamio(this.volumOcupat, entrega?.volumTotal ?? 0, this.camio);
+    const occ = this.entregues.reduce((acc, e) => acc + Number(e.volumTotal || 0), 0);
+    return volumPermetAfegirACamio(occ, entrega?.volumTotal ?? 0, this.camio);
   }
 
   afegirEntrega(entrega) {
