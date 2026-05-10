@@ -1,0 +1,210 @@
+{
+  "generat": "2026-05-10T00:10:06.858Z",
+  "magatzem": {
+    "x": 2.1718,
+    "y": 41.5278
+  },
+  "distanciaAnellKm": null,
+  "dataset": {
+    "fontDades": "excel",
+    "fitxerExcel": "C:\\Users\\victo\\Documents\\HackeMate\\hackemate-backend\\fixtures\\excel\\comandes-prova.xlsx",
+    "totalEntregues": 2,
+    "totalReferenciesPedido": 3,
+    "pedidosPerEntrega": null,
+    "optimitzacioIntraRutaCarreteraOsrm": false,
+    "osrmRouterUrlPerDefecte": "https://router.project-osrm.org"
+  },
+  "estadistiques": {
+    "nombreRutes": 2,
+    "mitjanaPercentatgeOcupacioUtilPerRuta_fisics": 11.9,
+    "mitjanaPercentatgeOcupacioUtilPerRuta_incloentVirtuals": 11.9,
+    "nombreCamionsAmbAlMenysUnaRuta": 1
+  },
+  "perCamio": {
+    "VHC-MOL-1": [
+      {
+        "indexRuta": 0,
+        "camio": {
+          "id": "VHC-MOL-1",
+          "capacitatMaxima": 180,
+          "capacitatOperativaMaxima": 167.4
+        },
+        "volumOcupat": 20,
+        "percentatgeOcupacioUtil": 11.9,
+        "virtual": false,
+        "horaSortidaMagatzem": "09:00",
+        "horaArribadaMagatzem": "10:15",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-BAR-01",
+            "nom": "Bar Balmes",
+            "adreca": "Carrer de Balmes 90, Barcelona",
+            "coordenades": {
+              "x": 2.2008,
+              "y": 41.359120000000004
+            },
+            "horaInici": "09:00",
+            "horaFinal": null,
+            "volumTotal": 20,
+            "horaDEntrega": "09:00",
+            "pedidos": [
+              {
+                "nom": "Begudes",
+                "volumPerCaixa": 1,
+                "quantitatCaixes": 12,
+                "tipusCarrega": "caixa",
+                "volumTotal": 12
+              },
+              {
+                "nom": "Menjar sec",
+                "volumPerCaixa": 1,
+                "quantitatCaixes": 8,
+                "tipusCarrega": "caixa",
+                "volumTotal": 8
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 2
+      },
+      {
+        "indexRuta": 1,
+        "camio": {
+          "id": "VHC-MOL-1",
+          "capacitatMaxima": 180,
+          "capacitatOperativaMaxima": 167.4
+        },
+        "volumOcupat": 20,
+        "percentatgeOcupacioUtil": 11.9,
+        "virtual": false,
+        "horaSortidaMagatzem": "15:30",
+        "horaArribadaMagatzem": "16:45",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-BAR-02",
+            "nom": "Cafè Diagonal",
+            "adreca": "Avinguda Diagonal 420, Barcelona",
+            "coordenades": {
+              "x": 2.19525,
+              "y": 41.368120000000005
+            },
+            "horaInici": "15:30",
+            "horaFinal": null,
+            "volumTotal": 20,
+            "horaDEntrega": "15:30",
+            "pedidos": [
+              {
+                "nom": "Càpsules",
+                "volumPerCaixa": 1,
+                "quantitatCaixes": 20,
+                "tipusCarrega": "caixa",
+                "volumTotal": 20
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 2,
+        "totalViatgesCamio": 2
+      }
+    ]
+  },
+  "resultat": {
+    "rutes": [
+      {
+        "indexRuta": 0,
+        "camio": {
+          "id": "VHC-MOL-1",
+          "capacitatMaxima": 180,
+          "capacitatOperativaMaxima": 167.4
+        },
+        "volumOcupat": 20,
+        "percentatgeOcupacioUtil": 11.9,
+        "virtual": false,
+        "horaSortidaMagatzem": "09:00",
+        "horaArribadaMagatzem": "10:15",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-BAR-01",
+            "nom": "Bar Balmes",
+            "adreca": "Carrer de Balmes 90, Barcelona",
+            "coordenades": {
+              "x": 2.2008,
+              "y": 41.359120000000004
+            },
+            "horaInici": "09:00",
+            "horaFinal": null,
+            "volumTotal": 20,
+            "horaDEntrega": "09:00",
+            "pedidos": [
+              {
+                "nom": "Begudes",
+                "volumPerCaixa": 1,
+                "quantitatCaixes": 12,
+                "tipusCarrega": "caixa",
+                "volumTotal": 12
+              },
+              {
+                "nom": "Menjar sec",
+                "volumPerCaixa": 1,
+                "quantitatCaixes": 8,
+                "tipusCarrega": "caixa",
+                "volumTotal": 8
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 1,
+        "totalViatgesCamio": 2
+      },
+      {
+        "indexRuta": 1,
+        "camio": {
+          "id": "VHC-MOL-1",
+          "capacitatMaxima": 180,
+          "capacitatOperativaMaxima": 167.4
+        },
+        "volumOcupat": 20,
+        "percentatgeOcupacioUtil": 11.9,
+        "virtual": false,
+        "horaSortidaMagatzem": "15:30",
+        "horaArribadaMagatzem": "16:45",
+        "kmsConduccioObertaPerCarrers": null,
+        "optimitzacioOsrmAplicada": false,
+        "entregues": [
+          {
+            "identificador": "ENT-BAR-02",
+            "nom": "Cafè Diagonal",
+            "adreca": "Avinguda Diagonal 420, Barcelona",
+            "coordenades": {
+              "x": 2.19525,
+              "y": 41.368120000000005
+            },
+            "horaInici": "15:30",
+            "horaFinal": null,
+            "volumTotal": 20,
+            "horaDEntrega": "15:30",
+            "pedidos": [
+              {
+                "nom": "Càpsules",
+                "volumPerCaixa": 1,
+                "quantitatCaixes": 20,
+                "tipusCarrega": "caixa",
+                "volumTotal": 20
+              }
+            ]
+          }
+        ],
+        "viatgeNumero": 2,
+        "totalViatgesCamio": 2
+      }
+    ],
+    "entreguesNoAssignades": []
+  }
+}

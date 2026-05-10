@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rutes joc de proves — Mollet</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, sans-serif; display: flex; height: 100vh; }
+    #map { flex: 1; min-height: 280px; }
+    #panel { width: min(420px, 100vw); overflow: auto; border-left: 1px solid #ccc; padding: 12px; background: #fafafa; }
+    h1 { font-size: 1.1rem; margin: 0 0 8px; }
+    h2 { font-size: 0.95rem; margin: 16px 0 8px; color: #333; }
+    .stats { background: #fff; padding: 10px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #e0e0e0; }
+    .camio-block { margin-bottom: 14px; padding: 10px; background: #fff; border-radius: 8px; border: 1px solid #ddd; }
+    .camio-title { font-weight: 600; margin-bottom: 6px; }
+    .trip { font-size: 0.85rem; margin: 6px 0; padding: 6px; background: #f5f5f5; border-radius: 6px; }
+    .bar { height: 8px; background: #e0e0e0; border-radius: 4px; overflow: hidden; margin-top: 4px; }
+    .bar > span { display: block; height: 100%; background: linear-gradient(90deg, #2e7d32, #66bb6a); }
+    label { font-size: 0.8rem; display: block; margin-bottom: 4px; }
+    select { width: 100%; padding: 6px; margin-bottom: 10px; }
+    .meta { font-size: 0.75rem; color: #666; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div id="panel">
+    <h1 id="titRutes">Rutes (joc de proves Mollet ~20 km)</h1>
+    <p class="meta" id="metaOpt">Magatzem: centre rodona Mollet · colors per ruta · filtre per camió</p>
+    <div class="stats" id="stats"></div>
+    <label for="filtreCamio">Mostrar camió</label>
+    <select id="filtreCamio"><option value="">Tots els camions</option></select>
+    <div id="detallCamions"></div>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script type="application/json" id="payload">{"generat":"2026-05-10T00:10:06.858Z","magatzem":{"x":2.1718,"y":41.5278},"distanciaAnellKm":null,"dataset":{"fontDades":"excel","fitxerExcel":"C:\\Users\\victo\\Documents\\HackeMate\\hackemate-backend\\fixtures\\excel\\comandes-prova.xlsx","totalEntregues":2,"totalReferenciesPedido":3,"pedidosPerEntrega":null,"optimitzacioIntraRutaCarreteraOsrm":false,"osrmRouterUrlPerDefecte":"https://router.project-osrm.org"},"estadistiques":{"nombreRutes":2,"mitjanaPercentatgeOcupacioUtilPerRuta_fisics":11.9,"mitjanaPercentatgeOcupacioUtilPerRuta_incloentVirtuals":11.9,"nombreCamionsAmbAlMenysUnaRuta":1},"perCamio":{"VHC-MOL-1":[{"indexRuta":0,"camio":{"id":"VHC-MOL-1","capacitatMaxima":180,"capacitatOperativaMaxima":167.4},"volumOcupat":20,"percentatgeOcupacioUtil":11.9,"virtual":false,"horaSortidaMagatzem":"09:00","horaArribadaMagatzem":"10:15","kmsConduccioObertaPerCarrers":null,"optimitzacioOsrmAplicada":false,"entregues":[{"identificador":"ENT-BAR-01","nom":"Bar Balmes","adreca":"Carrer de Balmes 90, Barcelona","coordenades":{"x":2.2008,"y":41.359120000000004},"horaInici":"09:00","horaFinal":null,"volumTotal":20,"horaDEntrega":"09:00","pedidos":[{"nom":"Begudes","volumPerCaixa":1,"quantitatCaixes":12,"tipusCarrega":"caixa","volumTotal":12},{"nom":"Menjar sec","volumPerCaixa":1,"quantitatCaixes":8,"tipusCarrega":"caixa","volumTotal":8}]}],"viatgeNumero":1,"totalViatgesCamio":2},{"indexRuta":1,"camio":{"id":"VHC-MOL-1","capacitatMaxima":180,"capacitatOperativaMaxima":167.4},"volumOcupat":20,"percentatgeOcupacioUtil":11.9,"virtual":false,"horaSortidaMagatzem":"15:30","horaArribadaMagatzem":"16:45","kmsConduccioObertaPerCarrers":null,"optimitzacioOsrmAplicada":false,"entregues":[{"identificador":"ENT-BAR-02","nom":"Cafè Diagonal","adreca":"Avinguda Diagonal 420, Barcelona","coordenades":{"x":2.19525,"y":41.368120000000005},"horaInici":"15:30","horaFinal":null,"volumTotal":20,"horaDEntrega":"15:30","pedidos":[{"nom":"Càpsules","volumPerCaixa":1,"quantitatCaixes":20,"tipusCarrega":"caixa","volumTotal":20}]}],"viatgeNumero":2,"totalViatgesCamio":2}]},"resultat":{"rutes":[{"indexRuta":0,"camio":{"id":"VHC-MOL-1","capacitatMaxima":180,"capacitatOperativaMaxima":167.4},"volumOcupat":20,"percentatgeOcupacioUtil":11.9,"virtual":false,"horaSortidaMagatzem":"09:00","horaArribadaMagatzem":"10:15","kmsConduccioObertaPerCarrers":null,"optimitzacioOsrmAplicada":false,"entregues":[{"identificador":"ENT-BAR-01","nom":"Bar Balmes","adreca":"Carrer de Balmes 90, Barcelona","coordenades":{"x":2.2008,"y":41.359120000000004},"horaInici":"09:00","horaFinal":null,"volumTotal":20,"horaDEntrega":"09:00","pedidos":[{"nom":"Begudes","volumPerCaixa":1,"quantitatCaixes":12,"tipusCarrega":"caixa","volumTotal":12},{"nom":"Menjar sec","volumPerCaixa":1,"quantitatCaixes":8,"tipusCarrega":"caixa","volumTotal":8}]}],"viatgeNumero":1,"totalViatgesCamio":2},{"indexRuta":1,"camio":{"id":"VHC-MOL-1","capacitatMaxima":180,"capacitatOperativaMaxima":167.4},"volumOcupat":20,"percentatgeOcupacioUtil":11.9,"virtual":false,"horaSortidaMagatzem":"15:30","horaArribadaMagatzem":"16:45","kmsConduccioObertaPerCarrers":null,"optimitzacioOsrmAplicada":false,"entregues":[{"identificador":"ENT-BAR-02","nom":"Cafè Diagonal","adreca":"Avinguda Diagonal 420, Barcelona","coordenades":{"x":2.19525,"y":41.368120000000005},"horaInici":"15:30","horaFinal":null,"volumTotal":20,"horaDEntrega":"15:30","pedidos":[{"nom":"Càpsules","volumPerCaixa":1,"quantitatCaixes":20,"tipusCarrega":"caixa","volumTotal":20}]}],"viatgeNumero":2,"totalViatgesCamio":2}],"entreguesNoAssignades":[]}}</script>
+  <script>
+    const payload = JSON.parse(document.getElementById('payload').textContent);
+    const magatzem = payload.magatzem;
+    const colors = ['#c62828','#1565c0','#2e7d32','#6a1b9a','#ef6c00','#00838f','#ad1457','#37474f','#558b2f','#4527a0'];
+    const map = L.map('map').setView([magatzem.y, magatzem.x], 10);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(map);
+    L.marker([magatzem.y, magatzem.x], { title: 'Magatzem' }).addTo(map).bindPopup('Magatzem (centre Mollet)');
+    const layers = { all: [] };
+    const rutes = payload.resultat.rutes;
+    rutes.forEach((ruta, i) => {
+      const c = colors[i % colors.length];
+      const latlngs = [[magatzem.y, magatzem.x]];
+      ruta.entregues.forEach((e) => {
+        if (e.coordenades && e.coordenades.x != null) latlngs.push([e.coordenades.y, e.coordenades.x]);
+      });
+      const poly = L.polyline(latlngs, { color: c, weight: 4, opacity: 0.85 }).addTo(map);
+      var kmTxt = (ruta.kmsConduccioObertaPerCarrers != null) ? (' · ~' + ruta.kmsConduccioObertaPerCarrers + ' km carretera (obert)') : '';
+      poly.bindPopup('Ruta ' + (i+1) + ' · ' + (ruta.camio && ruta.camio.id) + ' · ' + (ruta.percentatgeOcupacioUtil||0) + '% útil' + kmTxt);
+      layers.all.push({ poly, camioId: String(ruta.camio && ruta.camio.id || '') });
+      ruta.entregues.forEach((e) => {
+        if (e.coordenades && e.coordenades.x != null) {
+          L.circleMarker([e.coordenades.y, e.coordenades.x], { radius: 6, color: c, fillColor: c, fillOpacity: 0.7 })
+            .addTo(map).bindPopup((e.identificador||'') + '<br/>' + (e.nom||''));
+        }
+      });
+    });
+    try {
+      const b = L.latLngBounds([[magatzem.y, magatzem.x]]);
+      rutes.forEach(r => r.entregues.forEach(e => { if (e.coordenades) b.extend([e.coordenades.y, e.coordenades.x]); }));
+      map.fitBounds(b, { padding: [36, 36] });
+    } catch (_) {}
+    const ds = payload.dataset || {};
+    const st = payload.estadistiques;
+    if (ds.fontDades === 'excel') {
+      document.getElementById('titRutes').textContent =
+        'Rutes (Excel → ' + (ds.fitxerExcel || '').replace(/</g,'') + ')';
+    }
+    var optTxt = ds.optimitzacioIntraRutaCarreteraOsrm
+      ? 'ETA i km obert: OSRM (project-osrm) quan hi ha ≥2 parades; mapa en cordes rectes.'
+      : 'Mode ràpid: sense OSRM (temps com a línia recta).';
+    document.getElementById('metaOpt').textContent = 'Magatzem: centre rodona Mollet · ' + optTxt;
+    document.getElementById('stats').innerHTML =
+      '<strong>Resum</strong><br/>'
+      + 'Rutes: ' + st.nombreRutes + '<br/>'
+      + 'Mitjana ocupació útil (només físics): <strong>' + st.mitjanaPercentatgeOcupacioUtilPerRuta_fisics + '%</strong><br/>'
+      + 'Mitjana amb virtuals: ' + st.mitjanaPercentatgeOcupacioUtilPerRuta_incloentVirtuals + '%<br/>'
+      + 'Camions usats: ' + st.nombreCamionsAmbAlMenysUnaRuta;
+    const perCamio = payload.perCamio;
+    const sel = document.getElementById('filtreCamio');
+    const ids = Object.keys(perCamio).sort();
+    ids.forEach(id => {
+      const o = document.createElement('option');
+      o.value = id; o.textContent = id + ' (' + perCamio[id].length + ' viatge(s))';
+      sel.appendChild(o);
+    });
+    function applyFilter() {
+      const v = sel.value;
+      layers.all.forEach(({ poly, camioId }) => {
+        if (!v || camioId === v) poly.addTo(map);
+        else map.removeLayer(poly);
+      });
+    }
+    sel.addEventListener('change', applyFilter);
+    let html = '';
+    ids.forEach(id => {
+      html += '<div class="camio-block"><div class="camio-title">' + id.replace(/</g,'') + '</div>';
+      perCamio[id].forEach(r => {
+        const pct = r.percentatgeOcupacioUtil || 0;
+        var nPar = (r.entregues && r.entregues.length) ? r.entregues.length : 0;
+        var kmLine = (r.kmsConduccioObertaPerCarrers != null)
+          ? '<br/>Conducció oberta ~<strong>' + r.kmsConduccioObertaPerCarrers + ' km</strong> (OSRM)'
+          : (nPar < 2 ? '<br/><span style="color:#888">1 parada: el motor no fa tour OSRM (només temps recta)</span>' : '');
+        html += '<div class="trip">Viatge ' + r.viatgeNumero + '/' + r.totalViatgesCamio
+          + ' · Sortida ~' + (r.horaSortidaMagatzem||'—') + ' · Tornada ~' + (r.horaArribadaMagatzem||'—')
+          + '<br/>Càrrega ' + r.volumOcupat + ' / ' + r.camio.capacitatOperativaMaxima.toFixed(1) + ' útil (' + pct + '%)'
+          + kmLine
+          + '<div class="bar"><span style="width:' + Math.min(100, pct) + '%"></span></div></div>';
+      });
+      html += '</div>';
+    });
+    document.getElementById('detallCamions').innerHTML = html;
+  </script>
+</body>
+</html>
