@@ -1,3 +1,4 @@
+import { volumPermetAfegirACamio } from '../constants/capacitat-camio.constants.js';
 import { asseguraArray } from '../validators/logistica.validators.js';
 import { construeixEntrega } from '../utils/entrega.utils.js';
 import { coordenadesPolarsRespecteCentre, normalitzaCoordenades, normalitzaPuntRuta } from '../utils/coordenades.utils.js';
@@ -291,14 +292,15 @@ function teFinestresValides(ruta, context) {
 
 function creaRutaNovaPerEntrega(entrega, flotaCamions, index) {
   const volumEntrega = Number(entrega.volumTotal || 0);
-  const camio = flotaCamions.find((c) => Number(c.capacitatMaxima || 0) >= volumEntrega);
+  const camio = flotaCamions.find((c) => volumPermetAfegirACamio(0, volumEntrega, c));
   if (!camio) return null;
   return {
     camio: { id: camio.id ?? `camio-${index}`, capacitatMaxima: Number(camio.capacitatMaxima) },
     entregues: [],
     volumOcupat: 0,
     teCapacitatPer(entregaActual) {
-      return this.volumOcupat + Number(entregaActual.volumTotal || 0) <= Number(this.camio?.capacitatMaxima || 0);
+      const occ = this.entregues.reduce((acc, e) => acc + Number(e.volumTotal || 0), 0);
+      return volumPermetAfegirACamio(occ, entregaActual?.volumTotal ?? 0, this.camio);
     },
     afegirEntrega(entregaActual) {
       this.entregues.push(entregaActual);

@@ -1,13 +1,24 @@
 import { Entrega } from './entrega.model.js';
+import { volumPermetAfegirACamio } from '../constants/capacitat-camio.constants.js';
 import { calculaTempsRutaAproximat, normalitzaEntregues, obtenirEntreguesAmbAngleDesDeCentre } from '../services/ruta.service.js';
 import { geocodificarAdreces, generarRutes } from '../services/sweep-optimizer.service.js';
 import { normalitzaPuntRuta } from '../utils/coordenades.utils.js';
 
 export class Ruta {
-  constructor({ camio, entregues = [], volumOcupat = 0 }) {
+  constructor({
+    camio,
+    entregues = [],
+    volumOcupat = 0,
+    horaSortidaMagatzemAproximada = null,
+    horaArribadaMagatzemAproximada = null,
+  }) {
     this.camio = camio;
     this.entregues = normalitzaEntregues(entregues, Entrega);
     this.volumOcupat = Number(volumOcupat) || this.entregues.reduce((acc, e) => acc + Number(e.volumTotal || 0), 0);
+    /** Sortida aproximada del magatzem (`HH:mm`); `null` fins el pla de rutes. */
+    this.horaSortidaMagatzemAproximada = horaSortidaMagatzemAproximada;
+    /** Retorn aproximat al magatzem (`HH:mm`); `null` fins el pla de rutes. */
+    this.horaArribadaMagatzemAproximada = horaArribadaMagatzemAproximada;
   }
 
   obtenirEntreguesAmbAngleDesDeCentre() {
@@ -34,7 +45,8 @@ export class Ruta {
   }
 
   teCapacitatPer(entrega) {
-    return this.volumOcupat + Number(entrega.volumTotal || 0) <= Number(this.camio?.capacitatMaxima || 0);
+    const occ = this.entregues.reduce((acc, e) => acc + Number(e.volumTotal || 0), 0);
+    return volumPermetAfegirACamio(occ, entrega?.volumTotal ?? 0, this.camio);
   }
 
   afegirEntrega(entrega) {

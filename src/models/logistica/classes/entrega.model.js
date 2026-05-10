@@ -2,8 +2,29 @@ import { Pedido } from './pedido.model.js';
 import { coordenadesPolarsRespecteCentre, normalitzaCoordenades } from '../utils/coordenades.utils.js';
 
 export class Entrega {
-  constructor({ adreca, pedidos = [], horaInici, horaFinal, identificador, coordenades, angle = null }) {
+  /**
+   * @param {object} params
+   * @param {string|null} [params.horaDEntrega] — `null` fins el pla de rutes (`actualitzaEtasRutes`).
+   */
+  constructor({
+    adreca,
+    carrer = null,
+    codiPostal = null,
+    municipi = null,
+    nom,
+    pedidos = [],
+    horaInici,
+    horaFinal,
+    identificador,
+    coordenades,
+    angle = null,
+    horaDEntrega = null,
+  }) {
     this.adreca = adreca ?? null;
+    this.carrer = carrer != null && String(carrer).trim() !== '' ? String(carrer).trim() : null;
+    this.codiPostal = codiPostal != null && String(codiPostal).trim() !== '' ? String(codiPostal).trim() : null;
+    this.municipi = municipi != null && String(municipi).trim() !== '' ? String(municipi).trim() : null;
+    this.nom = nom ?? null;
     this.pedidos = Entrega.normalitzaPedidos(pedidos);
     this.volumTotal = Entrega.calculaVolumTotal(this.pedidos);
     this.horaInici = horaInici;
@@ -11,6 +32,7 @@ export class Entrega {
     this.identificador = identificador;
     this.coordenades = Entrega.normalitzaCoordenades(coordenades);
     this.angle = Number.isFinite(Number(angle)) ? Number(angle) : null;
+    this.horaDEntrega = horaDEntrega ?? null;
   }
 
   static normalitzaPedidos(pedidos) {
