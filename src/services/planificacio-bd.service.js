@@ -27,7 +27,7 @@ export function obtenirMagatzemDesDeEnv() {
  * @param {boolean} [options.assignacioCompleta=false]
  * @param {boolean} [options.optimIntraRutaCarrers=true] — OSRM (requereix xarxa)
  * @param {boolean} [options.usaMockGeocodificacioSweep=true] — només afecta entregues sense coords al pas {@link generarRutes}
- * @param {object} [options.generarRutes] — altres opcions del sweep
+ * @param {object} [options.generarRutes] — altres opcions del sweep (`guardarResultatJsonPath`, etc.). També es pot definir `LOGISTICS_RUTES_OUTPUT_JSON` al `.env`.
  */
 export async function planificarRutesDesDeBaseDades(options = {}) {
   const entregues = await fetchEntregasFromSource(options.fetchEntregasOptions ?? {});

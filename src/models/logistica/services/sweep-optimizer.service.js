@@ -9,6 +9,7 @@ import {
   volumPermetAfegirACamio,
   volumSuperaLimitOperatiu,
 } from '../constants/capacitat-camio.constants.js';
+import { guardarResultatGenerarRutesJson } from './serialitza-resultat-rutes.js';
 
 const MIGDIA_MINUTS = 14 * 60;
 const TEMPS_SERVEI_MINUTS = 5;
@@ -264,6 +265,8 @@ export async function geocodificarAdreces(entregues, options = {}) {
  *   ignora finestres de client, relaxa (opcionalment) la tornada màxima al magatzem i permet **camions virtuals** si la flota
  *   física no té prou capacitat. Objectiu: reduir o eliminar entregues sense assignar (pot generar rutes fora de franja o amb vehicle fictici).
  *   `capacitatCamioVirtualMinima`, `relaxacioHorariMagatzemAssignacioCompleta` (per defecte relaxa tornada en aquesta passada).
+ * - **Persistència JSON:** `guardarResultatJsonPath` (cadena): escriu el vector de `rutes` i `entreguesNoAssignades` en aquest fitxer al finalitzar.
+ *   Si no s’indica, es fa servir `LOGISTICS_RUTES_OUTPUT_JSON` (variable d’entorn) quan estigui definida i no buida.
  *
  * **Doble torn (matí / tarda):** el mateix camió pot tenir **dues rutes** (un viatge matí i un altre tarda): entre fases es
  * tornen a posar tots els vehicles a `camionsDisponibles`, i no s’afegeixen parades de tarda a una ruta només de matí (i viceversa).
@@ -511,10 +514,24 @@ export async function generarRutes(llistaEntregues, flotaCamions, puntMagatzem, 
   /** Després de fusió / reubicació / canvi de vehicle per solapament: una passada final evita qualsevol excés residual. */
   corregirSobrecàrregaRutes(rutes, context, entreguesNoAssignades);
 
-  return {
+  const resultat = {
     rutes: rutes.filter((r) => r.entregues.length > 0),
     entreguesNoAssignades,
   };
+
+  const pathGuardat =
+    typeof options.guardarResultatJsonPath === 'string' && options.guardarResultatJsonPath.trim() !== ''
+      ? options.guardarResultatJsonPath.trim()
+      : typeof process.env.LOGISTICS_RUTES_OUTPUT_JSON === 'string' &&
+          process.env.LOGISTICS_RUTES_OUTPUT_JSON.trim() !== ''
+        ? process.env.LOGISTICS_RUTES_OUTPUT_JSON.trim()
+        : null;
+
+  if (pathGuardat) {
+    await guardarResultatGenerarRutesJson(pathGuardat, resultat, magatzem, { font: 'generarRutes' });
+  }
+
+  return resultat;
 }
 
 function preprocessaClusterRadiAngle(entregues, magatzem, radiUrbàKm) {

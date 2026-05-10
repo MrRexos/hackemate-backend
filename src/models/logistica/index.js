@@ -23,6 +23,10 @@ export {
   parseAdrecaConcatenadaEspanya,
 } from './services/geocodificar-adreca.service.js';
 export { descripcioMotiuNoAssignacio, geocodificarAdreces, generarRutes } from './services/sweep-optimizer.service.js';
+export {
+  guardarResultatGenerarRutesJson,
+  serialitzaResultatGenerarRutes,
+} from './services/serialitza-resultat-rutes.js';
 
 /** Pont BD ↔ optimizer (Supabase); vegeu també `src/data/database.js` i `src/data/repository.js`. */
 export { createSupabaseClient, assertSupabaseConfigured } from '../../data/database.js';

@@ -73,12 +73,16 @@ async function main() {
   const entregues = await generaCentEntreguesAleatoriesBarcelona();
   const flota = FLOTA_EXEMPLE_15_CAMIONS.perOptimizador();
 
+  const dirSortida = path.join(arrelBackend, 'output');
+  await mkdir(dirSortida, { recursive: true });
+
   console.log('Executant generarRutes (sweep)…');
   const resultat = await generarRutes(entregues, flota, MAGATZEM_BCN, {
     EntregaClass: Entrega,
     usaMock: true,
     assignacioCompleta: true,
     optimIntraRutaCarrers: true,
+    guardarResultatJsonPath: path.join(dirSortida, 'prova-100-bcn-rutes.json'),
   });
 
   console.log('Calculant geometria OSRM per al mapa…');
@@ -87,14 +91,13 @@ async function main() {
     titol: `${N_ENTREGUES} entregues aleatòries Barcelona`,
     entreguesTotals: entregues.length,
   });
-  const dirSortida = path.join(arrelBackend, 'output');
-  await mkdir(dirSortida, { recursive: true });
   const outputPath = await escriuHtmlVistaRutes(payload, path.join(dirSortida, 'prova-100-bcn.html'));
 
   const assignades = entregues.length - resultat.entreguesNoAssignades.length;
   console.log(`Assignades: ${assignades} / ${entregues.length}`);
   console.log(`Rutes: ${resultat.rutes.length} · No assignades: ${resultat.entreguesNoAssignades.length}`);
   console.log(`HTML: ${outputPath}`);
+  console.log(`JSON rutes: ${path.join(dirSortida, 'prova-100-bcn-rutes.json')}`);
 }
 
 const execDesDelCli =

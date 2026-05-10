@@ -41,4 +41,9 @@ export const env = {
   logisticsTablePedidos: process.env.LOGISTICS_TABLE_PEDIDOS?.trim() ?? 'logistics_pedidos',
   /** Taula on fer UPDATE de lat/long (sol coincidir amb la taula d’entregues del company). */
   logisticsEntreguesTable: process.env.LOGISTICS_ENTREGUES_TABLE ?? 'logistics_entregues',
+  /**
+   * Opcional: camí d’un fitxer JSON on `generarRutes` (sweep) desa el resultat (`rutes` + `entreguesNoAssignades`).
+   * Es pot sobreescriure amb l’opció `guardarResultatJsonPath`.
+   */
+  logisticsRutesOutputJson: process.env.LOGISTICS_RUTES_OUTPUT_JSON?.trim() || null,
 };
