@@ -550,7 +550,7 @@ async function main() {
 
   const resultat = await generarRutes(entregues, flota, magatzemUsat, {
     EntregaClass: Entrega,
-    usaMock: true,
+    usaMock: false,
     fetchImpl: fetch,
     assignacioCompleta: true,
     optimIntraRutaCarrers: !args.fast,

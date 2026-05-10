@@ -1,3 +1,4 @@
+import { geocodificarAdrecaNominatim } from './geocodificar-adreca.service.js';
 import { asseguraArray } from '../validators/logistica.validators.js';
 import { construeixEntrega } from '../utils/entrega.utils.js';
 import { coordenadesPolarsRespecteCentre, normalitzaCoordenades, normalitzaPuntRuta } from '../utils/coordenades.utils.js';
@@ -137,7 +138,8 @@ function diferenciaAngularGraus(a, b) {
 }
 
 export async function geocodificarAdreces(entregues, options = {}) {
-  const { usaMock = true, fetchImpl = fetch } = options;
+  /** Per defecte OSM/Nominatim (coordenades reals de l’adreça). Mock només amb `usaMock: true` explícit. */
+  const { usaMock = false, fetchImpl = fetch } = options;
   const llista = asseguraArray(entregues, 'entregues');
   const resultat = [];
 
@@ -1486,21 +1488,8 @@ function calculaQuantitatCaixesEntrega(entrega) {
   }, 0);
 }
 
-async function geocodificaAdrecaOSM(adreca, fetchImpl) {
-  const url = new URL('https://nominatim.openstreetmap.org/search');
-  url.searchParams.set('format', 'json');
-  url.searchParams.set('limit', '1');
-  url.searchParams.set('q', adreca);
-
-  const response = await fetchImpl(url, { headers: { 'User-Agent': 'HackeMate/1.0' } });
-  if (!response.ok) throw new Error(`Error geocodificant l'adreca (${response.status}).`);
-
-  const resultats = await response.json();
-  if (!Array.isArray(resultats) || resultats.length === 0) {
-    throw new Error(`No s'han trobat coordenades per a: ${adreca}`);
-  }
-
-  return { x: Number(resultats[0].lon), y: Number(resultats[0].lat) };
+function geocodificaAdrecaOSM(adreca, fetchImpl) {
+  return geocodificarAdrecaNominatim(adreca, fetchImpl);
 }
 
 async function geocodificaAdrecaMockAsync(adreca) {

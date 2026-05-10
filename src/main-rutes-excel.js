@@ -4,7 +4,8 @@
  *
  * Ús:
  *   node src/main-rutes-excel.js ./comandes.xlsx
- *   node src/main-rutes-excel.js ./comandes.xlsx --magatzem 2.1718,41.5278 --mock-geocode
+ *   node src/main-rutes-excel.js ./comandes.xlsx --magatzem 2.1718,41.5278
+ *   node src/main-rutes-excel.js ./comandes.xlsx --mock-geocode   # sense xarxa (coords falses)
  *   node src/main-rutes-excel.js ./antic.xlsx --format motor   # Excel antic (VolumUnitari + union-find)
  */
 
@@ -18,7 +19,18 @@ import { excelToEntregas } from './models/logistica/services/excel-to-entregas.c
 import { generarRutes } from './models/logistica/services/sweep-optimizer.service.js';
 import { MOLLET_MAGATZEM_AFORES } from './scripts/utils/punts-sobre-carrer.js';
 
-/** Geocodificació determinista offline (mateixa idea que mocks dels scripts de prova). */
+/**
+ * Rectangle interior de Barcelona (Eixample / Gràcia / Sants), sense platja ni port.
+ * El mock anterior repartia punts en un rectangle massa ampli (fins 41.35) i molts acabaven **al mar**.
+ */
+export const MOCK_GEOCODIFICACIO_BBOX = {
+  minLon: 2.125,
+  maxLon: 2.195,
+  minLat: 41.375,
+  maxLat: 41.415,
+};
+
+/** Geocodificació determinista offline: sempre terra ferma dins {@link MOCK_GEOCODIFICACIO_BBOX}. */
 export async function geocodificarMockDeterminista(adreca) {
   let hash = 0;
   const s = String(adreca || '');
@@ -26,8 +38,11 @@ export async function geocodificarMockDeterminista(adreca) {
     hash = (hash << 5) - hash + s.charCodeAt(i);
     hash |= 0;
   }
-  const lon = 2.1 + ((Math.abs(hash) % 1000) / 1000) * 0.15;
-  const lat = 41.35 + ((Math.abs(hash >> 8) % 1000) / 1000) * 0.12;
+  const u = (Math.abs(hash) % 10000) / 10000;
+  const v = (Math.abs(hash >> 9) % 10000) / 10000;
+  const { minLon, maxLon, minLat, maxLat } = MOCK_GEOCODIFICACIO_BBOX;
+  const lon = minLon + u * (maxLon - minLon);
+  const lat = minLat + v * (maxLat - minLat);
   return { x: lon, y: lat };
 }
 
@@ -58,7 +73,7 @@ export async function executarRutesDesDeExcel(excelPath, options = {}) {
 
   const defecteGenerarRutes = {
     EntregaClass: Entrega,
-    usaMock: true,
+    usaMock: false,
     fetchImpl: fetch,
     assignacioCompleta: true,
     tempsBaseDescarregaMinuts: 10,

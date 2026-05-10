@@ -1,7 +1,14 @@
+/**
+ * Excel → `Entrega[]`. Per cada adreça d’entrega, les **coordenades són WGS84 (lon, lat)**
+ * obtingudes per **geocodificació de l’adreça** (OpenStreetMap Nominatim), excepte si:
+ * - passes `options.geocodificar` (p. ex. mock determinista només per proves sense xarxa), o
+ * - la fulla inclou columnes **Longitud / Latitud** vàlides → s’usen directament.
+ */
 import XLSX from 'xlsx';
 
 import { Entrega } from '../classes/entrega.model.js';
 import { Pedido } from '../classes/pedido.model.js';
+import { normalitzaCoordenades } from '../utils/coordenades.utils.js';
 import { geocodificarAdrecaNominatim } from './geocodificar-adreca.service.js';
 
 function horaExcelAHhMm(valor) {
@@ -31,6 +38,22 @@ function obtenirCamp(fila, ...noms) {
 
 function normalitzaAdreca(valor) {
   return text(valor).toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+/** Clau estable per agrupar IDs d’entrega (majúscules / espais). */
+function clauIdEntrega(id) {
+  return text(id).toLowerCase().replace(/\s+/g, '');
+}
+
+function explicitCoordsDesValors(lonRaw, latRaw) {
+  if (lonRaw == null || latRaw === '' || latRaw == null || latRaw === '') return null;
+  const x = Number(String(lonRaw).replace(',', '.'));
+  const y = Number(String(latRaw).replace(',', '.'));
+  if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+  // Catalunya aprox.: lon 0.5–3.5, lat 40–43 (evita invertir lon/lat per error)
+  if (x < -1 || x > 5 || y < 39 || y > 45) return null;
+  const p = normalitzaCoordenades({ x, y });
+  return p;
 }
 
 function creaPedidoDeFila(fila) {
@@ -228,8 +251,29 @@ function volumUnitariDesDeTipus(tipusCarrega, volumPerTipus) {
 /** Primera fila és capçalera (columnes ID entrega / direcció…). */
 function esCapcaleraFilaPedidosPerEntrega(row) {
   if (!Array.isArray(row) || row.length === 0) return false;
-  const c0 = text(row[0]).toLowerCase();
-  return (c0.includes('id') && c0.includes('entrega')) || c0 === 'id_entrega' || c0 === 'identificador';
+  const c0 = text(row[0]).toLowerCase().replace(/\s+/g, ' ');
+  if (c0 === 'id_entrega' || c0 === 'identificador') return true;
+  if (c0.includes('id') && c0.includes('entrega')) return true;
+  if (c0.includes('id') && c0.includes('pedido')) return true;
+  return false;
+}
+
+/** Evita tractar una segona capçalera o textos de plantilla com a ID d’entrega. */
+function esTextCapcaleraIdEntrega(valor) {
+  const s = text(valor).toLowerCase().replace(/\s+/g, ' ');
+  if (!s) return true;
+  const prohibits = new Set([
+    'id entrega',
+    'id_entrega',
+    'identificador',
+    'id pedido',
+    'id_pedido',
+    'pedido',
+    'entrega',
+  ]);
+  if (prohibits.has(s)) return true;
+  if (s === 'id' || s.startsWith('columna')) return true;
+  return false;
 }
 
 function registreDesDeArrayPedidosPerEntrega(row, volumPerTipus) {
@@ -243,7 +287,11 @@ function registreDesDeArrayPedidosPerEntrega(row, volumPerTipus) {
   const quantitat = numero(r[5]);
   const horaIniciEntrega = horaExcelAHhMm(r[6]);
   const horaIniciPedido = horaExcelAHhMm(r[7]);
-  if (!idEntrega || !direccio) return null;
+  const lonExtra = r.length > 8 ? r[8] : null;
+  const latExtra = r.length > 9 ? r[9] : null;
+  const coordenadesExplicit = explicitCoordsDesValors(lonExtra, latExtra);
+
+  if (!idEntrega || !direccio || esTextCapcaleraIdEntrega(idEntrega)) return null;
 
   return {
     idEntrega,
@@ -254,6 +302,7 @@ function registreDesDeArrayPedidosPerEntrega(row, volumPerTipus) {
     quantitat,
     horaIniciEntrega,
     horaIniciPedido,
+    coordenadesExplicit,
     _volumUnitari: volumUnitariDesDeTipus(tipusCarrega, volumPerTipus),
   };
 }
@@ -298,7 +347,28 @@ function parseFilaObjectePedidosPerEntrega(fila, volumPerTipus) {
     obtenirCamp(fila, 'Hora_Inici_Pedido', 'Hora Inici Pedido', 'HoraIniciPedido', 'Hora pedido inici'),
   );
 
-  if (!idEntrega || !direccio) return null;
+  const lonRaw = obtenirCamp(
+    fila,
+    'Longitud',
+    'Lon',
+    'Lng',
+    'Coordenada_X',
+    'Coord_X',
+    'GPS_X',
+    'Longitude',
+  );
+  const latRaw = obtenirCamp(
+    fila,
+    'Latitud',
+    'Lat',
+    'Coordenada_Y',
+    'Coord_Y',
+    'GPS_Y',
+    'Latitude',
+  );
+  const coordenadesExplicit = explicitCoordsDesValors(lonRaw, latRaw);
+
+  if (!idEntrega || !direccio || esTextCapcaleraIdEntrega(idEntrega)) return null;
 
   return {
     idEntrega,
@@ -309,6 +379,7 @@ function parseFilaObjectePedidosPerEntrega(fila, volumPerTipus) {
     quantitat,
     horaIniciEntrega,
     horaIniciPedido,
+    coordenadesExplicit,
     _volumUnitari: volumUnitariDesDeTipus(tipusCarrega, volumPerTipus),
   };
 }
@@ -343,23 +414,34 @@ function registresPedidosPerEntregaDesDeFulla(worksheet, volumPerTipus) {
   return extretsObj;
 }
 
+function mateixPunt(a, b, eps = 1e-5) {
+  if (!a || !b) return false;
+  return Math.abs(a.x - b.x) <= eps && Math.abs(a.y - b.y) <= eps;
+}
+
 function agrupaRegistresPerIdEntrega(registres) {
-  const ordenats = [...registres].sort((a, b) => a.idEntrega.localeCompare(b.idEntrega, 'ca'));
-  /** @type {Array<{ identificador: string, nom: string, adreca: string, horaInici: string|null, horaFinal: string|null, pedidos: Pedido[] }>} */
-  const blocs = [];
+  const ordenats = [...registres].sort((a, b) =>
+    clauIdEntrega(a.idEntrega).localeCompare(clauIdEntrega(b.idEntrega), 'ca'),
+  );
+
+  /** @type {Map<string, { identificador: string, nom: string, adreca: string, horaInici: string|null, horaFinal: string|null, coordenadesExplicit: { x: number, y: number }|null, pedidos: Pedido[] }>} */
+  const mapa = new Map();
 
   for (const r of ordenats) {
-    let bloc = blocs.find((b) => b.identificador === r.idEntrega);
+    const key = clauIdEntrega(r.idEntrega);
+    let bloc = mapa.get(key);
+
     if (!bloc) {
       bloc = {
-        identificador: r.idEntrega,
+        identificador: text(r.idEntrega),
         nom: r.nomEntrega,
         adreca: r.direccio,
         horaInici: r.horaIniciEntrega,
         horaFinal: null,
+        coordenadesExplicit: r.coordenadesExplicit ?? null,
         pedidos: [],
       };
-      blocs.push(bloc);
+      mapa.set(key, bloc);
     } else {
       if (normalitzaAdreca(bloc.adreca) !== normalitzaAdreca(r.direccio)) {
         throw new Error(
@@ -370,6 +452,16 @@ function agrupaRegistresPerIdEntrega(registres) {
         throw new Error(`ID entrega "${r.idEntrega}" amb Hora Inici Entrega inconsistent.`);
       }
       if (bloc.horaInici == null && r.horaIniciEntrega != null) bloc.horaInici = r.horaIniciEntrega;
+
+      if (r.coordenadesExplicit) {
+        if (!bloc.coordenadesExplicit) {
+          bloc.coordenadesExplicit = r.coordenadesExplicit;
+        } else if (!mateixPunt(bloc.coordenadesExplicit, r.coordenadesExplicit)) {
+          throw new Error(
+            `ID entrega "${r.idEntrega}" té coordenades GPS diferents entre files del mateix grup.`,
+          );
+        }
+      }
     }
 
     bloc.pedidos.push(
@@ -381,7 +473,7 @@ function agrupaRegistresPerIdEntrega(registres) {
     );
   }
 
-  return blocs;
+  return [...mapa.values()];
 }
 
 function pausaMs(ms) {
@@ -394,10 +486,12 @@ async function excelToEntregasPedidosPerIdEntrega(filePath, options = {}) {
     options.pausaEntreGeocodificacionsMs != null ? Number(options.pausaEntreGeocodificacionsMs) : 1100;
   const volumPerTipus = options.volumPerTipus;
 
+  const nominatimOpts = options.nominatim ?? {};
+
   const geocodificar =
     typeof options.geocodificar === 'function'
       ? options.geocodificar
-      : (adreca) => geocodificarAdrecaNominatim(adreca, fetchImpl);
+      : (adreca) => geocodificarAdrecaNominatim(adreca, fetchImpl, nominatimOpts);
 
   const workbook = XLSX.readFile(filePath, { cellDates: false });
   const primeraHoja = workbook.SheetNames[0];
@@ -409,15 +503,33 @@ async function excelToEntregasPedidosPerIdEntrega(filePath, options = {}) {
 
   const preparades = agrupaRegistresPerIdEntrega(registres);
 
+  /** Cache per adreça normalitzada: mateixa adreça repetida a l’Excel → una sola crida Nominatim. */
+  const coordsPerAdreca = new Map();
+  let cridesGeocodificacio = 0;
+
   const entregues = [];
   for (let g = 0; g < preparades.length; g += 1) {
     const bloc = preparades[g];
 
-    if (g > 0 && pausaEntreGeocodificacionsMs > 0) {
-      await pausaMs(pausaEntreGeocodificacionsMs);
+    let coordenades = null;
+    if (bloc.coordenadesExplicit && normalitzaCoordenades(bloc.coordenadesExplicit)) {
+      coordenades = bloc.coordenadesExplicit;
+    } else {
+      const clauAdreca = normalitzaAdreca(bloc.adreca);
+      if (coordsPerAdreca.has(clauAdreca)) {
+        coordenades = coordsPerAdreca.get(clauAdreca);
+      } else {
+        if (cridesGeocodificacio >= 1 && pausaEntreGeocodificacionsMs > 0) {
+          await pausaMs(pausaEntreGeocodificacionsMs);
+        }
+        cridesGeocodificacio += 1;
+        console.log(
+          `[excel→entregues] Entrega ${g + 1}/${preparades.length} · crida API ${cridesGeocodificacio} · ${bloc.identificador} — ${String(bloc.adreca).slice(0, 68)}`,
+        );
+        coordenades = await geocodificar(bloc.adreca);
+        coordsPerAdreca.set(clauAdreca, coordenades);
+      }
     }
-
-    const coordenades = await geocodificar(bloc.adreca);
 
     entregues.push(
       new Entrega({
@@ -440,6 +552,7 @@ async function excelToEntregasPedidosPerIdEntrega(filePath, options = {}) {
  *
  * Primera fulla — columnes (amb o sense capçalera): ID entrega, Nom entrega, Direcció, Nom pedido,
  * Tipus càrrega, Quantitat, Hora inici entrega, Hora inici pedido.
+ * Opcional (9è i 10è camp en mode array, o columnes Longitud/Latitud): coordenades WGS84 en graus (evita geocodificar).
  *
  * @param {string} filePath
  * @param {object} [options]

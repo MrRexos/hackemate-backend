@@ -10,11 +10,14 @@
     "prova:sweep": "node src/scripts/prova-sweep.js",
     "prova:bars40": "node src/scripts/prova-bars-bcn-40.js",
     "fixtures:excel": "node src/scripts/genera-fixture-excel-prova.js",
-    "prova:excel": "node src/main-rutes-excel.js fixtures/excel/comandes-prova.xlsx --mock-geocode",
+    "prova:excel": "node src/main-rutes-excel.js fixtures/excel/comandes-prova.xlsx",
+    "prova:excel:mock": "node src/main-rutes-excel.js fixtures/excel/comandes-prova.xlsx --mock-geocode",
     "rutes:excel": "node src/main-rutes-excel.js",
     "joc-proves:rutes": "node src/scripts/joc-proves-rutes-mollet.js",
     "joc-proves:rutes:fast": "node src/scripts/joc-proves-rutes-mollet.js --fast",
-    "joc-proves:rutes:excel": "node src/scripts/joc-proves-rutes-mollet.js --excel fixtures/excel/comandes-prova.xlsx --mock-geocode --fast"
+    "joc-proves:rutes:excel": "node src/scripts/joc-proves-rutes-mollet.js --excel fixtures/excel/comandes-prova.xlsx --fast",
+    "joc-proves:rutes:excel:mock": "node src/scripts/joc-proves-rutes-mollet.js --excel fixtures/excel/comandes-prova.xlsx --mock-geocode --fast",
+    "verify:excel-converter": "node src/scripts/verify-excel-converter.js"
   },
   "keywords": [
     "hackemate",
