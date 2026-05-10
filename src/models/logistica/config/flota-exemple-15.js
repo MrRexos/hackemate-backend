@@ -4,6 +4,10 @@ import { FlotaCamions } from '../classes/camio.model.js';
  * Flota d’exemple (15 vehicles). Els scripts de prova i qualsevol crida a `generarRutes`
  * poden importar aquesta instància per tenir sempre la mateixa flota.
  *
+ * Per defecte l’optimizer només usa aquests vehicles (sense crear-ne de nous, excepte si
+ * es passa `permetCamioVirtual: true`). Després de calcular les ETA, es bloqueja el mateix
+ * id de camió per intervals temporals que es solapin (`resoleSolapamentsTemporalCamions`).
+ *
  * Per substituir per dades reals, edita aquest fitxer o importa una altra `FlotaCamions`.
  */
 export const FLOTA_EXEMPLE_15_CAMIONS = new FlotaCamions([

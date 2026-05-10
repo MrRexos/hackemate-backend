@@ -8,7 +8,8 @@
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
     "prova:sweep": "node src/scripts/prova-sweep.js",
-    "prova:bars40": "node src/scripts/prova-bars-bcn-40.js"
+    "prova:bars40": "node src/scripts/prova-bars-bcn-40.js",
+    "prova:joc-pedidos-html": "node src/scripts/prova-joc-pedidos-entregues-html.js"
   },
   "keywords": [
     "hackemate",
