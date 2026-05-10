@@ -8,6 +8,9 @@ export class Entrega {
    */
   constructor({
     adreca,
+    carrer = null,
+    codiPostal = null,
+    municipi = null,
     nom,
     pedidos = [],
     horaInici,
@@ -18,6 +21,9 @@ export class Entrega {
     horaDEntrega = null,
   }) {
     this.adreca = adreca ?? null;
+    this.carrer = carrer != null && String(carrer).trim() !== '' ? String(carrer).trim() : null;
+    this.codiPostal = codiPostal != null && String(codiPostal).trim() !== '' ? String(codiPostal).trim() : null;
+    this.municipi = municipi != null && String(municipi).trim() !== '' ? String(municipi).trim() : null;
     this.nom = nom ?? null;
     this.pedidos = Entrega.normalitzaPedidos(pedidos);
     this.volumTotal = Entrega.calculaVolumTotal(this.pedidos);
