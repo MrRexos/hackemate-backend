@@ -3,8 +3,8 @@
  *
  * - **CAJ**: 1 unitat de línia = 1 caixa.
  * - **BRL**: 1 barril = 4 caixes.
- * - **UN**: 24 unitats = 1 caixa (factor 1/24 per unitat).
- * - Qualsevol altre codi (incloent buit): unitats genèriques empaquetades de **12 per caixa** (factor 1/12).
+ * - **UN**: 1 unitat de línia = 1 caixa.
+ * - Qualsevol altre codi o tipus no reconegut (incloent buit): 1 unitat de línia = 1 caixa.
  */
 
 /** @param {string|null|undefined} raw */
@@ -32,8 +32,8 @@ export function factorCaixesPerUnitatTipusCarrega(tipusCarrega) {
     case 'BRL':
       return 4;
     case 'UN':
-      return 1 / 24;
+      return 1;
     default:
-      return 1 / 12;
+      return 1;
   }
 }
